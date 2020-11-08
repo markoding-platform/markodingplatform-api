@@ -8,7 +8,7 @@ export type HTTPMethods = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 export type HandlerSchemas = 'body' | 'querystring' | 'params' | 'response'
 
 export type LifeCycles = 'preParsing' | 'preValidation' | 'preHandler' | 'preSerialization'
-  | 'onSend' | 'onResponse'
+  | 'onSend' | 'onResponse' | 'onRequest' | 'onTimeout' | 'onError'
 
 export type GenericHookFunc = (request: FastifyRequest, reply: FastifyReply) => Promise<unknown>
 
@@ -25,7 +25,9 @@ export enum HandlerMetadataKeys {
   BodySchema = 'BodySchema',
   QuerystringSchema = 'QuerystringSchema',
   ParamsSchema = 'ParamsSchema',
-  ResponseSchema = 'ResponseSchema'
+  ResponseSchema = 'ResponseSchema',
+  RoutePefix = 'RoutePrefix',
+  
 }
 
 function normalizeUrl (urlStr: string): string {
@@ -87,9 +89,18 @@ function useSchemaDecoratorFactory (schemaName: HandlerSchemas): Function {
   }
 }
 
-// function useHookDecoratorFactory (cylce: LifeCycles): Function {
-  
-// }
+function useHookDecoratorFactory<T> (cylce: LifeCycles): Function {
+  return function useHookDecorator (hook: T): Function {
+    return function decorator (target: Function, key: string): void {
+      Reflect.defineMetadata(
+        cylce,
+        hook,
+        target.prototype,
+        key
+      )
+    }
+  }
+}
 
 export const get = httpMethodDecoratorFactory('GET')
 export const post = httpMethodDecoratorFactory('POST')
@@ -101,3 +112,15 @@ export const bodySchema = useSchemaDecoratorFactory('body')
 export const querySchema = useSchemaDecoratorFactory('querystring')
 export const paramsSchema = useSchemaDecoratorFactory('params')
 export const responseSchema = useSchemaDecoratorFactory('response')
+
+export const onRequest = useHookDecoratorFactory('onRequest')
+export const preValidation = useHookDecoratorFactory('preValidation')
+export const preHandler = useHookDecoratorFactory('preHandler')
+export const onResponse = useHookDecoratorFactory('onResponse')
+export const onTimeout = useHookDecoratorFactory('onTimeout')
+
+export const preParsing = useHookDecoratorFactory<PayloadHookFunc>('preParsing')
+export const preSerialization = useHookDecoratorFactory<PayloadHookFunc>('preSerialization')
+export const onSend = useHookDecoratorFactory<PayloadHookFunc>('onSend')
+
+export const onError = useHookDecoratorFactory<ErrorHookFunc>('onError')
