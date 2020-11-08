@@ -18,7 +18,7 @@
         "src/libs/types/*"
       ]
     },
-    "typeRoots" : ["./node_modules/@types", "./src/libs/types"],
+    "typeRoots" : ["./node_modules/@types", "./src/libs/types", "./src/libs/interfaces"],
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
   },
