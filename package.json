@@ -4,13 +4,10 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "build": "rimraf ./build && tsc",
-    "lint": "eslint . --ext js",
-    "lint:fix": "eslint . --fix --ext js",
-    "prettier": "prettier --write '{src,__{tests,mocks}__}/**/*.js'",
+    "build": "backpack build",
+    "lint": "eslint . --ext ts",
     "start": "node ./build/server.js",
-    "start:dev": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "backpack dev"
   },
   "repository": {
     "type": "git",
@@ -29,107 +26,25 @@
     }
   },
   "lint-staged": {
-    "*.(js)": [
-      "yarn prettier",
-      "yarn lint",
+    "**/*.(ts)": [
       "git add"
     ]
   },
-  "nodemonConfig": {
-    "watch": [
-      "src"
-    ],
-    "ext": ".ts",
-    "ignore": [],
-    "exec": "ts-node ./src/server.ts"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "airbnb-base",
-      "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "ecmaVersion": 2018,
-      "sourceType": "module"
-    },
-    "rules": {
-      "object-curly-newline": 0,
-      "implicit-arrow-linebreak": 0,
-      "arrow-parens": 0,
-      "function-paren-newline": 0,
-      "operator-linebreak": 0,
-      "max-len": [
-        "error",
-        {
-          "code": 80,
-          "ignoreComments": true,
-          "ignoreTrailingComments": true,
-          "ignoreUrls": true,
-          "ignoreStrings": true,
-          "ignoreTemplateLiterals": true,
-          "ignoreRegExpLiterals": true
-        }
-      ],
-      "import/extensions": [
-        "error",
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-      ],
-      "no-underscore-dangle": "off",
-      "@typescript-eslint/no-implicit-any": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/ban-ts-ignore": "off"
-    },
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "extensions": [
-            ".js",
-            ".ts"
-          ],
-          "paths": [
-            "./src"
-          ]
-        }
-      }
-    }
-  },
-  "eslintIgnore": [
-    "build",
-    "node_modules"
-  ],
   "dependencies": {
     "@types/pg": "^7.14.6",
     "@types/validator": "^13.1.0",
+    "dotenv": "^8.2.0",
     "fastify": "^3.7.0",
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^9.0.0",
     "typeorm": "^0.2.29"
   },
   "devDependencies": {
     "@types/node": "^14.14.6",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
     "@typescript-eslint/parser": "^4.6.1",
+    "backpack-core": "^0.8.4",
     "eslint": "^7.13.0",
     "eslint-config-standard": "^16.0.1",
     "eslint-plugin-import": "^2.22.1",
@@ -137,10 +52,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.5.1",
-    "nodemon": "^2.0.6",
     "prettier": "^2.1.2",
-    "rimraf": "^3.0.2",
-    "ts-node": "^9.0.0",
+    "ts-loader": "^8.0.10",
     "typescript": "^4.0.5"
   }
 }

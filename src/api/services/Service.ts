@@ -1,4 +1,3 @@
-import { Connection } from 'typeorm'
 import DAO from '../daos/DAO'
 
 class Service {

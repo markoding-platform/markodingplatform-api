@@ -18,7 +18,6 @@ export type PayloadHookFunc = (request: FastifyRequest, reply: FastifyRequest, p
 export type ErrorHookFunc = (request: FastifyRequest, reply: FastifyReply, error: unknown)
   => Promise<unknown>
 
-
 export enum HandlerMetadataKeys {
   HTTPMethod = 'HTPPMethod',
   RoutePath = 'RoutePath',
@@ -26,8 +25,7 @@ export enum HandlerMetadataKeys {
   QuerystringSchema = 'QuerystringSchema',
   ParamsSchema = 'ParamsSchema',
   ResponseSchema = 'ResponseSchema',
-  RoutePefix = 'RoutePrefix',
-  
+  RoutePefix = 'RoutePrefix'
 }
 
 function normalizeUrl (urlStr: string): string {

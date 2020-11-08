@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  d-markoding-postgres:
+    image: postgres:alpine
+    ports: 
+      - 5432:5432
+    env_file: .env
+    container_name: "markoding-postgres"
+    volumes:
+      - /var/lib/postgresql/data
+    networks:
+      - default
+      - bridge-network
+
+  d-markoding-api:
+    image: markoding-api:latest
+    build:
+      context: .
+      dockerfile: dockerfiles/dockerfile.dev
+    env_file: .env
+    container_name: "markoding-api"
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:8080
+    networks:
+      - default
+      - bridge-network
+
+networks:
+  default:
+    driver: bridge
+  bridge-network:
+    external: true
+

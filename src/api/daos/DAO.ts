@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm'
 
-class DAO<T = object> {
+class DAO {
   protected db: Connection
 
   constructor (db: Connection) {

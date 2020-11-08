@@ -1,16 +1,32 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "module": "commonjs",
-    "lib": ["ES6"],
-    "sourceMap": true,
-    "outDir": "build",
-    "rootDir": "src",
-    "strict": true,
-    "esModuleInterop": true,
     "experimentalDecorators": true,
+    "target": "ES5",
+    "lib": [
+      "ES5",
+      "ES7",
+      "ES2015.Promise"
+    ],
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "src/libs/types/*"
+      ]
+    },
+    "typeRoots" : ["./node_modules/@types", "./src/libs/types"],
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "resolveJsonModule": true,
+  },
+  "exclude": [
+    "scripts/**/*"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts"
+  ]
 }
