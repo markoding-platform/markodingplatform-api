@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { FastifyRequest } from 'fastify'
 import { FastifyReply } from 'fastify/types/reply'
-import 'reflect-metadata'
 
 export type HTTPMethods = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
 export type HandlerSchemas = 'body' | 'querystring' | 'params' | 'response'
 
 export type LifeCycles = 'preParsing' | 'preValidation' | 'preHandler' | 'preSerialization'
-  | 'onSend' | 'onResponse'
+  | 'onSend' | 'onResponse' | 'onRequest' | 'onTimeout' | 'onError'
 
 export type GenericHookFunc = (request: FastifyRequest, reply: FastifyReply) => Promise<unknown>
 
@@ -18,14 +17,14 @@ export type PayloadHookFunc = (request: FastifyRequest, reply: FastifyRequest, p
 export type ErrorHookFunc = (request: FastifyRequest, reply: FastifyReply, error: unknown)
   => Promise<unknown>
 
-
 export enum HandlerMetadataKeys {
   HTTPMethod = 'HTPPMethod',
   RoutePath = 'RoutePath',
   BodySchema = 'BodySchema',
   QuerystringSchema = 'QuerystringSchema',
   ParamsSchema = 'ParamsSchema',
-  ResponseSchema = 'ResponseSchema'
+  ResponseSchema = 'ResponseSchema',
+  RoutePrefix = 'RoutePrefix'
 }
 
 function normalizeUrl (urlStr: string): string {
@@ -33,7 +32,7 @@ function normalizeUrl (urlStr: string): string {
   const lastChar = urlStr[urlStr.length - 1]
 
   if (firstChar !== '/') urlStr = '/' + urlStr
-  if (lastChar !== '/') urlStr = urlStr + '/'
+  if (lastChar === '/') urlStr = urlStr.slice(0, urlStr.length - 1)
 
   return urlStr
 }
@@ -44,13 +43,13 @@ function httpMethodDecoratorFactory (method: HTTPMethods): Function {
       Reflect.defineMetadata(
         HandlerMetadataKeys.RoutePath,
         normalizeUrl(path),
-        target.prototype,
+        target,
         key
       )
       Reflect.defineMetadata(
         HandlerMetadataKeys.HTTPMethod,
         method,
-        target.prototype,
+        target,
         key
       )
     }
@@ -80,16 +79,25 @@ function useSchemaDecoratorFactory (schemaName: HandlerSchemas): Function {
       Reflect.defineMetadata(
         schemaType,
         schema,
-        target.prototype,
+        target,
         key
       )
     }
   }
 }
 
-// function useHookDecoratorFactory (cylce: LifeCycles): Function {
-  
-// }
+function useHookDecoratorFactory<T> (cylce: LifeCycles): Function {
+  return function useHookDecorator (hook: T): Function {
+    return function decorator (target: Function, key: string): void {
+      Reflect.defineMetadata(
+        cylce,
+        hook,
+        target,
+        key
+      )
+    }
+  }
+}
 
 export const get = httpMethodDecoratorFactory('GET')
 export const post = httpMethodDecoratorFactory('POST')
@@ -101,3 +109,25 @@ export const bodySchema = useSchemaDecoratorFactory('body')
 export const querySchema = useSchemaDecoratorFactory('querystring')
 export const paramsSchema = useSchemaDecoratorFactory('params')
 export const responseSchema = useSchemaDecoratorFactory('response')
+
+export const onRequest = useHookDecoratorFactory('onRequest')
+export const preValidation = useHookDecoratorFactory('preValidation')
+export const preHandler = useHookDecoratorFactory('preHandler')
+export const onResponse = useHookDecoratorFactory('onResponse')
+export const onTimeout = useHookDecoratorFactory('onTimeout')
+
+export const preParsing = useHookDecoratorFactory<PayloadHookFunc>('preParsing')
+export const preSerialization = useHookDecoratorFactory<PayloadHookFunc>('preSerialization')
+export const onSend = useHookDecoratorFactory<PayloadHookFunc>('onSend')
+
+export const onError = useHookDecoratorFactory<ErrorHookFunc>('onError')
+
+export function handler (prefix: string): Function {
+  return function decorator (target: Function): void {
+    Reflect.defineMetadata(
+      HandlerMetadataKeys.RoutePrefix,
+      normalizeUrl(prefix),
+      target.prototype
+    )
+  }
+}

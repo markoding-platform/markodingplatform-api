@@ -1,24 +1,19 @@
-import "reflect-metadata"; // typeorm specific requirement
-import Fastify, { FastifyInstance } from "fastify";
+import 'reflect-metadata'
 
-const server: FastifyInstance = Fastify({});
+import './config/database'
 
-server.get("/ping", async () => {
-  return "pong\n";
-});
+import fastify from 'fastify'
 
-const start = async () => {
-  try {
-    await server.listen(3000);
+import { routes } from './config/routes'
 
-    const address = server.server.address();
-    const port = typeof address === "string" ? address : address?.port;
+const server = fastify()
 
-    server.log.info(`server listening on ${port}`);
-  } catch (err) {
-    server.log.error(err);
-    process.exit(1);
+server.register(routes)
+
+server.listen(8080, '0.0.0.0', (err, address) => {
+  if (err) {
+    console.error(err)
+    process.exit(1)
   }
-};
-start();
-
+  console.log(`Server listening at ${address}`)
+})

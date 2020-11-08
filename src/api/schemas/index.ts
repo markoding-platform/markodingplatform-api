@@ -1,2 +1,2 @@
-// this folder will contain generated schema from 
+// this folder will contain generated schema from
 // [APPDIR]/libs/jsonSchemas
