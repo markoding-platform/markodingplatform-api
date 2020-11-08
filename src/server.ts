@@ -1,6 +1,14 @@
+import 'reflect-metadata'
+
+import './config/database'
+
+import { routes } from './config/routes'
+
 import fastify from 'fastify'
 
 const server = fastify()
+
+server.register(routes)
 
 server.get('/ping', async (request, reply) => {
   return 'pong\n'

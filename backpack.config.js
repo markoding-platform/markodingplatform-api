@@ -5,7 +5,7 @@ module.exports = {
     config.entry.main = ['./src/server.ts']
 
     config.resolve = {
-      extensions: ['.ts']
+      extensions: ['.ts', '.js', '.json']
     }
 
     config.module.rules.push(

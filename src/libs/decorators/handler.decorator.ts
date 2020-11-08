@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { FastifyRequest } from 'fastify'
 import { FastifyReply } from 'fastify/types/reply'
-import 'reflect-metadata'
 
 export type HTTPMethods = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
 
@@ -25,7 +24,7 @@ export enum HandlerMetadataKeys {
   QuerystringSchema = 'QuerystringSchema',
   ParamsSchema = 'ParamsSchema',
   ResponseSchema = 'ResponseSchema',
-  RoutePefix = 'RoutePrefix'
+  RoutePrefix = 'RoutePrefix'
 }
 
 function normalizeUrl (urlStr: string): string {
@@ -33,7 +32,7 @@ function normalizeUrl (urlStr: string): string {
   const lastChar = urlStr[urlStr.length - 1]
 
   if (firstChar !== '/') urlStr = '/' + urlStr
-  if (lastChar !== '/') urlStr = urlStr + '/'
+  if (lastChar === '/') urlStr = urlStr.slice(0, urlStr.length - 1)
 
   return urlStr
 }
@@ -44,13 +43,13 @@ function httpMethodDecoratorFactory (method: HTTPMethods): Function {
       Reflect.defineMetadata(
         HandlerMetadataKeys.RoutePath,
         normalizeUrl(path),
-        target.prototype,
+        target,
         key
       )
       Reflect.defineMetadata(
         HandlerMetadataKeys.HTTPMethod,
         method,
-        target.prototype,
+        target,
         key
       )
     }
@@ -80,7 +79,7 @@ function useSchemaDecoratorFactory (schemaName: HandlerSchemas): Function {
       Reflect.defineMetadata(
         schemaType,
         schema,
-        target.prototype,
+        target,
         key
       )
     }
@@ -93,7 +92,7 @@ function useHookDecoratorFactory<T> (cylce: LifeCycles): Function {
       Reflect.defineMetadata(
         cylce,
         hook,
-        target.prototype,
+        target,
         key
       )
     }
@@ -122,3 +121,13 @@ export const preSerialization = useHookDecoratorFactory<PayloadHookFunc>('preSer
 export const onSend = useHookDecoratorFactory<PayloadHookFunc>('onSend')
 
 export const onError = useHookDecoratorFactory<ErrorHookFunc>('onError')
+
+export function handler (prefix: string): Function {
+  return function decorator (target: Function): void {
+    Reflect.defineMetadata(
+      HandlerMetadataKeys.RoutePrefix,
+      normalizeUrl(prefix),
+      target.prototype
+    )
+  }
+}
