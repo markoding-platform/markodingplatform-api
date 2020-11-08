@@ -1,21 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 import User from '../../models/User'
-import { handler, get, post } from '../../libs/decorators/handler.decorator'
 import { userService } from '../services'
-
-interface UserReqParams extends FastifyRequest {
-  params: {
-    id: number
-  }
-}
-
-interface UserReqBody extends FastifyRequest {
-  body: {
-    name: string
-    email: string
-  }
-}
+import { handler, get, post } from '../../libs/decorators/handler.decorator'
+import { UserReqBody, UserReqParams } from '../../libs/interfaces/Handler'
 
 @handler('/users')
 class UserHandler {
