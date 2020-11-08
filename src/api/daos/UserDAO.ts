@@ -19,7 +19,7 @@ class UserDAO extends DAO<User> {
 
   async createOne (data: User): Promise<User> {
     return this.db.getRepository(User)
-      .create(data)
+      .save(data)
   }
 }
 
