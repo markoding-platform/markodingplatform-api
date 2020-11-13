@@ -1,5 +1,4 @@
-import UserHandler from './UserHandler'
+import UserHandler from "./UserHandler";
+import IdeaHandler from "./IdeaHandler";
 
-export {
-  UserHandler
-}
+export { UserHandler, IdeaHandler };

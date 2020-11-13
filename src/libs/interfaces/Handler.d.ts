@@ -12,3 +12,16 @@ export interface UserReqBody extends FastifyRequest {
     email: string
   }
 }
+
+export interface IdeaReqParams extends FastifyRequest {
+  params: {
+    id: number
+  }
+}
+
+export interface IdeaReqBody extends FastifyRequest {
+  body: {
+    problem: string
+    solution: string
+  }
+}
