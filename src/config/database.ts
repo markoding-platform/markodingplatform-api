@@ -1,6 +1,7 @@
 import { createConnection } from 'typeorm'
 
 import User from '../models/User'
+import Idea from '../models/Idea'
 
 createConnection({
   name: 'connection-1',
@@ -10,7 +11,7 @@ createConnection({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  entities: [User],
+  entities: [User, Idea],
   logging: true,
   synchronize: true
 })

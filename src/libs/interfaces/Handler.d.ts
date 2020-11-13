@@ -21,6 +21,7 @@ export interface IdeaReqParams extends FastifyRequest {
 
 export interface IdeaReqBody extends FastifyRequest {
   body: {
+    teamId: string
     problem: string
     solution: string
   }

@@ -1,31 +1,27 @@
 import { join } from 'path'
-import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import { FastifyInstance } from 'fastify'
 
-import { UserHandler } from './handlers'
+import { UserHandler, IdeaHandler } from './handlers'
 import { HandlerMetadataKeys, HTTPMethods } from '../libs/decorators/handler.decorator'
 
-export default async function api (instance: FastifyInstance, option: FastifyPluginOptions) {
-  Object.getOwnPropertyNames(
-    UserHandler.prototype
-  ).forEach((methodName: string) => {
-    if (methodName !== 'constructor' && typeof UserHandler.prototype[methodName] === 'function') {
+export default async function api (instance: FastifyInstance) {
+  Object.getOwnPropertyNames(IdeaHandler.prototype).forEach((methodName: string) => {
+    if (methodName !== 'constructor' && typeof IdeaHandler.prototype[methodName] === 'function') {
       const method: HTTPMethods = Reflect.getMetadata(
         HandlerMetadataKeys.HTTPMethod,
-        UserHandler.prototype,
+        IdeaHandler.prototype,
         methodName
       )
       const routePrefix = Reflect.getMetadata(
         HandlerMetadataKeys.RoutePrefix,
-        UserHandler.prototype
+        IdeaHandler.prototype
       )
       const routePath = Reflect.getMetadata(
         HandlerMetadataKeys.RoutePath,
-        UserHandler.prototype,
+        IdeaHandler.prototype,
         methodName
       )
-      const handlerFunc = UserHandler.prototype[methodName]
-
-      console.log(method, join(routePrefix, routePath), handlerFunc)
+      const handlerFunc = IdeaHandler.prototype[methodName]
 
       switch (method) {
         case 'GET':

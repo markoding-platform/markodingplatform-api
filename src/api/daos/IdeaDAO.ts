@@ -7,7 +7,7 @@ class IdeaDAO extends DAO<Idea> {
     return this.db.getRepository(Idea).findOne(id)
   }
 
-  getMany(params: FindManyOptions): Promise<Idea[]> {
+  async getMany(params: FindManyOptions): Promise<Idea[]> {
     return this.db.getRepository(Idea).find(params)
   }
 

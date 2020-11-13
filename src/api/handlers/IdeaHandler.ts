@@ -21,6 +21,7 @@ class IdeaHandler {
   @post('/')
   async createIdea(request: IdeaReqBody) {
     let idea = new Idea()
+    idea.teamId = request.body.teamId
     idea.problem = request.body.problem
     idea.solution = request.body.solution
 

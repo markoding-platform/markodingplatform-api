@@ -14,7 +14,11 @@ class Idea {
   @Column("text")
   solution: string
 
-  @Column("bigint")
+  @Column({
+    type: "bigint",
+    nullable: true,
+    default: 0,
+  })
   vote: number
 }
 

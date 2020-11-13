@@ -1,4 +1,4 @@
-import { userDAO } from '../daos'
+import { userDAO, ideaDAO } from '../daos'
 import UserService from './UserService'
 import IdeaService from './IdeaService'
 
