@@ -4,7 +4,7 @@ import './config/database'
 
 import fastify from 'fastify'
 
-import { routes } from './config/routes'
+import routes from './config/routes'
 
 const server = fastify()
 

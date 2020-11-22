@@ -1,5 +1,1 @@
-export enum SolutionType {
-  WEB = "web",
-  MOBILE = "mobile",
-  GAME = "game",
-}
+export type SolutionType = "web" | "mobile" | "game"
