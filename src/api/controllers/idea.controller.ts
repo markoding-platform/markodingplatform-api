@@ -1,10 +1,10 @@
 import Idea from '../../entity/Idea'
-import { IdeaService } from '../services/idea.service'
+import IdeaService from '../services/idea.service'
 import { IdeaReqBody, IdeaReqParams } from '../../libs/interfaces/Controller'
 import { Controller, GET, POST } from 'fastify-decorators';
 
 @Controller({ route: '/ideas' })
-export class IdeaController {
+export default class IdeaController {
   constructor(private service: IdeaService) {}
 
   @GET({ url: '/:id' })

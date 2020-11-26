@@ -5,7 +5,7 @@ import User from '../entity/User'
 import Idea from '../entity/Idea'
 
 @Service()
-export default class ConnectionService {
+export default class Database {
   connection!: Connection;
 
   @Initializer()

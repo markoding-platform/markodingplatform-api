@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 import { SolutionType } from '../libs/types'
 
 @Entity()
-class Idea {
+export default class Idea {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
@@ -13,7 +13,7 @@ class Idea {
   @Column("uuid")
   teacherId: string
 
-  @Column("tinytext")
+  @Column("text")
   solutionName: string
 
   @Column("char", { length: 6 })
@@ -28,7 +28,7 @@ class Idea {
   @Column("text")
   problemReasoning: string
 
-  @Column("tinytext")
+  @Column("text")
   solutionVision: string
 
   @Column("text")
@@ -58,5 +58,3 @@ class Idea {
   @Column("bool")
   isDraft: boolean
 }
-
-export default Idea

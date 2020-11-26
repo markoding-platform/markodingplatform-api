@@ -1,16 +1,16 @@
 import { Initializer, Service } from 'fastify-decorators';
 import { Repository } from 'typeorm'
-import ConnectionService from '../../config/database'
+import Database from '../../config/database'
 import Idea from '../../entity/Idea'
 
 @Service()
-export class IdeaService {
+export default class IdeaService {
   private repository!: Repository<Idea>;
-  constructor(private connectionService: ConnectionService) {}
+  constructor(private database: Database) {}
 
-  @Initializer([ConnectionService])
+  @Initializer([Database])
   async init(): Promise<void> {
-    this.repository = this.connectionService.connection.getRepository(Idea)
+    this.repository = this.database.connection.getRepository(Idea)
   }
 
   async getOneById(id: number): Promise<Idea | undefined> {
