@@ -3,6 +3,8 @@ import { createConnection, Connection } from "typeorm";
 
 import { User, Idea } from "../api/entity";
 
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
+
 @Service()
 export default class Database {
   private _connection!: Connection;
@@ -18,9 +20,9 @@ export default class Database {
       type: "postgres",
       host: "d-markoding-postgres",
       port: 5432,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
+      username: POSTGRES_USER,
+      password: POSTGRES_PASSWORD,
+      database: POSTGRES_DB,
       entities: [User, Idea],
       logging: true,
       synchronize: true,
