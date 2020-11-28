@@ -1,9 +1,7 @@
 import 'reflect-metadata'
-import { bootstrap } from 'fastify-decorators';
-import { resolve } from 'path';
 import fastify from 'fastify'
+import { bootstrap } from 'fastify-decorators';
 
-import './config/database'
 import IdeaController from './api/controllers/idea.controller'
 
 // import routes from './config/routes'

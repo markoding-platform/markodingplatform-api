@@ -6,11 +6,14 @@ import Idea from '../entity/Idea'
 
 @Service()
 export default class Database {
-  connection!: Connection;
+  private _connection!: Connection;
+
+  public get connection(): Connection {
+    return this._connection;
+  }
 
   @Initializer()
   async init(): Promise<void> {
-    // @ts-ignore
     this._connection = await createConnection({
       name: 'connection-1',
       type: 'postgres',
@@ -22,12 +25,6 @@ export default class Database {
       entities: [User, Idea],
       logging: true,
       synchronize: true
-    }).then((conn: Connection): Connection => {
-      console.log('connection to db is established')
-      return conn
-    }).catch((error) => {
-      console.log('failed connecting to db')
-      console.log(error)
     })
   }
 }
