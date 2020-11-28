@@ -1,36 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "experimentalDecorators": true,
+    "lib": [ "ES6"],
     "target": "ES5",
-    "lib": [
-      "ES5",
-      "ES7",
-      "ES2015.Promise"
-    ],
+    "module": "commonjs",
+    "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
     "strictNullChecks": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "src/libs/types/*"
-      ]
-    },
-    "typeRoots" : [
-      "./node_modules/@types",
-      "./src/libs/types",
-      "./src/libs/interfaces"
-    ],
-    "emitDecoratorMetadata": true,
-    "resolveJsonModule": true
-  },
-  "exclude": [
-    "scripts/**/*"
-  ],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ]
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
 }

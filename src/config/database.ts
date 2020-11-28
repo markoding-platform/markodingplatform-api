@@ -1,8 +1,7 @@
-import { Initializer, Service } from 'fastify-decorators'
-import { createConnection, Connection } from 'typeorm'
+import { Initializer, Service } from "fastify-decorators";
+import { createConnection, Connection } from "typeorm";
 
-import User from '../entity/User'
-import Idea from '../entity/Idea'
+import { User, Idea } from "../api/entity";
 
 @Service()
 export default class Database {
@@ -15,16 +14,16 @@ export default class Database {
   @Initializer()
   async init(): Promise<void> {
     this._connection = await createConnection({
-      name: 'connection-1',
-      type: 'postgres',
-      host: 'd-markoding-postgres',
+      name: "connection-1",
+      type: "postgres",
+      host: "d-markoding-postgres",
       port: 5432,
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       entities: [User, Idea],
       logging: true,
-      synchronize: true
-    })
+      synchronize: true,
+    });
   }
 }

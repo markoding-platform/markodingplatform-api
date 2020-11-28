@@ -1,72 +1,56 @@
-import Idea from '../../entity/Idea'
-import IdeaService from '../services/idea.service'
-import { IdeaReqBody, IdeaReqParams } from '../../libs/interfaces/Controller'
-import { Controller, GET, POST } from 'fastify-decorators';
+import { FastifyRequest, FastifySchema, RouteSchema } from "fastify";
+import { Controller, GET, POST } from "fastify-decorators";
 
-@Controller({ route: '/ideas' })
+import IdeaService from "../services/idea";
+import { Idea, IdeaInput } from "../entity/idea";
+import { ideaSchema, ideaInputSchema } from "../schemas/idea";
+
+@Controller({ route: "/ideas" })
 export default class IdeaController {
   constructor(private service: IdeaService) {}
 
-  @GET({ url: '/:id' })
-  async getIdeaById(req: IdeaReqParams) {
-    const idea = await this.service.getOneById(req.params.id)
-    if (!idea) return null
-
-    return idea
-  }
-
-  @GET({ url: '/' })
-  async getAllIdeas() {
-    return this.service.getAll()
-  }
-
-  @POST({ url: '/', options: {
-    schema: {
-      body: {
-        type: "object",
-        // required: ["name", "img"],
-        properties: {
-          schoolId: { type: "string" },
-          teacherId: { type: "string" },
-          solutionName: { type: "string" },
-          solutionType: { type: "string" },
-          probleamArea: { type: "string" },
-          probleamSelection: { type: "string" },
-          probleamReasoning: { type: "string" },
-          solutionVision: { type: "string" },
-          solutionMission: { type: "string" },
-          solutionBenefit: { type: "string" },
-          solutionObstacle: { type: "string" },
-          solutionPitchUrl: { type: "string" },
-          targetOutcomes: { type: "string" },
-          targetCustomer: { type: "string" },
-          potentialCollaboration: { type: "string" },
-          solutionSupportingPhotos: { type: "array" },
-          isDraft: { type: "boolean" },
-        },
+  @GET({
+    url: "/:id",
+    options: {
+      schema: <RouteSchema & FastifySchema>{
+        params: { type: "object", properties: { id: { type: "string" } } },
+        response: { 200: ideaSchema },
       },
-    }
-  }})
-  async createIdea(req: IdeaReqBody) {
-    let idea = new Idea()
-    idea.schoolId = req.body.schoolId
-    idea.teacherId = req.body.teacherId
-    idea.solutionName = req.body.solutionName
-    idea.solutionType = req.body.solutionType
-    idea.problemArea = req.body.problemArea
-    idea.problemSelection = req.body.problemSelection
-    idea.problemReasoning = req.body.problemReasoning
-    idea.solutionVision = req.body.solutionVision
-    idea.solutionMission = req.body.solutionMission
-    idea.solutionBenefit = req.body.solutionBenefit
-    idea.solutionObstacle = req.body.solutionObstacle
-    idea.solutionPitchUrl = req.body.solutionPitchUrl
-    idea.targetOutcomes = req.body.targetOutcomes
-    idea.targetCustomer = req.body.targetCustomer
-    idea.potentialCollaboration = req.body.potentialCollaboration
-    idea.solutionSupportingPhotos = req.body.solutionSupportingPhotos
-    idea.isDraft = req.body.isDraft
+    },
+  })
+  async getIdeaById(
+    req: FastifyRequest<{ Params: { id: string } }>
+  ): Promise<Idea> {
+    const idea = await this.service.getById(req.params.id);
 
-    return this.service.createOne(idea)
+    if (!idea) throw { statusCode: 404, message: "Entity not found" };
+    return idea;
+  }
+
+  @GET({
+    url: "/",
+    options: {
+      schema: <RouteSchema & FastifySchema>{
+        response: { 200: { type: "array", items: ideaSchema } },
+      },
+    },
+  })
+  async getAllIdeas(): Promise<Idea[]> {
+    return this.service.getAll();
+  }
+
+  @POST({
+    url: "/",
+    options: {
+      schema: <RouteSchema & FastifySchema>{
+        body: ideaInputSchema,
+        response: { 200: ideaSchema },
+      },
+    },
+  })
+  async createOrUpdate(
+    req: FastifyRequest<{ Body: IdeaInput }>
+  ): Promise<Idea> {
+    return await this.service.store(req.body);
   }
 }

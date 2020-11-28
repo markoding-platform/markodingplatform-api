@@ -1,1 +1,1 @@
-export type SolutionType = "web" | "mobile" | "game"
+export type SolutionType = "web" | "mobile" | "game";
