@@ -1,11 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import { FastifyInstance } from "fastify";
+import { bootstrap } from "fastify-decorators";
+import { resolve } from "path";
 
-import api from '../api'
-
-export async function routes (instance: FastifyInstance, options: FastifyPluginOptions) {
-  instance.register(api)
-
-  instance.get('/ping', async (request, reply) => {
-    return 'pong\n'
-  })
+export default function routes(instance: FastifyInstance): void {
+  instance.register(bootstrap, {
+    directory: resolve(__dirname, "../api/controllers"),
+    mask: /\.controller\./,
+  });
 }

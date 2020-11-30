@@ -35,4 +35,3 @@ networks:
     driver: bridge
   bridge-network:
     external: true
-
