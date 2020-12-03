@@ -3,4 +3,4 @@ build
 .vscode
 .env
 
-MarkodingWebserverPlatformKey.pem
+*.pem
