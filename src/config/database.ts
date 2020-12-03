@@ -1,7 +1,8 @@
 import { Initializer, Service } from "fastify-decorators";
 import { createConnection, Connection } from "typeorm";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-import { User, Idea } from "../api/entity";
+import { User, Idea, Team } from "../api/entity";
 
 const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
 
@@ -23,9 +24,10 @@ export default class Database {
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [User, Idea],
+      entities: [User, Idea, Team],
       logging: true,
       synchronize: true,
+      namingStrategy: new SnakeNamingStrategy(),
     });
   }
 }
