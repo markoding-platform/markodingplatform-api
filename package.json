@@ -39,7 +39,9 @@
       "es6": true,
       "node": true
     },
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "extends": [
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended"
@@ -54,7 +56,12 @@
       "sourceType": "module"
     },
     "rules": {
-      "max-len": ["error", { "tabWidth": 2 }]
+      "max-len": [
+        "error",
+        {
+          "tabWidth": 2
+        }
+      ]
     }
   },
   "eslintIgnore": [
