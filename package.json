@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix --ext ts",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "start": "node ./build/index.js"
+    "start": "node -r dotenv/config ./build/main.js"
   },
   "repository": {
     "type": "git",
