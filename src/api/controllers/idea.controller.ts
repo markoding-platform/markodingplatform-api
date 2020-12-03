@@ -1,4 +1,4 @@
-import { FastifyRequest, FastifySchema, RouteSchema } from "fastify";
+import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
 
 import IdeaService from "../services/idea";
@@ -12,7 +12,7 @@ export default class IdeaController {
   @GET({
     url: "/:id",
     options: {
-      schema: <RouteSchema & FastifySchema>{
+      schema: {
         params: { type: "object", properties: { id: { type: "string" } } },
         response: { 200: ideaSchema },
       },
@@ -30,7 +30,7 @@ export default class IdeaController {
   @GET({
     url: "/",
     options: {
-      schema: <RouteSchema & FastifySchema>{
+      schema: {
         response: { 200: { type: "array", items: ideaSchema } },
       },
     },
@@ -42,7 +42,7 @@ export default class IdeaController {
   @POST({
     url: "/",
     options: {
-      schema: <RouteSchema & FastifySchema>{
+      schema: {
         body: ideaInputSchema,
         response: { 200: ideaSchema },
       },
