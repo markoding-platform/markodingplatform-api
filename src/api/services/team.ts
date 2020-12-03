@@ -14,10 +14,10 @@ export default class TeamService {
     this.repository = this.database.connection.getRepository(Team);
   }
 
-  async getById(id: string): Promise<Team[] | undefined> {
+  async getById(ideaId: string): Promise<Team[] | undefined> {
     return this.repository
       .createQueryBuilder("team")
-      .where("idea_id = :id", { id })
+      .where("idea_id = :ideaId", { ideaId })
       .getMany();
   }
 
