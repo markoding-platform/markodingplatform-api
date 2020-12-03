@@ -39,7 +39,9 @@
       "es6": true,
       "node": true
     },
-    "plugins": ["@typescript-eslint"],
+    "plugins": [
+      "@typescript-eslint"
+    ],
     "extends": [
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended"
@@ -54,7 +56,12 @@
       "sourceType": "module"
     },
     "rules": {
-      "max-len": ["error", { "tabWidth": 2 }]
+      "max-len": [
+        "error",
+        {
+          "tabWidth": 2
+        }
+      ]
     }
   },
   "eslintIgnore": [
@@ -67,10 +74,12 @@
     "dotenv": "^8.2.0",
     "fastify": "^3.7.0",
     "fastify-decorators": "^3.4.1",
+    "hyperid": "^2.0.5",
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.29"
+    "typeorm": "^0.2.29",
+    "typeorm-naming-strategies": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.9",
