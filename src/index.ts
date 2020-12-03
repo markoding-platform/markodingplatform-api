@@ -3,6 +3,7 @@ import fastify from "fastify";
 import { bootstrap } from "fastify-decorators";
 
 import IdeaController from "./api/controllers/idea.controller";
+import TeamController from "./api/controllers/team";
 
 const { APP_PORT, APP_HOST } = process.env;
 
@@ -12,7 +13,7 @@ const ADDRESS = APP_HOST || "0.0.0.0";
 const server = fastify();
 
 server.register(bootstrap, {
-  controllers: [IdeaController],
+  controllers: [IdeaController, TeamController],
 });
 
 server.listen(PORT, ADDRESS, (err, address) => {
