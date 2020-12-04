@@ -5,7 +5,7 @@ import Database from "../../config/database";
 import { Event } from "../entity";
 
 @Service()
-export default class IdeaService {
+export default class EventService {
   private repository!: Repository<Event>;
   constructor(private database: Database) {}
 
