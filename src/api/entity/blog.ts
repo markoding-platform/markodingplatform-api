@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity("events")
-export class Event {
+@Entity("blogs")
+export class Blog {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -21,4 +21,4 @@ export class Event {
   finish: string;
 }
 
-export type EventInput = Omit<Event, "id">;
+export type BlogInput = Omit<Blog, "id">;
