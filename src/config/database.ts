@@ -4,7 +4,12 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 import { User, Idea, Team, Event } from "../api/entity";
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_URI,
+} = process.env;
 
 @Service()
 export default class Database {
@@ -19,7 +24,7 @@ export default class Database {
     this._connection = await createConnection({
       name: "connection-1",
       type: "postgres",
-      host: "d-markoding-postgres",
+      host: POSTGRES_URI,
       port: 5432,
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,

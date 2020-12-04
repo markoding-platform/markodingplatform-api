@@ -5,11 +5,11 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "backpack -r dotenv/config",
-    "build": "backpack build",
+    "build": "rimraf ./build && backpack build",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix --ext ts",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "start": "node ./build/index.js"
+    "start": "node -r dotenv/config ./build/main.js"
   },
   "repository": {
     "type": "git",
@@ -94,6 +94,7 @@
     "husky": "^4.3.0",
     "lint-staged": "^10.5.2",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "ts-loader": "^8.0.10",
     "typescript": "^4.0.5"
   }

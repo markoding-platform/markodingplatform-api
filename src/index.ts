@@ -6,8 +6,10 @@ import IdeaController from "./api/controllers/idea";
 import TeamController from "./api/controllers/team";
 import EventController from "./api/controllers/event";
 
-const PORT = 8080;
-const ADDRESS = "0.0.0.0";
+const { APP_PORT, APP_HOST } = process.env;
+
+const PORT = APP_PORT || 8080;
+const ADDRESS = APP_HOST || "0.0.0.0";
 
 const server = fastify();
 
