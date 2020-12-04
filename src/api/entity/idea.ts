@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 import { SolutionType } from "../../libs/types";
 
-@Entity()
+@Entity("ideas")
 export class Idea {
   @PrimaryGeneratedColumn("uuid")
   id: string;

@@ -2,7 +2,7 @@ import "reflect-metadata";
 import fastify from "fastify";
 import { bootstrap } from "fastify-decorators";
 
-import IdeaController from "./api/controllers/idea.controller";
+import IdeaController from "./api/controllers/idea";
 import TeamController from "./api/controllers/team";
 import EventController from "./api/controllers/event";
 
