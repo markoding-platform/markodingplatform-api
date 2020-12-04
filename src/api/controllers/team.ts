@@ -1,12 +1,12 @@
 import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
-import hyperId from "hyperid";
 
 import TeamService from "../services/team";
-import { Team, TeamInput, TeamInputMany } from "../entity/team";
+import { AddToTeamInput, Team, TeamInput, TeamInputMany } from "../entity/team";
 import {
   teamSchema,
-  /* teamInputSchema, ) */ teamInputManySchema,
+  addUserInputSchema,
+  teamInputManySchema,
 } from "../schemas/team";
 
 @Controller({ route: "/teams" })
@@ -54,28 +54,27 @@ export default class TeamController {
     return this.service.storeMany(values);
   }
 
-  /* @POST({
+  @POST({
     url: "/:ideaId",
     options: {
       schema: {
-        body: teamInputSchema,
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        body: addUserInputSchema,
         response: { 200: teamSchema },
       },
     },
   })
-  async createMany(
-    req: FastifyRequest<{ Body: TeamInputMany }>
+  async addUserToTeam(
+    req: FastifyRequest<{
+      Params: { ideaId: string };
+      Body: AddToTeamInput;
+    }>
   ): Promise<Team[]> {
-    const values: TeamInput[] = [];
-    req.body.userIds.forEach((userId: string) => {
-      values.push({
-        ideaId: req.body.ideaId,
-        userId: userId,
-        isLeader: checkLeader(req.body.leaderId, userId),
-      });
-    });
-    return this.service.storeMany(values);
-  } */
+    await this.service.addToTeam({ ideaId: req.params.ideaId, ...req.body });
+    const team = await this.service.getById(req.params.ideaId);
+    if (!team) throw { statusCode: 404, message: "Entity not found" };
+    return team;
+  }
 }
 
 function checkLeader(leaderId: string, userId: string): boolean {

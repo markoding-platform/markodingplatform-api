@@ -24,3 +24,12 @@ export const teamInputManySchema = {
     },
   },
 };
+
+export const addUserInputSchema = {
+  type: "object",
+  required: ["userId", "isLeader"],
+  properties: {
+    userId: { type: "string" },
+    isLeader: { type: "boolean" },
+  },
+};

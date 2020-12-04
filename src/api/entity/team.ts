@@ -22,3 +22,8 @@ export interface TeamInputMany {
   leaderId: string;
   userIds: string[];
 }
+
+export interface AddToTeamInput {
+  userId: string;
+  isLeader: boolean;
+}
