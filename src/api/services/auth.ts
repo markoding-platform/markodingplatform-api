@@ -26,7 +26,7 @@ class AuthService {
     const data = new Nonce();
 
     data.expiredAt = addMinutes(new Date(), Number(NONCE_EXP_MIN));
-    data.nonce = crypto.randomBytes(16).toString("base64");
+    data.nonce = crypto.randomBytes(16).toString("hex");
 
     return this.repository.save(data);
   }
@@ -34,7 +34,7 @@ class AuthService {
   async validateNonce(nonceStr: string): Promise<boolean> {
     const nonce = await this.repository
       .createQueryBuilder()
-      .where("nonce = :nonce AND expiredAt < :expiredAt", {
+      .where("nonce = :nonce AND expired_at > :expiredAt", {
         nonce: nonceStr,
         expiredAt: new Date(),
       })
