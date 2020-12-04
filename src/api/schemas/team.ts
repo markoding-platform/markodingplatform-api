@@ -11,7 +11,7 @@ export const teamSchema = {
   },
 };
 
-export const teamInputSchema = {
+export const teamInputManySchema = {
   type: "object",
   required: ["ideaId", "leaderId", "userIds"],
   properties: {

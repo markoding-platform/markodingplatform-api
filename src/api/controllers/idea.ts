@@ -1,3 +1,4 @@
+import camelcaseKeys from "camelcase-keys";
 import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
 
@@ -18,7 +19,7 @@ export default class IdeaController {
       },
     },
   })
-  async getIdeaById(
+  async getById(
     req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Idea> {
     const idea = await this.service.getById(req.params.id);
@@ -48,9 +49,32 @@ export default class IdeaController {
       },
     },
   })
-  async createOrUpdate(
-    req: FastifyRequest<{ Body: IdeaInput }>
+  async create(req: FastifyRequest<{ Body: IdeaInput }>): Promise<Idea> {
+    return this.service.store(req.body);
+  }
+
+  @POST({
+    url: "/:ideaId",
+    options: {
+      schema: {
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        body: ideaInputSchema,
+        response: { 200: ideaSchema },
+      },
+    },
+  })
+  async update(
+    req: FastifyRequest<{
+      Params: { ideaId: string };
+      Body: IdeaInput;
+    }>
   ): Promise<Idea> {
-    return await this.service.store(req.body);
+    let updated = await this.service.update(req.params.ideaId, req.body);
+    updated = camelcaseKeys(updated, { deep: true });
+    if (!Array.isArray(updated.solutionSupportingPhotos)) {
+      updated.solutionSupportingPhotos = [];
+    }
+
+    return updated;
   }
 }

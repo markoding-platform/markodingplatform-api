@@ -4,7 +4,10 @@ import hyperId from "hyperid";
 
 import TeamService from "../services/team";
 import { Team, TeamInput, TeamInputMany } from "../entity/team";
-import { teamSchema, teamInputSchema } from "../schemas/team";
+import {
+  teamSchema,
+  /* teamInputSchema, ) */ teamInputManySchema,
+} from "../schemas/team";
 
 @Controller({ route: "/teams" })
 export default class TeamController {
@@ -32,7 +35,7 @@ export default class TeamController {
     url: "/",
     options: {
       schema: {
-        body: teamInputSchema,
+        body: teamInputManySchema,
         response: { 200: teamSchema },
       },
     },
@@ -50,6 +53,29 @@ export default class TeamController {
     });
     return this.service.storeMany(values);
   }
+
+  /* @POST({
+    url: "/:ideaId",
+    options: {
+      schema: {
+        body: teamInputSchema,
+        response: { 200: teamSchema },
+      },
+    },
+  })
+  async createMany(
+    req: FastifyRequest<{ Body: TeamInputMany }>
+  ): Promise<Team[]> {
+    const values: TeamInput[] = [];
+    req.body.userIds.forEach((userId: string) => {
+      values.push({
+        ideaId: req.body.ideaId,
+        userId: userId,
+        isLeader: checkLeader(req.body.leaderId, userId),
+      });
+    });
+    return this.service.storeMany(values);
+  } */
 }
 
 function checkLeader(leaderId: string, userId: string): boolean {
