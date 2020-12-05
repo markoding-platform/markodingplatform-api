@@ -4,6 +4,7 @@ import { Controller, GET, POST } from "fastify-decorators";
 import EventService from "../services/event";
 import { Event, EventInput } from "../entity/event";
 import { eventSchema, eventInputSchema } from "../schemas/event";
+import { validateDateInput } from "../../libs/utils";
 
 @Controller({ route: "/events" })
 export default class EventController {
@@ -35,7 +36,7 @@ export default class EventController {
       },
     },
   })
-  async getAllIdeas(): Promise<Event[]> {
+  async getAll(): Promise<Event[]> {
     return this.service.getAll();
   }
 
@@ -48,9 +49,11 @@ export default class EventController {
       },
     },
   })
-  async createOrUpdate(
-    req: FastifyRequest<{ Body: EventInput }>
-  ): Promise<Event> {
-    return await this.service.store(req.body);
+  async create(req: FastifyRequest<{ Body: EventInput }>): Promise<Event> {
+    if (validateDateInput(req.body.date)) {
+      return await this.service.store(req.body);
+    }
+
+    throw { statusCode: 400, message: "Bad Request" };
   }
 }
