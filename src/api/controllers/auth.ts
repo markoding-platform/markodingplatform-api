@@ -28,8 +28,6 @@ class AuthController {
 
     const payload = this.service.decodeSSO(sso);
 
-    console.log(payload);
-
     if (!(await this.service.validateNonce(payload.nonce))) {
       throw new Error("please login again");
     }
