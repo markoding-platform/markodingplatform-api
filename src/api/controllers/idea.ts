@@ -36,7 +36,7 @@ export default class IdeaController {
       },
     },
   })
-  async getAllIdeas(): Promise<Idea[]> {
+  async getAll(): Promise<Idea[]> {
     return this.service.getAll();
   }
 
