@@ -1,3 +1,9 @@
+const timestamps = {
+  createdAt: { type: "string" },
+  updatedAt: { type: "string" },
+  deletedAt: { type: "string" },
+};
+
 const properties = {
   schoolId: { type: "string" },
   teacherId: { type: "string" },
@@ -22,6 +28,7 @@ export const ideaSchema = {
   type: "object",
   properties: {
     id: { type: "string" },
+    ...timestamps,
     ...properties,
   },
 };

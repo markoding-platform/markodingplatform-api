@@ -3,6 +3,9 @@ export const teamSchema = {
   items: {
     type: "object",
     properties: {
+      createdAt: { type: "string" },
+      updatedAt: { type: "string" },
+      deletedAt: { type: "string" },
       id: { type: "string", nullable: false },
       ideaId: { type: "string", nullable: false },
       userId: { type: "string", nullable: false },

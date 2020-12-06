@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 import { SolutionType } from "../../libs/types";
 
@@ -6,6 +13,15 @@ import { SolutionType } from "../../libs/types";
 export class Idea {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  deletedAt: Date;
 
   @Column("uuid")
   schoolId: string;
@@ -59,4 +75,7 @@ export class Idea {
   isDraft: boolean;
 }
 
-export type IdeaInput = Omit<Idea, "id">;
+export type IdeaInput = Omit<
+  Idea,
+  "id" | "createdAt" | "updatedAt" | "deletedAt"
+>;
