@@ -3,6 +3,7 @@
     "lib": [ "ES6"],
     "target": "ES5",
     "module": "commonjs",
+    "outDir": "./dist",
     "baseUrl": ".",
     "sourceMap": true,
     "esModuleInterop": true,
