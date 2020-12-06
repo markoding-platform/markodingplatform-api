@@ -9,26 +9,15 @@ import {
 
 @Entity("teams")
 export class Team {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
+  @PrimaryGeneratedColumn("uuid") id: string;
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
-
   @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
   updatedAt: Date;
-
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
-  deletedAt: Date;
-
-  @Column("uuid")
-  ideaId: string;
-
-  @Column("uuid")
-  userId: string;
-
-  @Column("boolean")
-  isLeader: boolean;
+  @DeleteDateColumn({ type: "timestamp", nullable: true }) deletedAt: Date;
+  @Column("uuid") ideaId: string;
+  @Column("uuid") userId: string;
+  @Column("boolean") isLeader: boolean;
 }
 
 export type TeamInput = Omit<
