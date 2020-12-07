@@ -2,9 +2,14 @@ import { Initializer, Service } from "fastify-decorators";
 import { createConnection, Connection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-import { User, Idea, Team } from "../api/entity";
+import { User, Idea, Team, Nonce } from "../api/entity";
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_URI,
+} = process.env;
 
 @Service()
 export default class Database {
@@ -19,12 +24,12 @@ export default class Database {
     this._connection = await createConnection({
       name: "connection-1",
       type: "postgres",
-      host: "d-markoding-postgres",
+      host: POSTGRES_URI,
       port: 5432,
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [User, Idea, Team],
+      entities: [User, Idea, Team, Nonce],
       logging: true,
       synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
