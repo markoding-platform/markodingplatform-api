@@ -1,10 +1,13 @@
 import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
-import hyperId from "hyperid";
 
 import TeamService from "../services/team";
-import { Team, TeamInput, TeamInputMany } from "../entity/team";
-import { teamSchema, teamInputSchema } from "../schemas/team";
+import { AddToTeamInput, Team, TeamInput, TeamInputMany } from "../entity/team";
+import {
+  teamSchema,
+  addUserInputSchema,
+  teamInputManySchema,
+} from "../schemas/team";
 
 @Controller({ route: "/teams" })
 export default class TeamController {
@@ -32,7 +35,7 @@ export default class TeamController {
     url: "/",
     options: {
       schema: {
-        body: teamInputSchema,
+        body: teamInputManySchema,
         response: { 200: teamSchema },
       },
     },
@@ -49,6 +52,28 @@ export default class TeamController {
       });
     });
     return this.service.storeMany(values);
+  }
+
+  @POST({
+    url: "/:ideaId",
+    options: {
+      schema: {
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        body: addUserInputSchema,
+        response: { 200: teamSchema },
+      },
+    },
+  })
+  async addUserToTeam(
+    req: FastifyRequest<{
+      Params: { ideaId: string };
+      Body: AddToTeamInput;
+    }>
+  ): Promise<Team[]> {
+    await this.service.addToTeam({ ideaId: req.params.ideaId, ...req.body });
+    const team = await this.service.getById(req.params.ideaId);
+    if (!team) throw { statusCode: 404, message: "Entity not found" };
+    return team;
   }
 }
 

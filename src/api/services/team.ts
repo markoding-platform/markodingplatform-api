@@ -33,4 +33,8 @@ export default class TeamService {
       .execute();
     return generatedMaps as Team[];
   }
+
+  async addToTeam(payload: TeamInput): Promise<Team> {
+    return this.repository.save(payload);
+  }
 }
