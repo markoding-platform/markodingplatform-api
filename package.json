@@ -8,8 +8,10 @@
     "build": "backpack build",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix --ext ts",
-    "prettier": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier --write '**/*.ts'",
     "start": "node ./build/index.js",
+    "migration:create": "typeorm migration:create",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
