@@ -4,6 +4,8 @@ import { bootstrap } from "fastify-decorators";
 
 import IdeaController from "./api/controllers/idea";
 import TeamController from "./api/controllers/team";
+import EventController from "./api/controllers/event";
+import BlogController from "./api/controllers/blog";
 import AuthController from "./api/controllers/auth";
 import AnnouncementController from "./api/controllers/announcement";
 
@@ -18,6 +20,8 @@ server.register(bootstrap, {
   controllers: [
     IdeaController,
     TeamController,
+    EventController,
+    BlogController,
     AuthController,
     AnnouncementController,
   ],
