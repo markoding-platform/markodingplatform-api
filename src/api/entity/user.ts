@@ -11,3 +11,5 @@ export class User {
   @Column()
   email: string;
 }
+
+export type UserInput = Omit<User, "id">;

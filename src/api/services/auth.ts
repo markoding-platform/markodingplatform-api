@@ -62,7 +62,7 @@ class AuthService {
 
     return {
       sso: payloadBase64,
-      sig: hmac.digest("base64"),
+      sig: hmac.digest("hex"),
     };
   }
 
@@ -71,7 +71,7 @@ class AuthService {
 
     hmac.update(ssoStr);
 
-    return hmac.digest("base64") === sigStr;
+    return hmac.digest("hex") === sigStr;
   }
 
   decodeSSO(ssoStr: string): SSOResponse {

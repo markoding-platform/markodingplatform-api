@@ -2,16 +2,20 @@ import { FastifyRequest } from "fastify";
 import { Controller, POST } from "fastify-decorators";
 
 import AuthService from "../services/auth";
+import UserService from "../services/user";
 import { SSORequest } from "../entity";
 
 @Controller({ route: "/auth" })
 class AuthController {
-  constructor(private service: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   @POST({ url: "/start" })
   async start(req: FastifyRequest): Promise<SSORequest> {
-    const newNonce = await this.service.generateNonce();
-    const payload = this.service.signNonce(newNonce.nonce);
+    const newNonce = await this.authService.generateNonce();
+    const payload = this.authService.signNonce(newNonce.nonce);
 
     return payload;
   }
@@ -19,21 +23,27 @@ class AuthController {
   @POST({ url: "/finish" })
   async finish(
     req: FastifyRequest<{ Querystring: { sso: string; sig: string } }>
-  ): Promise<{ token: string }> {
+  ): Promise<{ token: string; data: any }> {
     const { sso, sig } = req.query;
 
-    if (!this.service.verifySSO(sso, sig)) {
-      throw new Error("forbidden");
+    if (!this.authService.verifySSO(sso, sig)) {
+      throw { statusCode: 403, message: "forbidden " };
     }
 
-    const payload = this.service.decodeSSO(sso);
+    const payload = this.authService.decodeSSO(sso);
 
-    if (!(await this.service.validateNonce(payload.nonce))) {
-      throw new Error("please login again");
+    if (!(await this.authService.validateNonce(payload.nonce))) {
+      throw { statusCode: 403, message: "please login again" };
     }
+
+    const user = this.userService.findOrCreate({
+      name: payload.name,
+      email: payload.name,
+    });
 
     return {
-      token: this.service.generateJWT(payload),
+      token: this.authService.generateJWT(payload),
+      data: { user },
     };
   }
 }
