@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import fastify from "fastify";
+import fastifyCors from "fastify-cors";
 import { bootstrap } from "fastify-decorators";
 
 import IdeaController from "./api/controllers/idea";
@@ -13,6 +14,10 @@ const PORT = APP_PORT || 8080;
 const ADDRESS = APP_HOST || "0.0.0.0";
 
 const server = fastify();
+
+server.register(fastifyCors, {
+  origin: "*",
+});
 
 server.register(bootstrap, {
   controllers: [
