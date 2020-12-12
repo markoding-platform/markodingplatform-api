@@ -2,7 +2,7 @@ import { Initializer, Service } from "fastify-decorators";
 import { Repository } from "typeorm";
 
 import Database from "../../config/database";
-import { Idea } from "../entity";
+import { Idea, IdeaInput } from "../entity";
 
 @Service()
 export default class IdeaService {
@@ -24,5 +24,16 @@ export default class IdeaService {
 
   async store(idea: Partial<Idea>): Promise<Idea> {
     return this.repository.save(idea);
+  }
+
+  async update(id: string, idea: Partial<IdeaInput>): Promise<Idea> {
+    const { raw } = await this.repository
+      .createQueryBuilder()
+      .update(Idea)
+      .set(idea)
+      .where("id = :id", { id })
+      .returning("*")
+      .execute();
+    return raw[0];
   }
 }

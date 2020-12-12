@@ -15,10 +15,10 @@ export class Event {
   date: Date;
 
   @Column("time")
-  start: string;
+  startAt: string;
 
   @Column("time")
-  finish: string;
+  finishAt: string;
 }
 
 export type EventInput = Omit<Event, "id">;
