@@ -7,31 +7,22 @@ import {
   DeleteDateColumn,
 } from "typeorm";
 
-@Entity("teams")
-export class Team {
+@Entity("announcements")
+export class Announcement {
   @PrimaryGeneratedColumn("uuid") id: string;
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
   @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
   updatedAt: Date;
   @DeleteDateColumn({ type: "timestamp", nullable: true }) deletedAt: Date;
-  @Column("uuid") ideaId: string;
-  @Column("uuid") userId: string;
-  @Column("boolean") isLeader: boolean;
+  @Column("varchar", { length: 255 }) title: string;
+  @Column("text") subtitle: string;
+  @Column("timestamp") datetime: Date;
+  @Column("varchar", { length: 255 }) url: string;
+  @Column("uuid", { nullable: true }) userId: Date;
 }
 
-export type TeamInput = Omit<
-  Team,
+export type AnnouncementInput = Omit<
+  Announcement,
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;
-
-export interface TeamInputMany {
-  ideaId: string;
-  leaderId: string;
-  userIds: string[];
-}
-
-export interface AddToTeamInput {
-  userId: string;
-  isLeader: boolean;
-}

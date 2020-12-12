@@ -2,7 +2,15 @@ import { Initializer, Service } from "fastify-decorators";
 import { createConnection, Connection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-import { User, Idea, Team, Event, Blog } from "../api/entity";
+import {
+  User,
+  Idea,
+  Team,
+  Nonce,
+  Announcement,
+  Event,
+  Blog,
+} from "../api/entity";
 
 const {
   POSTGRES_USER,
@@ -29,7 +37,7 @@ export default class Database {
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [User, Idea, Team, Event, Blog],
+      entities: [User, Idea, Team, Nonce, Announcement, Event, Blog],
       logging: true,
       synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
