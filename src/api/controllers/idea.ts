@@ -5,6 +5,7 @@ import { Controller, GET, POST } from "fastify-decorators";
 import IdeaService from "../services/idea";
 import { Idea, IdeaInput } from "../entity/idea";
 import { ideaSchema, ideaInputSchema } from "../schemas/idea";
+import authenticate from "../hooks/onRequest/authentication";
 
 @Controller({ route: "/ideas" })
 export default class IdeaController {
@@ -34,6 +35,7 @@ export default class IdeaController {
       schema: {
         response: { 200: { type: "array", items: ideaSchema } },
       },
+      onRequest: authenticate,
     },
   })
   async getAll(): Promise<Idea[]> {
