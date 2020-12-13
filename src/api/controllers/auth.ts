@@ -53,7 +53,7 @@ class AuthController {
     const { sso, sig } = req.query;
 
     if (!this.authService.verifySSO(sso, sig)) {
-      throw { statusCode: 403, message: "forbidden " };
+      throw { statusCode: 403, message: "forbidden" };
     }
 
     const payload = this.authService.decodeSSO(sso);
