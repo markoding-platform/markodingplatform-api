@@ -43,18 +43,34 @@ class AuthService {
     return nonce !== undefined;
   }
 
-  generateJWT(payload: any): string {
+  generateJWT(payload: Record<string, unknown>): string {
     const token = jwt.sign(payload, JWT_SECRET as string);
 
     return token;
   }
 
-  async decodeJWT(jwtStr: string) {
-    return;
-  }
-
   signNonce(nonceStr: string): SSORequest {
     const rawPayload = `nonce=${nonceStr}`;
+    const payloadBase64 = Buffer.from(rawPayload, "utf-8").toString("base64");
+    const hmac = crypto.createHmac("SHA256", SSO_SECRET as string);
+
+    hmac.update(payloadBase64);
+
+    return {
+      sso: payloadBase64,
+      sig: hmac.digest("hex"),
+    };
+  }
+
+  signNonceDebug(
+    nonceStr: string,
+    id: number,
+    email: string,
+    isEmailVerified: boolean,
+    name: string
+  ): SSORequest {
+    // eslint-disable-next-line max-len
+    const rawPayload = `nonce=${nonceStr}&id=${id}&email=${email}&isEmailVerified=${isEmailVerified}&name=${name}`;
     const payloadBase64 = Buffer.from(rawPayload, "utf-8").toString("base64");
     const hmac = crypto.createHmac("SHA256", SSO_SECRET as string);
 
@@ -82,7 +98,7 @@ class AuthService {
       nonce: decoded["nonce"] as string,
       id: decoded["id"] as string,
       email: decoded["email"] as string,
-      isEmailVerified: Boolean(decoded["isEmailVerified"] as string),
+      isEmailVerified: (decoded["isEmailVerified"] as string) === "true",
       name: decoded["name"] as string,
     };
   }
