@@ -75,6 +75,7 @@
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "fastify": "^3.7.0",
+    "fastify-cors": "^5.1.0",
     "fastify-decorators": "^3.4.1",
     "hyperid": "^2.0.5",
     "jsonwebtoken": "^8.5.1",

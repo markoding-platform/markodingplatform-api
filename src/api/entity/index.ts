@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User, UserInput } from "./user";
 import { Idea, IdeaInput } from "./idea";
 import { Team, TeamInput, AddToTeamInput } from "./team";
 import { Nonce, SSORequest, SSOResponse } from "./nonce";
@@ -8,6 +8,7 @@ import { Blog } from "./blog";
 
 export {
   User,
+  UserInput,
   Idea,
   IdeaInput,
   Team,
