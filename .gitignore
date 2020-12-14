@@ -4,3 +4,5 @@ build
 .env
 
 *.pem
+.idea
+docker-compose.local.yaml
