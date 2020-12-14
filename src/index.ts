@@ -17,6 +17,8 @@ const ADDRESS = APP_HOST || "0.0.0.0";
 
 const server = fastify();
 
+server.decorateRequest("user", null);
+
 server.register(fastifyCors, {
   origin: "*",
 });

@@ -16,10 +16,33 @@ class UserService {
   }
 
   async findOrCreate(data: UserInput): Promise<User> {
-    let user = await this.repository.findOne(data);
+    let user = await this.repository.findOne({
+      name: data.name,
+      email: data.email,
+      externalId: data.externalId,
+    });
 
     if (!user) {
-      user = await this.repository.create(data);
+      user = await this.repository.save({
+        ...data,
+        isEmailVerified: false,
+      });
+    }
+
+    if (!user?.isEmailVerified && data.isEmailVerified) {
+      await this.repository.update(
+        {
+          id: user.id,
+        },
+        {
+          isEmailVerified: true,
+        }
+      );
+
+      user = {
+        ...user,
+        isEmailVerified: true,
+      };
     }
 
     return user;

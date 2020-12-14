@@ -1,9 +1,13 @@
 import { FastifyRequest } from "fastify";
+import { AuthQuerystring } from "schemas";
 import { Controller, POST } from "fastify-decorators";
 
 import AuthService from "../services/auth";
 import UserService from "../services/user";
 import { SSORequest } from "../entity";
+import { authQuerySchema } from "../schemas/auth";
+
+const { DEBUGGABLE = false } = process.env;
 
 @Controller({ route: "/auth" })
 class AuthController {
@@ -12,8 +16,30 @@ class AuthController {
     private userService: UserService
   ) {}
 
-  @POST({ url: "/start" })
-  async start(req: FastifyRequest): Promise<SSORequest> {
+  @POST({
+    url: "/start",
+    options: {
+      schema: {
+        querystring: authQuerySchema,
+      },
+    },
+  })
+  async start(
+    request: FastifyRequest<{ Querystring: AuthQuerystring }>
+  ): Promise<SSORequest> {
+    if (request.query.debug && Boolean(DEBUGGABLE)) {
+      const newNonce = await this.authService.generateNonce();
+      const payload = this.authService.signNonceDebug(
+        newNonce.nonce,
+        request.query.id,
+        request.query.email,
+        request.query.isEmailVerified,
+        request.query.name
+      );
+
+      return payload;
+    }
+
     const newNonce = await this.authService.generateNonce();
     const payload = this.authService.signNonce(newNonce.nonce);
 
@@ -23,11 +49,11 @@ class AuthController {
   @POST({ url: "/finish" })
   async finish(
     req: FastifyRequest<{ Querystring: { sso: string; sig: string } }>
-  ): Promise<{ token: string; data: any }> {
+  ): Promise<{ token: string; data: unknown }> {
     const { sso, sig } = req.query;
 
     if (!this.authService.verifySSO(sso, sig)) {
-      throw { statusCode: 403, message: "forbidden " };
+      throw { statusCode: 403, message: "forbidden" };
     }
 
     const payload = this.authService.decodeSSO(sso);
@@ -36,9 +62,11 @@ class AuthController {
       throw { statusCode: 403, message: "please login again" };
     }
 
-    const user = this.userService.findOrCreate({
+    const user = await this.userService.findOrCreate({
       name: payload.name,
       email: payload.name,
+      externalId: payload.id,
+      isEmailVerified: payload.isEmailVerified,
     });
 
     return {
