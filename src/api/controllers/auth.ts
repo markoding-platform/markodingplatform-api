@@ -48,9 +48,9 @@ class AuthController {
 
   @POST({ url: "/finish" })
   async finish(
-    req: FastifyRequest<{ Querystring: { sso: string; sig: string } }>
+    req: FastifyRequest<{ Body: { sso: string; sig: string } }>
   ): Promise<{ token: string; data: unknown }> {
-    const { sso, sig } = req.query;
+    const { sso, sig } = req.body;
 
     if (!this.authService.verifySSO(sso, sig)) {
       throw { statusCode: 403, message: "forbidden" };
@@ -64,7 +64,7 @@ class AuthController {
 
     const user = await this.userService.findOrCreate({
       name: payload.name,
-      email: payload.name,
+      email: payload.email,
       externalId: payload.id,
       isEmailVerified: payload.isEmailVerified,
     });

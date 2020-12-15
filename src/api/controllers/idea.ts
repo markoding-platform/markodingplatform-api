@@ -35,7 +35,6 @@ export default class IdeaController {
       schema: {
         response: { 200: { type: "array", items: ideaSchema } },
       },
-      onRequest: authenticate,
     },
   })
   async getAll(): Promise<Idea[]> {
