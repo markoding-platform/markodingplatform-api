@@ -18,12 +18,18 @@ export default class QuestionService {
     return this.repository.findOne({ id });
   }
 
-  async getAll(): Promise<Question[]> {
-    return this.repository.find();
+  async getByChannel(channelId: string): Promise<Question[]> {
+    return this.repository
+      .createQueryBuilder()
+      .where("channel_id = :channelId", {
+        channelId,
+      })
+      .leftJoinAndSelect("Question.user", "user")
+      .getMany();
   }
 
-  async store(idea: Partial<Question>): Promise<Question> {
-    return this.repository.save(idea);
+  async store(question: Partial<Question>): Promise<Question> {
+    return this.repository.save(question);
   }
 
   async update(

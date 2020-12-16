@@ -1,7 +1,8 @@
+import { userSchema } from "./user";
+
 const timestamps = {
   createdAt: { type: "string" },
   updatedAt: { type: "string" },
-  deletedAt: { type: "string" },
 };
 
 const properties = {
@@ -15,6 +16,7 @@ export const questionSchema = {
     id: { type: "string" },
     ...timestamps,
     ...properties,
+    user: userSchema,
   },
 };
 

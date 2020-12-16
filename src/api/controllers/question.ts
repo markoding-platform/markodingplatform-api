@@ -12,6 +12,20 @@ export default class QuestionController {
   constructor(private service: QuestionService) {}
 
   @GET({
+    url: "/channel/:id",
+    options: {
+      schema: {
+        response: { 200: { type: "array", items: questionSchema } },
+      },
+    },
+  })
+  async getByChannel(
+    req: FastifyRequest<{ Params: { id: string } }>
+  ): Promise<Question[]> {
+    return this.service.getByChannel(req.params.id);
+  }
+
+  @GET({
     url: "/:id",
     options: {
       schema: {
@@ -27,18 +41,6 @@ export default class QuestionController {
 
     if (!question) throw { statusCode: 404, message: "Entity not found" };
     return question;
-  }
-
-  @GET({
-    url: "/",
-    options: {
-      schema: {
-        response: { 200: { type: "array", items: questionSchema } },
-      },
-    },
-  })
-  async getAll(): Promise<Question[]> {
-    return this.service.getAll();
   }
 
   @POST({
@@ -58,12 +60,12 @@ export default class QuestionController {
   }
 
   @PUT({
-    url: "/:questionId",
+    url: "/:id",
     options: {
       schema: {
         params: {
           type: "object",
-          properties: { questionId: { type: "string" } },
+          properties: { id: { type: "string" } },
         },
         body: questionInputSchema,
         response: { 200: questionSchema },
@@ -73,11 +75,11 @@ export default class QuestionController {
   })
   async update(
     req: FastifyRequest<{
-      Params: { questionId: string };
+      Params: { id: string };
       Body: QuestionInput;
     }>
   ): Promise<Question> {
-    let updated = await this.service.update(req.params.questionId, req.body);
+    let updated = await this.service.update(req.params.id, req.body);
     updated = camelcaseKeys(updated, { deep: true });
     return updated;
   }
