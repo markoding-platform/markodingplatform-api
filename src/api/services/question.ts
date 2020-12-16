@@ -2,35 +2,38 @@ import { Initializer, Service } from "fastify-decorators";
 import { Repository } from "typeorm";
 
 import Database from "../../config/database";
-import { Idea, IdeaInput } from "../entity";
+import { Question, QuestionInput } from "../entity";
 
 @Service()
-export default class IdeaService {
-  private repository!: Repository<Idea>;
+export default class QuestionService {
+  private repository!: Repository<Question>;
   constructor(private database: Database) {}
 
   @Initializer([Database])
   async init(): Promise<void> {
-    this.repository = this.database.connection.getRepository(Idea);
+    this.repository = this.database.connection.getRepository(Question);
   }
 
-  async getById(id: string): Promise<Idea | undefined> {
+  async getById(id: string): Promise<Question | undefined> {
     return this.repository.findOne({ id });
   }
 
-  async getAll(): Promise<Idea[]> {
+  async getAll(): Promise<Question[]> {
     return this.repository.find();
   }
 
-  async store(idea: Partial<Idea>): Promise<Idea> {
+  async store(idea: Partial<Question>): Promise<Question> {
     return this.repository.save(idea);
   }
 
-  async update(id: string, idea: Partial<IdeaInput>): Promise<Idea> {
+  async update(
+    id: string,
+    question: Partial<QuestionInput>
+  ): Promise<Question> {
     const { raw } = await this.repository
       .createQueryBuilder()
-      .update(Idea)
-      .set(idea)
+      .update(Question)
+      .set(question)
       .where("id = :id", { id })
       .returning("*")
       .execute();

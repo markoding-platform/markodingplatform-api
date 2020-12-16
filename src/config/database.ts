@@ -10,6 +10,8 @@ import {
   Announcement,
   Event,
   Blog,
+  Channel,
+  Question,
 } from "../api/entity";
 
 const {
@@ -37,7 +39,17 @@ export default class Database {
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [User, Idea, Team, Nonce, Announcement, Event, Blog],
+      entities: [
+        User,
+        Idea,
+        Team,
+        Nonce,
+        Announcement,
+        Event,
+        Blog,
+        Channel,
+        Question,
+      ],
       logging: true,
       synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),

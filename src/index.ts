@@ -9,6 +9,8 @@ import EventController from "./api/controllers/event";
 import BlogController from "./api/controllers/blog";
 import AuthController from "./api/controllers/auth";
 import AnnouncementController from "./api/controllers/announcement";
+import ChannelController from "./api/controllers/channel";
+import QuestionController from "./api/controllers/question";
 
 const { APP_PORT, APP_HOST } = process.env;
 
@@ -31,6 +33,8 @@ server.register(bootstrap, {
     BlogController,
     AuthController,
     AnnouncementController,
+    ChannelController,
+    QuestionController,
   ],
 });
 

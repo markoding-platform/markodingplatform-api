@@ -5,6 +5,8 @@ import { Nonce, SSORequest, SSOResponse } from "./nonce";
 import { Announcement, AnnouncementInput } from "./announcement";
 import { Event } from "./event";
 import { Blog } from "./blog";
+import { Channel } from "./channel";
+import { Question, QuestionInput } from "./question";
 
 export {
   User,
@@ -21,4 +23,7 @@ export {
   AnnouncementInput,
   Event,
   Blog,
+  Channel,
+  Question,
+  QuestionInput,
 };
