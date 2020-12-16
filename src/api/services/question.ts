@@ -15,7 +15,13 @@ export default class QuestionService {
   }
 
   async getById(id: string): Promise<Question | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository
+      .createQueryBuilder()
+      .where("Question.id = :id", {
+        id,
+      })
+      .leftJoinAndSelect("Question.user", "user")
+      .getOne();
   }
 
   async getByChannel(channelId: string): Promise<Question[]> {
