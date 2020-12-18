@@ -6,16 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  OneToMany,
 } from "typeorm";
 import { User } from "./user";
-import { Channel } from "./channel";
-import { QuestionComment } from "./questionCommnet";
-import { QuestionLike } from "./questionLike";
+import { Question } from "./question";
 
-@Entity("questions")
-export class Question {
-  @PrimaryGeneratedColumn("uuid")
+@Entity("questionComments")
+export class QuestionComment {
+  @PrimaryGeneratedColumn()
   id: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
@@ -30,20 +27,14 @@ export class Question {
   @Column("text")
   content: string;
 
-  @ManyToOne(() => Channel)
-  channel: Channel;
+  @ManyToOne(() => Question, (question) => question.comments)
+  question: Question;
 
   @ManyToOne(() => User)
   user: User;
-
-  @OneToMany(() => QuestionComment, (comment) => comment.question)
-  comments: QuestionComment[];
-
-  @OneToMany(() => QuestionLike, (like) => like.question)
-  likes: QuestionLike[];
 }
 
-export type QuestionInput = Omit<
-  Question,
+export type QuestionCommentInput = Omit<
+  QuestionComment,
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;

@@ -70,7 +70,7 @@ class AuthController {
     });
 
     return {
-      token: this.authService.generateJWT(payload),
+      token: this.authService.generateJWT({ user }),
       data: { user },
     };
   }

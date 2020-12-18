@@ -1,4 +1,5 @@
 import { userSchema } from "./user";
+import { channelSchema } from "./channel";
 
 const timestamps = {
   createdAt: { type: "string" },
@@ -6,8 +7,7 @@ const timestamps = {
 };
 
 const properties = {
-  question: { type: "string" },
-  channelId: { type: "string" },
+  content: { type: "string" },
 };
 
 export const questionSchema = {
@@ -16,12 +16,22 @@ export const questionSchema = {
     id: { type: "string" },
     ...timestamps,
     ...properties,
+    comments: { type: "number" },
+    likes: { type: "number" },
+    channel: channelSchema,
     user: userSchema,
   },
 };
 
-export const questionInputSchema = {
+export const questionPostSchema = {
   type: "object",
-  required: ["question", "channelId"],
+  required: ["content", "channel"],
+  channel: { type: "string" },
+  properties,
+};
+
+export const questionPutSchema = {
+  type: "object",
+  required: ["content"],
   properties,
 };

@@ -11,6 +11,8 @@ import AuthController from "./api/controllers/auth";
 import AnnouncementController from "./api/controllers/announcement";
 import ChannelController from "./api/controllers/channel";
 import QuestionController from "./api/controllers/question";
+import QuestionCommentController from "./api/controllers/questionComment";
+import QuestionLikeController from "./api/controllers/questionLike";
 
 const { APP_PORT, APP_HOST } = process.env;
 
@@ -35,6 +37,8 @@ server.register(bootstrap, {
     AnnouncementController,
     ChannelController,
     QuestionController,
+    QuestionCommentController,
+    QuestionLikeController,
   ],
 });
 

@@ -3,8 +3,12 @@ import { FastifyRequest } from "fastify";
 import { Controller, GET, POST, PUT } from "fastify-decorators";
 
 import QuestionService from "../services/question";
-import { Question, QuestionInput } from "../entity";
-import { questionSchema, questionInputSchema } from "../schemas/question";
+import { Question, QuestionInput, User } from "../entity";
+import {
+  questionSchema,
+  questionPostSchema,
+  questionPutSchema,
+} from "../schemas/question";
 import authenticate from "../hooks/onRequest/authentication";
 
 @Controller({ route: "/questions" })
@@ -20,9 +24,16 @@ export default class QuestionController {
     },
   })
   async getByChannel(
-    req: FastifyRequest<{ Params: { id: string } }>
+    req: FastifyRequest<{
+      Params: { id: string };
+      Querystring: { limit: number; offset: number };
+    }>
   ): Promise<Question[]> {
-    return this.service.getByChannel(req.params.id);
+    return this.service.getByChannel(
+      req.params.id,
+      req.query.limit || 10,
+      req.query.offset || 0
+    );
   }
 
   @GET({
@@ -47,15 +58,21 @@ export default class QuestionController {
     url: "/",
     options: {
       schema: {
-        body: questionInputSchema,
+        body: questionPostSchema,
         response: { 200: questionSchema },
       },
       onRequest: authenticate,
     },
   })
   async create(
-    req: FastifyRequest<{ Body: QuestionInput }>
+    req: AuthenticatedRequest<{
+      Body: QuestionInput;
+      User: Record<string, unknown>;
+    }>
   ): Promise<Question> {
+    const user = req.user?.user as User;
+    const data = req.body;
+    data.user = user;
     return this.service.store(req.body);
   }
 
@@ -67,20 +84,22 @@ export default class QuestionController {
           type: "object",
           properties: { id: { type: "string" } },
         },
-        body: questionInputSchema,
+        body: questionPutSchema,
         response: { 200: questionSchema },
       },
       onRequest: authenticate,
     },
   })
   async update(
-    req: FastifyRequest<{
+    req: AuthenticatedRequest<{
       Params: { id: string };
       Body: QuestionInput;
+      User: Record<string, unknown>;
     }>
   ): Promise<Question> {
-    let updated = await this.service.update(req.params.id, req.body);
-    updated = camelcaseKeys(updated, { deep: true });
-    return updated;
+    const user = req.user?.user as User;
+    const updated = await this.service.update(req.params.id, req.body, user);
+    if (!updated) throw { statusCode: 404, message: "Entity not found" };
+    return camelcaseKeys(updated, { deep: true });
   }
 }

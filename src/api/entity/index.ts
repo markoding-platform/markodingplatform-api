@@ -7,6 +7,8 @@ import { Event } from "./event";
 import { Blog } from "./blog";
 import { Channel } from "./channel";
 import { Question, QuestionInput } from "./question";
+import { QuestionComment, QuestionCommentInput } from "./questionCommnet";
+import { QuestionLike, QuestionLikeInput } from "./questionLike";
 
 export {
   User,
@@ -26,4 +28,8 @@ export {
   Channel,
   Question,
   QuestionInput,
+  QuestionComment,
+  QuestionCommentInput,
+  QuestionLike,
+  QuestionLikeInput,
 };

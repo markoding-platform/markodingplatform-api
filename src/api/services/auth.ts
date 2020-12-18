@@ -44,9 +44,7 @@ class AuthService {
   }
 
   generateJWT(payload: Record<string, unknown>): string {
-    const token = jwt.sign(payload, JWT_SECRET as string);
-
-    return token;
+    return jwt.sign(payload, JWT_SECRET as string);
   }
 
   signNonce(nonceStr: string): SSORequest {

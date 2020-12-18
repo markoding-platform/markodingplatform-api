@@ -12,6 +12,8 @@ import {
   Blog,
   Channel,
   Question,
+  QuestionComment,
+  QuestionLike,
 } from "../api/entity";
 
 const {
@@ -49,6 +51,8 @@ export default class Database {
         Blog,
         Channel,
         Question,
+        QuestionComment,
+        QuestionLike,
       ],
       logging: true,
       synchronize: true,
