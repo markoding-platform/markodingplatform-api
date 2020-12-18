@@ -23,7 +23,7 @@ export default class QuestionLikeService {
       const { raw } = await this.repository
         .createQueryBuilder()
         .update(QuestionLike)
-        .set({ isLike: data.isLike })
+        .set({ isLike: !liked.isLike })
         .where("id = :id", { id: liked.id })
         .returning("*")
         .execute();
