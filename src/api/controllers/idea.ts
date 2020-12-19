@@ -5,7 +5,6 @@ import { Controller, GET, POST } from "fastify-decorators";
 import IdeaService from "../services/idea";
 import { Idea, IdeaInput } from "../entity/idea";
 import { ideaSchema, ideaInputSchema } from "../schemas/idea";
-import authenticate from "../hooks/onRequest/authentication";
 
 @Controller({ route: "/ideas" })
 export default class IdeaController {

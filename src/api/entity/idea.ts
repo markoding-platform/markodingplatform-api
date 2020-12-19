@@ -11,12 +11,18 @@ import { SolutionType } from "../../libs/types";
 
 @Entity("ideas")
 export class Idea {
-  @PrimaryGeneratedColumn("uuid") id: string;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
+
   @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
   updatedAt: Date;
-  @DeleteDateColumn({ type: "timestamp", nullable: true }) deletedAt: Date;
+
+  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  deletedAt: Date;
+
   @Column("uuid") schoolId: string;
   @Column("uuid") teacherId: string;
   @Column("text") solutionName: string;

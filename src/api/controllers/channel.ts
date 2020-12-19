@@ -1,7 +1,7 @@
 import { Controller, GET } from "fastify-decorators";
 
 import ChannelService from "../services/channel";
-import { Channel, Question } from "../entity";
+import { Channel } from "../entity";
 import { channelSchema } from "../schemas/channel";
 import { FastifyRequest } from "fastify";
 
