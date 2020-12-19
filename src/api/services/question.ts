@@ -44,7 +44,7 @@ export default class QuestionService {
 
   async getById(id: string): Promise<Question | undefined> {
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder("Question")
       .where("Question.id = :id", {
         id,
       })

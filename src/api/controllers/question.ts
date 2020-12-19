@@ -73,7 +73,7 @@ export default class QuestionController {
     const user = req.user?.user as User;
     const data = req.body;
     data.user = user;
-    return this.service.store(req.body);
+    return this.service.store(data);
   }
 
   @PUT({
