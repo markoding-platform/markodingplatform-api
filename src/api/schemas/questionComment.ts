@@ -22,6 +22,8 @@ export const questionCommentSchema = {
 export const questionCommentInputSchema = {
   type: "object",
   required: ["content", "question"],
-  question: { type: "string" },
-  properties,
+  properties: {
+    ...properties,
+    question: { type: "string" },
+  },
 };
