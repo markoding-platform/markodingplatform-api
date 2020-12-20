@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { User, Question } from ".";
 
-@Entity("questionLikes")
+@Entity("question_likes")
 export class QuestionLike {
   @PrimaryGeneratedColumn()
   id: string;
