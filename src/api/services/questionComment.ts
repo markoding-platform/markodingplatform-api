@@ -20,7 +20,7 @@ export default class QuestionCommentService {
     offset: number
   ): Promise<QuestionComment[]> {
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder("QuestionComment")
       .where("question_id = :questionId", {
         questionId,
       })
