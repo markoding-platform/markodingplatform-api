@@ -20,7 +20,7 @@ export default class QuestionService {
     offset: number
   ): Promise<Question[]> {
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder("Question")
       .where("channel_id = :channelId", {
         channelId,
       })
@@ -44,7 +44,7 @@ export default class QuestionService {
 
   async getById(id: string): Promise<Question | undefined> {
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder("Question")
       .where("Question.id = :id", {
         id,
       })
