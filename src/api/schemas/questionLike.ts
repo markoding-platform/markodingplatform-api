@@ -22,6 +22,8 @@ export const questionLikeSchema = {
 export const questionLikeInputSchema = {
   type: "object",
   required: ["isLike", "question"],
-  question: { type: "string" },
-  properties,
+  properties: {
+    ...properties,
+    question: { type: "string" },
+  },
 };

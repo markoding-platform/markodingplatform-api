@@ -26,8 +26,10 @@ export const questionSchema = {
 export const questionPostSchema = {
   type: "object",
   required: ["content", "channel"],
-  channel: { type: "string" },
-  properties,
+  properties: {
+    ...properties,
+    channel: { type: "string" },
+  },
 };
 
 export const questionPutSchema = {

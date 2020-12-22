@@ -2,7 +2,7 @@ import { Initializer, Service } from "fastify-decorators";
 import { Repository } from "typeorm";
 
 import Database from "../../config/database";
-import { QuestionComment } from "../entity";
+import { QuestionComment, QuestionCommentInput } from "../entity";
 
 @Service()
 export default class QuestionCommentService {
@@ -20,7 +20,7 @@ export default class QuestionCommentService {
     offset: number
   ): Promise<QuestionComment[]> {
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder("QuestionComment")
       .where("question_id = :questionId", {
         questionId,
       })
@@ -30,7 +30,9 @@ export default class QuestionCommentService {
       .getMany();
   }
 
-  async store(comment: Partial<QuestionComment>): Promise<QuestionComment> {
+  async store(
+    comment: Partial<QuestionCommentInput>
+  ): Promise<QuestionComment> {
     return this.repository.save(comment);
   }
 }
