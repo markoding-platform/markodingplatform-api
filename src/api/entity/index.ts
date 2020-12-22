@@ -9,6 +9,7 @@ import { Channel } from "./channel";
 import { Question, QuestionInput } from "./question";
 import { QuestionComment, QuestionCommentInput } from "./questionCommnet";
 import { QuestionLike, QuestionLikeInput } from "./questionLike";
+export { Banner, BannerInput } from "./banner";
 
 export {
   User,

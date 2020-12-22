@@ -7,6 +7,7 @@ import IdeaController from "./api/controllers/idea";
 import TeamController from "./api/controllers/team";
 import EventController from "./api/controllers/event";
 import BlogController from "./api/controllers/blog";
+import BannerController from "./api/controllers/banner";
 import AuthController from "./api/controllers/auth";
 import AnnouncementController from "./api/controllers/announcement";
 import ChannelController from "./api/controllers/channel";
@@ -33,6 +34,7 @@ server.register(bootstrap, {
     TeamController,
     EventController,
     BlogController,
+    BannerController,
     AuthController,
     AnnouncementController,
     ChannelController,
