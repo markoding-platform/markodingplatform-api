@@ -9,6 +9,7 @@ import { Channel } from "./channel";
 import { Question, QuestionInput } from "./question";
 import { QuestionComment, QuestionCommentInput } from "./questionCommnet";
 import { QuestionLike, QuestionLikeInput } from "./questionLike";
+import { Chat, ChatInput } from "./chat";
 
 export {
   User,
@@ -32,4 +33,6 @@ export {
   QuestionCommentInput,
   QuestionLike,
   QuestionLikeInput,
+  Chat,
+  ChatInput,
 };
