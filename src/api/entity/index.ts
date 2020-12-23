@@ -7,7 +7,7 @@ import { Event } from "./event";
 import { Blog } from "./blog";
 import { Channel } from "./channel";
 import { Question, QuestionInput } from "./question";
-import { QuestionComment, QuestionCommentInput } from "./questionCommnet";
+import { QuestionComment, QuestionCommentInput } from "./questionComment";
 import { QuestionLike, QuestionLikeInput } from "./questionLike";
 import { Chat, ChatInput } from "./chat";
 

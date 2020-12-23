@@ -7,10 +7,9 @@ import {
   ManyToOne,
   Column,
 } from "typeorm";
-import { User } from "./user";
-import { Question } from "./question";
+import { User, Question } from ".";
 
-@Entity("questionLikes")
+@Entity("question_likes")
 export class QuestionLike {
   @PrimaryGeneratedColumn()
   id: string;
@@ -27,7 +26,7 @@ export class QuestionLike {
   @Column({ type: "boolean", default: () => false })
   isLike: boolean;
 
-  @ManyToOne(() => Question, (question) => question.likes)
+  @ManyToOne(() => Question, (question: Question) => question.likes)
   question: Question;
 
   @ManyToOne(() => User)
