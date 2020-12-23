@@ -8,10 +8,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { User } from "./user";
-import { Channel } from "./channel";
-import { QuestionComment } from "./questionCommnet";
-import { QuestionLike } from "./questionLike";
+import { User, Channel, QuestionComment, QuestionLike } from ".";
 
 @Entity("questions")
 export class Question {
@@ -36,10 +33,13 @@ export class Question {
   @ManyToOne(() => User)
   user: User;
 
-  @OneToMany(() => QuestionComment, (comment) => comment.question)
+  @OneToMany(
+    () => QuestionComment,
+    (comment: QuestionComment) => comment.question
+  )
   comments: QuestionComment[];
 
-  @OneToMany(() => QuestionLike, (like) => like.question)
+  @OneToMany(() => QuestionLike, (like: QuestionLike) => like.question)
   likes: QuestionLike[];
 }
 
