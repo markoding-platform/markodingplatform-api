@@ -5,6 +5,9 @@ export class Blog {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column("integer")
+  userId: number;
+
   @Column("varchar", { length: 255 })
   title: string;
 

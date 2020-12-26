@@ -2,8 +2,10 @@ import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
 
 import BlogService from "../services/blog";
-import { Blog, BlogInput } from "../entity/blog";
+import { User, Blog, BlogInput } from "../entity";
 import { blogSchema, blogInputSchema } from "../schemas/blog";
+import authenticate from "../hooks/onRequest/authentication";
+import camelcaseKeys from "camelcase-keys";
 
 @Controller({ route: "/blogs" })
 export default class BlogController {
@@ -46,11 +48,21 @@ export default class BlogController {
         body: blogInputSchema,
         response: { 200: blogSchema },
       },
+      onRequest: authenticate,
     },
   })
   async createOrUpdate(
-    req: FastifyRequest<{ Body: BlogInput }>
+    req: AuthenticatedRequest<{
+      Body: BlogInput;
+      User: Record<string, unknown>;
+    }>
   ): Promise<Blog> {
-    return await this.service.store(req.body);
+    const user = req.user?.user as User;
+    return this.service.store(
+      camelcaseKeys({
+        userId: user.id,
+        ...req.body,
+      })
+    );
   }
 }
