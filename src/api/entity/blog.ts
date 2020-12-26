@@ -11,6 +11,9 @@ export class Blog {
   @Column("text")
   description: string;
 
+  @Column("varchar", { length: 255 })
+  imageUrl: string;
+
   @Column("date")
   date: Date;
 
