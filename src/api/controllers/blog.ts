@@ -58,11 +58,10 @@ export default class BlogController {
     }>
   ): Promise<Blog> {
     const user = req.user?.user as User;
-    return this.service.store(
-      camelcaseKeys({
-        userId: user.id,
-        ...req.body,
-      })
-    );
+    const blog = camelcaseKeys({
+      userId: user.id,
+      ...req.body,
+    });
+    return this.service.store(blog);
   }
 }
