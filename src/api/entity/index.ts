@@ -4,7 +4,7 @@ import { Team, TeamInput, AddToTeamInput } from "./team";
 import { Nonce, SSORequest, SSOResponse } from "./nonce";
 import { Announcement, AnnouncementInput } from "./announcement";
 import { Event } from "./event";
-import { Blog } from "./blog";
+import { Blog, BlogInput } from "./blog";
 import { Channel } from "./channel";
 import { Question, QuestionInput } from "./question";
 import { QuestionComment, QuestionCommentInput } from "./questionComment";
@@ -26,6 +26,7 @@ export {
   AnnouncementInput,
   Event,
   Blog,
+  BlogInput,
   Channel,
   Question,
   QuestionInput,
