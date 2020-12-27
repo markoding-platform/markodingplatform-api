@@ -35,7 +35,7 @@ export default class BlogController {
       },
     },
   })
-  async getAllIdeas(): Promise<Blog[]> {
+  async getAll(): Promise<Blog[]> {
     return this.service.getAll();
   }
 

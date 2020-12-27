@@ -6,13 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  OneToMany,
 } from "typeorm";
-import { User, Channel, QuestionComment, QuestionLike } from ".";
+import { User } from "./user";
+import { ChatType } from "../../libs/types";
 
-@Entity("questions")
-export class Question {
-  @PrimaryGeneratedColumn("uuid")
+@Entity("chats")
+export class Chat {
+  @PrimaryGeneratedColumn()
   id: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
@@ -27,23 +27,14 @@ export class Question {
   @Column("text")
   content: string;
 
-  @ManyToOne(() => Channel)
-  channel: Channel;
+  @Column("char", { length: 5 })
+  type: ChatType;
 
   @ManyToOne(() => User)
   user: User;
-
-  @OneToMany(
-    () => QuestionComment,
-    (comment: QuestionComment) => comment.question
-  )
-  comments: QuestionComment[];
-
-  @OneToMany(() => QuestionLike, (like: QuestionLike) => like.question)
-  likes: QuestionLike[];
 }
 
-export type QuestionInput = Omit<
-  Question,
+export type ChatInput = Omit<
+  Chat,
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;

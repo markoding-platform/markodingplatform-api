@@ -14,6 +14,7 @@ import ChannelController from "./api/controllers/channel";
 import QuestionController from "./api/controllers/question";
 import QuestionCommentController from "./api/controllers/questionComment";
 import QuestionLikeController from "./api/controllers/questionLike";
+import ChatController from "./api/controllers/chat";
 
 const { APP_PORT, APP_HOST } = process.env;
 
@@ -41,6 +42,7 @@ server.register(bootstrap, {
     QuestionController,
     QuestionCommentController,
     QuestionLikeController,
+    ChatController,
   ],
 });
 
