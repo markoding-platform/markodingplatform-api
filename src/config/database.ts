@@ -3,6 +3,7 @@ import { createConnection, Connection } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 import {
+  Admin,
   User,
   Idea,
   Team,
@@ -43,6 +44,7 @@ export default class Database {
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
       entities: [
+        Admin,
         User,
         Idea,
         Team,

@@ -22,7 +22,7 @@ export default class AnnouncementService {
     return this.repository.find();
   }
 
-  async store(announcement: Partial<Announcement>): Promise<Announcement> {
+  async store(announcement: Partial<AnnouncementInput>): Promise<Announcement> {
     return this.repository.save(announcement);
   }
 

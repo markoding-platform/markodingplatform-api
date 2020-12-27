@@ -3,6 +3,7 @@ import fastify from "fastify";
 import fastifyCors from "fastify-cors";
 import { bootstrap } from "fastify-decorators";
 
+import AdminController from "./api/controllers/admin";
 import IdeaController from "./api/controllers/idea";
 import TeamController from "./api/controllers/team";
 import EventController from "./api/controllers/event";
@@ -30,6 +31,7 @@ server.register(fastifyCors, {
 
 server.register(bootstrap, {
   controllers: [
+    AdminController,
     IdeaController,
     TeamController,
     EventController,

@@ -10,6 +10,7 @@ import { Question, QuestionInput } from "./question";
 import { QuestionComment, QuestionCommentInput } from "./questionComment";
 import { QuestionLike, QuestionLikeInput } from "./questionLike";
 import { Chat, ChatInput } from "./chat";
+export { Admin, AdminInput } from "./admin";
 
 export {
   User,
