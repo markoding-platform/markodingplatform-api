@@ -1,10 +1,14 @@
 import camelcaseKeys from "camelcase-keys";
 import { FastifyRequest } from "fastify";
-import { Controller, GET, POST, PUT } from "fastify-decorators";
+import { Controller, GET, POST, PATCH, PUT } from "fastify-decorators";
 
 import BannerService from "../services/banner";
 import { Banner, BannerInput } from "../entity/banner";
-import { bannerSchema, bannerInputSchema } from "../schemas/banner";
+import {
+  bannerSchema,
+  bannerInputSchema,
+  bannerUpdateSchema,
+} from "../schemas/banner";
 
 @Controller({ route: "/banners" })
 export default class BannerController {
@@ -50,7 +54,40 @@ export default class BannerController {
     },
   })
   async create(req: FastifyRequest<{ Body: BannerInput }>): Promise<Banner> {
+    if (req.body.sort) {
+      const banner = await this.service.getOne({ sort: req.body.sort });
+      if (banner) throw { statusCode: 400, message: "Sort already used." };
+    }
+
     return this.service.store(req.body);
+  }
+
+  @PATCH({
+    url: "/:bannerId",
+    options: {
+      schema: {
+        params: {
+          type: "object",
+          properties: { bannerId: { type: "string" } },
+        },
+        response: { 200: bannerSchema },
+      },
+    },
+  })
+  async inactive(
+    req: FastifyRequest<{
+      Params: { bannerId: string };
+    }>
+  ): Promise<Banner> {
+    const banner = await this.service.getById(req.params.bannerId);
+    if (!banner) throw { statusCode: 404, message: "Entity not found" };
+
+    let updated = await this.service.update(req.params.bannerId, {
+      isActive: false,
+    });
+    updated = camelcaseKeys(updated, { deep: true });
+
+    return updated;
   }
 
   @PUT({
@@ -61,7 +98,7 @@ export default class BannerController {
           type: "object",
           properties: { bannerId: { type: "string" } },
         },
-        body: bannerInputSchema,
+        body: bannerUpdateSchema,
         response: { 200: bannerSchema },
       },
     },

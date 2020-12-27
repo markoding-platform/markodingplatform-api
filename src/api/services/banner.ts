@@ -22,6 +22,10 @@ export default class BannerService {
     return this.repository.find();
   }
 
+  async getOne(query: Partial<Banner>): Promise<Banner | undefined> {
+    return this.repository.findOne(query);
+  }
+
   async store(banner: Partial<Banner>): Promise<Banner> {
     return this.repository.save(banner);
   }
