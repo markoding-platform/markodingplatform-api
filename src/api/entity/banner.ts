@@ -1,9 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 @Entity("banners")
 export class Banner {
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  deletedAt: Date;
 
   @Column("varchar", { length: 255 })
   imageUrl: string;

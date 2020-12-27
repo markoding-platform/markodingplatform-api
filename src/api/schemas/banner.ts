@@ -1,3 +1,9 @@
+const timestamps = {
+  createdAt: { type: "string" },
+  updatedAt: { type: "string" },
+  deletedAt: { type: "string" },
+};
+
 const properties = {
   id: { type: "string", nullable: false },
   imageUrl: { type: "string" },
@@ -10,7 +16,10 @@ const properties = {
 
 export const bannerSchema = {
   type: "object",
-  properties,
+  properties: {
+    ...timestamps,
+    ...properties,
+  },
 };
 
 export const bannerInputSchema = {
