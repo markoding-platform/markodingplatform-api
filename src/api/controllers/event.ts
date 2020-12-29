@@ -36,8 +36,12 @@ export default class EventController {
       },
     },
   })
-  async getAll(): Promise<Event[]> {
-    return this.service.getAll();
+  async getAll(
+    req: FastifyRequest<{ Querystring: { limit: number; offset: number } }>
+  ): Promise<Event[]> {
+    const limit = req.query.limit || 6;
+    const offset = req.query.offset || 0;
+    return this.service.getAll(limit, offset);
   }
 
   @POST({
@@ -50,7 +54,7 @@ export default class EventController {
     },
   })
   async create(req: FastifyRequest<{ Body: EventInput }>): Promise<Event> {
-    if (validateDateInput(req.body.date)) {
+    if (validateDateInput(req.body.startDate)) {
       return await this.service.store(req.body);
     }
 

@@ -5,6 +5,7 @@ const properties = {
   date: { type: "string" },
   startAt: { type: "string" },
   finishAt: { type: "string" },
+  imageUrl: { type: "string" },
 };
 
 export const blogSchema = {
