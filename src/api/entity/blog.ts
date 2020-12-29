@@ -31,4 +31,7 @@ export class Blog {
   deletedAt: Date;
 }
 
-export type BlogInput = Omit<Blog, "id">;
+export type BlogInput = Omit<
+  Blog,
+  "id" | "createdAt" | "updatedAt" | "deletedAt"
+>;

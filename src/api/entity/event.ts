@@ -33,6 +33,9 @@ export class Event {
   @Column("varchar", { length: 255 })
   imageUrl: string;
 
+  @Column("text", { nullable: true })
+  link: string;
+
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
 

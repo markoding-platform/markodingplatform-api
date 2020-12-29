@@ -7,6 +7,7 @@ const properties = {
   startAt: { type: "string" },
   finishAt: { type: "string" },
   imageUrl: { type: "string" },
+  link: { type: "string" },
 };
 
 export const eventSchema = {

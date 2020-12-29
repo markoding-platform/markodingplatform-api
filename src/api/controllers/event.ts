@@ -41,7 +41,7 @@ export default class EventController {
   ): Promise<Event[]> {
     const limit = req.query.limit || 6;
     const offset = req.query.offset || 0;
-    return this.service.getAll(limit, offset);
+    return this.service.getAll(offset, limit);
   }
 
   @POST({

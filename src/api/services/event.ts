@@ -23,7 +23,7 @@ export default class EventService {
       .createQueryBuilder()
       .offset(offset)
       .limit(limit)
-      .orderBy("date", "ASC")
+      .orderBy("start_date", "ASC")
       .getMany();
   }
 
