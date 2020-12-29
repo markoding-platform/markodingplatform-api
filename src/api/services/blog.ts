@@ -18,8 +18,13 @@ export default class BlogService {
     return this.repository.findOne({ id });
   }
 
-  async getAll(): Promise<Blog[]> {
-    return this.repository.find();
+  async getAll(offset: number, limit: number): Promise<Blog[]> {
+    return this.repository
+      .createQueryBuilder()
+      .offset(offset)
+      .limit(limit)
+      .orderBy("created_at", "DESC")
+      .getMany();
   }
 
   async store(blog: Partial<Blog>): Promise<Blog> {
