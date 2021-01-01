@@ -2,9 +2,12 @@ const properties = {
   id: { type: "string", nullable: false },
   title: { type: "string" },
   description: { type: "string" },
-  date: { type: "string" },
+  startDate: { type: "string" },
+  finishDate: { type: "string" },
   startAt: { type: "string" },
   finishAt: { type: "string" },
+  imageUrl: { type: "string" },
+  link: { type: "string" },
 };
 
 export const eventSchema = {

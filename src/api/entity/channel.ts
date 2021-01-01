@@ -7,19 +7,13 @@ import {
   DeleteDateColumn,
 } from "typeorm";
 
-@Entity("blogs")
-export class Blog {
+@Entity("channels")
+export class Channel {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column("varchar", { length: 255 })
-  title: string;
-
-  @Column("text")
-  description: string;
-
-  @Column("varchar", { length: 255 })
-  imageUrl: string;
+  @Column("varchar")
+  name: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
@@ -30,8 +24,3 @@ export class Blog {
   @DeleteDateColumn({ type: "timestamp", nullable: true })
   deletedAt: Date;
 }
-
-export type BlogInput = Omit<
-  Blog,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
->;

@@ -1,25 +1,18 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
+  Column,
 } from "typeorm";
+import { User, Question } from ".";
 
-@Entity("blogs")
-export class Blog {
-  @PrimaryGeneratedColumn("uuid")
+@Entity("question_likes")
+export class QuestionLike {
+  @PrimaryGeneratedColumn()
   id: string;
-
-  @Column("varchar", { length: 255 })
-  title: string;
-
-  @Column("text")
-  description: string;
-
-  @Column("varchar", { length: 255 })
-  imageUrl: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
@@ -29,9 +22,18 @@ export class Blog {
 
   @DeleteDateColumn({ type: "timestamp", nullable: true })
   deletedAt: Date;
+
+  @Column({ type: "boolean", default: () => false })
+  isLike: boolean;
+
+  @ManyToOne(() => Question, (question: Question) => question.likes)
+  question: Question;
+
+  @ManyToOne(() => User)
+  user: User;
 }
 
-export type BlogInput = Omit<
-  Blog,
+export type QuestionLikeInput = Omit<
+  QuestionLike,
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;

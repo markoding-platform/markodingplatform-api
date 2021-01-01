@@ -35,8 +35,12 @@ export default class BlogController {
       },
     },
   })
-  async getAllIdeas(): Promise<Blog[]> {
-    return this.service.getAll();
+  async getAll(
+    req: FastifyRequest<{ Querystring: { limit: number; offset: number } }>
+  ): Promise<Blog[]> {
+    const limit = req.query.limit || 6;
+    const offset = req.query.offset || 0;
+    return this.service.getAll(offset, limit);
   }
 
   @POST({
