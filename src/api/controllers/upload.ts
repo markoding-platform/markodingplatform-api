@@ -32,7 +32,7 @@ export default class UploadController {
 
     const params = {
       Bucket: "markodingplatform",
-      Key: data.filename,
+      Key: "ideas/" + data.filename,
       Body: data.file,
       ACL: "public-read",
     };
