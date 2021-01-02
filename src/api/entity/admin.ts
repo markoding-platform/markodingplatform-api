@@ -1,20 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column,
+CreateDateColumn,
+UpdateDateColumn,
+DeleteDateColumn,
+} from "typeorm";
 
 @Entity("admins")
 export class Admin {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
-  @Column()
+  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  deletedAt: Date;
+
+  @Column("varchar", { length: 255 })
   name: string;
 
-  @Column({ unique: true })
+  @Column("varchar", { length: 255, unique: true })
   email: string;
 
-  @Column()
+  @Column("varchar", { length: 255 })
   role: Role;
 
-  @Column()
+  @Column("text")
   password: string;
 }
 

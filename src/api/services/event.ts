@@ -18,8 +18,13 @@ export default class EventService {
     return this.repository.findOne({ id });
   }
 
-  async getAll(): Promise<Event[]> {
-    return this.repository.find();
+  async getAll(offset: number, limit: number): Promise<Event[]> {
+    return this.repository
+      .createQueryBuilder()
+      .offset(offset)
+      .limit(limit)
+      .orderBy("start_date", "ASC")
+      .getMany();
   }
 
   async store(event: Partial<Event>): Promise<Event> {

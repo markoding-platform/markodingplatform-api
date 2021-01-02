@@ -1,3 +1,8 @@
+const timestamps = {
+  createdAt: { type: "string" },
+  updatedAt: { type: "string" },
+};
+
 const properties = {
   id: { type: "string", nullable: false },
   title: { type: "string" },
@@ -10,7 +15,10 @@ const properties = {
 
 export const blogSchema = {
   type: "object",
-  properties,
+  properties: {
+    ...properties,
+    ...timestamps,
+  },
 };
 
 export const blogInputSchema = {

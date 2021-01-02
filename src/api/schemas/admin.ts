@@ -1,7 +1,6 @@
 const timestamps = {
   createdAt: { type: "string" },
   updatedAt: { type: "string" },
-  deletedAt: { type: "string" },
 };
 
 const properties = {

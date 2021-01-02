@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 @Entity("blogs")
 export class Blog {
@@ -20,11 +27,17 @@ export class Blog {
   @Column("date")
   date: Date;
 
-  @Column("time")
-  start: string;
+  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  createdAt: Date;
 
-  @Column("time")
-  finish: string;
+  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  deletedAt: Date;
 }
 
-export type BlogInput = Omit<Blog, "id">;
+export type BlogInput = Omit<
+  Blog,
+  "id" | "createdAt" | "updatedAt" | "deletedAt"
+>;
