@@ -3,6 +3,14 @@ const timestamps = {
   updatedAt: { type: "string" },
 };
 
+const author = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    name: { type: "string" },
+  }
+}
+
 const properties = {
   id: { type: "string", nullable: false },
   title: { type: "string" },
@@ -11,6 +19,7 @@ const properties = {
   date: { type: "string" },
   startAt: { type: "string" },
   finishAt: { type: "string" },
+  author,
 };
 
 export const blogSchema = {

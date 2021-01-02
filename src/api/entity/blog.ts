@@ -13,7 +13,7 @@ export class Blog {
   id: string;
 
   @Column("integer")
-  userId: number;
+  adminId: number;
 
   @Column("varchar", { length: 255 })
   title: string;
@@ -41,3 +41,12 @@ export type BlogInput = Omit<
   Blog,
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;
+
+type Author = {
+  id: number;
+  name: string;
+}
+
+export interface BlogAuthor extends Blog {
+  author: Author
+}

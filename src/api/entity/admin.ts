@@ -6,7 +6,7 @@ DeleteDateColumn,
 
 @Entity("admins")
 export class Admin {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn()
   id: number;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })

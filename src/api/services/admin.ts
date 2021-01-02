@@ -17,4 +17,8 @@ export default class AdminService {
   async store(admin: Partial<AdminInput>): Promise<Admin> {
     return this.repository.save(admin);
   }
+
+  async getById(id: number): Promise<Admin | undefined> {
+    return this.repository.findOne({ id });
+  }
 }
