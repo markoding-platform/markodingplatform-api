@@ -55,7 +55,10 @@ export default class BannerController {
   })
   async create(req: FastifyRequest<{ Body: BannerInput }>): Promise<Banner> {
     if (req.body.sort) {
-      const banner = await this.service.getOne({ sort: req.body.sort });
+      const banner = await this.service.getOne({
+        sort: req.body.sort,
+        isActive: true,
+      });
       if (banner) throw { statusCode: 400, message: "Sort already used." };
     }
 
@@ -63,7 +66,7 @@ export default class BannerController {
   }
 
   @PATCH({
-    url: "/:bannerId",
+    url: "/:bannerId/inactive",
     options: {
       schema: {
         params: {
