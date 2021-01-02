@@ -23,7 +23,8 @@ export class Idea {
   @DeleteDateColumn({ type: "timestamp", nullable: true })
   deletedAt: Date;
 
-  @Column("uuid") schoolId: string;
+  @Column("varchar", { length: 255 }) schoolId: string;
+  @Column("text") schoolName: string;
   @Column("uuid") teacherId: string;
   @Column("text") solutionName: string;
   @Column("char", { length: 6 }) solutionType: SolutionType;
@@ -34,11 +35,12 @@ export class Idea {
   @Column("text") solutionMission: string;
   @Column("text") solutionBenefit: string;
   @Column("text") solutionObstacle: string;
-  @Column("varchar", { length: 255 }) solutionPitchUrl: string;
+  @Column("varchar", { length: 255, nullable: true }) solutionPitchUrl: string;
   @Column("text") targetOutcomes: string;
   @Column("text") targetCustomer: string;
-  @Column("text") potentialCollaboration: string;
-  @Column("simple-array") solutionSupportingPhotos: string[];
+  @Column("text", { nullable: true }) potentialCollaboration: string;
+  @Column("simple-array", { nullable: true })
+  solutionSupportingPhotos: string[];
   @Column("bool") isDraft: boolean;
 }
 
