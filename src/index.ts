@@ -18,20 +18,14 @@ import QuestionLikeController from "./api/controllers/questionLike";
 import ChatController from "./api/controllers/chat";
 import UploadController from "./api/controllers/upload";
 
-const { APP_PORT, APP_HOST } = process.env;
-
-const PORT = APP_PORT || 8080;
-const ADDRESS = APP_HOST || "0.0.0.0";
+const { APP_PORT = 8080, APP_HOST = "0.0.0.0" } = process.env;
 
 const server = fastify();
-
 server.decorateRequest("user", null);
-
 server.register(fastifyMultipart);
 server.register(fastifyCors, {
   origin: "*",
 });
-
 server.register(bootstrap, {
   controllers: [
     IdeaController,
@@ -50,7 +44,7 @@ server.register(bootstrap, {
   ],
 });
 
-server.listen(PORT, ADDRESS, (err, address) => {
+server.listen(APP_PORT, APP_HOST, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(-1);
