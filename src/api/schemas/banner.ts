@@ -1,11 +1,11 @@
 const timestamps = {
   createdAt: { type: "string" },
   updatedAt: { type: "string" },
-  deletedAt: { type: "string" },
 };
 
 const properties = {
   id: { type: "string", nullable: false },
+  title: { type: "string" },
   imageUrl: { type: "string" },
   link: { type: "string" },
   sort: { type: "string" },

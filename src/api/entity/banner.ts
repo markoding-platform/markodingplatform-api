@@ -21,6 +21,9 @@ export class Banner {
   @DeleteDateColumn({ type: "timestamp", nullable: true })
   deletedAt: Date;
 
+  @Column("text")
+  title: string;
+
   @Column("varchar", { length: 255 })
   imageUrl: string;
 
