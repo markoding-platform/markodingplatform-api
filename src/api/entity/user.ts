@@ -1,8 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 
-import { Student } from "./student";
-
-export type UserType = "teacher" | "student" | "mentor";
+import { Profile } from "./profile";
 
 @Entity("users")
 export class User {
@@ -26,10 +30,9 @@ export class User {
     enum: ["teacher", "student", "mentor"],
     nullable: true,
   })
-  type?: UserType;
-
-  @OneToMany(() => Student, (student) => student.user)
-  student: Student[];
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
 }
 
 export type UserInput = Omit<User, "id">;
