@@ -1,6 +1,6 @@
 import camelcaseKeys from "camelcase-keys";
 import { FastifyRequest } from "fastify";
-import { Controller, GET, POST } from "fastify-decorators";
+import { Controller, GET, POST, PUT } from "fastify-decorators";
 
 import IdeaService from "../services/idea";
 import { Idea, IdeaInput } from "../entity/idea";
@@ -57,7 +57,7 @@ export default class IdeaController {
     return this.service.store(req.body);
   }
 
-  @POST({
+  @PUT({
     url: "/:ideaId",
     options: {
       schema: {
