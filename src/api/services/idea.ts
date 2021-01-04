@@ -19,7 +19,7 @@ export default class IdeaService {
   }
 
   async getAll(): Promise<Idea[]> {
-    return this.repository.find();
+    return this.repository.find({ isDraft: false });
   }
 
   async store(idea: Partial<Idea>): Promise<Idea> {
