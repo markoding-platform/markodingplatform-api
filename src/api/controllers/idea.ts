@@ -50,6 +50,10 @@ export default class IdeaController {
     },
   })
   async create(req: FastifyRequest<{ Body: IdeaInput }>): Promise<Idea> {
+    if (!req.body.solutionSupportingPhotos) {
+      req.body.solutionSupportingPhotos = [];
+    }
+
     return this.service.store(req.body);
   }
 

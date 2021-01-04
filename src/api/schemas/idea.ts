@@ -1,11 +1,11 @@
 const timestamps = {
   createdAt: { type: "string" },
   updatedAt: { type: "string" },
-  deletedAt: { type: "string" },
 };
 
 const properties = {
   schoolId: { type: "string" },
+  schoolName: { type: "string" },
   teacherId: { type: "string" },
   solutionName: { type: "string" },
   solutionType: { type: "string" },
@@ -35,6 +35,21 @@ export const ideaSchema = {
 
 export const ideaInputSchema = {
   type: "object",
-  // required: ["schoolId", "teacherId"],
+  required: [
+    "schoolId",
+    "schoolName",
+    "teacherId",
+    "solutionName",
+    "solutionType",
+    "problemArea",
+    "problemSelection",
+    "problemReasoning",
+    "solutionVision",
+    "solutionMission",
+    "solutionBenefit",
+    "solutionObstacle",
+    "targetOutcomes",
+    "targetCustomer",
+  ],
   properties,
 };
