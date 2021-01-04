@@ -12,5 +12,6 @@ declare global {
     V extends RawRequestDefaultExpression<U> = RawRequestDefaultExpression<U>
   > extends FastifyRequest<T, U, V> {
     user?: Record<string, unknown>;
+    profile?: Record<string, unknown>;
   }
 }
