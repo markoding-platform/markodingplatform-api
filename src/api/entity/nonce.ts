@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
 
-@Entity("nonces")
+@Entity('nonces')
 export class Nonce {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar")
+  @Column('varchar')
   nonce: string;
 
-  @Column("timestamp")
+  @Column('timestamp')
   expiredAt: Date;
 }
 

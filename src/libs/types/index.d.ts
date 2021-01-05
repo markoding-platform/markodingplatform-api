@@ -1,2 +1,2 @@
-export type SolutionType = "web" | "mobile" | "game";
-export type ChatType = "text" | "image";
+export type SolutionType = 'web' | 'mobile' | 'game';
+export type ChatType = 'text' | 'image';

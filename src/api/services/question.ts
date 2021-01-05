@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Question, QuestionInput, User } from "../entity";
+import Database from '../../config/database';
+import {Question, QuestionInput, User} from '../entity';
 
 @Service()
 export default class QuestionService {
@@ -17,26 +17,26 @@ export default class QuestionService {
   async getByChannel(
     channelId: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Promise<Question[]> {
     return this.repository
-      .createQueryBuilder("Question")
-      .where("channel_id = :channelId", {
+      .createQueryBuilder('Question')
+      .where('channel_id = :channelId', {
         channelId,
       })
       .loadRelationCountAndMap(
-        "Question.comments",
-        "Question.comments",
-        "comments"
+        'Question.comments',
+        'Question.comments',
+        'comments',
       )
       .loadRelationCountAndMap(
-        "Question.likes",
-        "Question.likes",
-        "likes",
-        (qb) => qb.andWhere("likes.isLike = :isLike", { isLike: true })
+        'Question.likes',
+        'Question.likes',
+        'likes',
+        (qb) => qb.andWhere('likes.isLike = :isLike', {isLike: true}),
       )
-      .leftJoinAndSelect("Question.user", "user")
-      .orderBy("Question.created_at", "DESC")
+      .leftJoinAndSelect('Question.user', 'user')
+      .orderBy('Question.created_at', 'DESC')
       .limit(limit)
       .offset(offset)
       .getMany();
@@ -44,23 +44,23 @@ export default class QuestionService {
 
   async getById(id: string): Promise<Question | undefined> {
     return this.repository
-      .createQueryBuilder("Question")
-      .where("Question.id = :id", {
+      .createQueryBuilder('Question')
+      .where('Question.id = :id', {
         id,
       })
       .loadRelationCountAndMap(
-        "Question.comments",
-        "Question.comments",
-        "comments"
+        'Question.comments',
+        'Question.comments',
+        'comments',
       )
       .loadRelationCountAndMap(
-        "Question.likes",
-        "Question.likes",
-        "likes",
-        (qb) => qb.andWhere("likes.isLike = :isLike", { isLike: true })
+        'Question.likes',
+        'Question.likes',
+        'likes',
+        (qb) => qb.andWhere('likes.isLike = :isLike', {isLike: true}),
       )
-      .leftJoinAndSelect("Question.channel", "channel")
-      .leftJoinAndSelect("Question.user", "user")
+      .leftJoinAndSelect('Question.channel', 'channel')
+      .leftJoinAndSelect('Question.user', 'user')
       .getOne();
   }
 
@@ -71,7 +71,7 @@ export default class QuestionService {
   async update(
     id: string,
     question: Partial<QuestionInput>,
-    user: Partial<User>
+    user: Partial<User>,
   ): Promise<Question | undefined> {
     const userQ = await this.repository.findOne({
       id: id,
@@ -82,12 +82,12 @@ export default class QuestionService {
       return undefined;
     }
 
-    const { raw } = await this.repository
+    const {raw} = await this.repository
       .createQueryBuilder()
       .update(Question)
       .set(question)
-      .where("id = :id", { id })
-      .returning("*")
+      .where('id = :id', {id})
+      .returning('*')
       .execute();
     return raw[0];
   }

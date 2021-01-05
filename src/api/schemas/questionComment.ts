@@ -1,14 +1,14 @@
-import { userSchema } from "./user";
-import { timestamps } from "./common";
+import {userSchema} from './user';
+import {timestamps} from './common';
 
 const properties = {
-  content: { type: "string" },
+  content: {type: 'string'},
 };
 
 export const questionCommentSchema = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "string" },
+    id: {type: 'string'},
     ...timestamps,
     ...properties,
     user: userSchema,
@@ -16,10 +16,10 @@ export const questionCommentSchema = {
 };
 
 export const questionCommentInputSchema = {
-  type: "object",
-  required: ["content", "question"],
+  type: 'object',
+  required: ['content', 'question'],
   properties: {
     ...properties,
-    question: { type: "string" },
+    question: {type: 'string'},
   },
 };

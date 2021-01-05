@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { QuestionComment, QuestionCommentInput } from "../entity";
+import Database from '../../config/database';
+import {QuestionComment, QuestionCommentInput} from '../entity';
 
 @Service()
 export default class QuestionCommentService {
@@ -17,21 +17,21 @@ export default class QuestionCommentService {
   async getByQuestion(
     questionId: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Promise<QuestionComment[]> {
     return this.repository
-      .createQueryBuilder("QuestionComment")
-      .where("question_id = :questionId", {
+      .createQueryBuilder('QuestionComment')
+      .where('question_id = :questionId', {
         questionId,
       })
-      .leftJoinAndSelect("QuestionComment.user", "user")
+      .leftJoinAndSelect('QuestionComment.user', 'user')
       .take(limit)
       .skip(offset)
       .getMany();
   }
 
   async store(
-    comment: Partial<QuestionCommentInput>
+    comment: Partial<QuestionCommentInput>,
   ): Promise<QuestionComment> {
     return this.repository.save(comment);
   }

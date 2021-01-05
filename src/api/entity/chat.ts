@@ -6,28 +6,28 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-} from "typeorm";
-import { User } from "./user";
-import { ChatType } from "../../libs/types";
+} from 'typeorm';
+import {User} from './user';
+import {ChatType} from '../../libs/types';
 
-@Entity("chats")
+@Entity('chats')
 export class Chat {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column("text")
+  @Column('text')
   content: string;
 
-  @Column("char", { length: 5 })
+  @Column('char', {length: 5})
   type: ChatType;
 
   @ManyToOne(() => User)
@@ -36,5 +36,5 @@ export class Chat {
 
 export type ChatInput = Omit<
   Chat,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;

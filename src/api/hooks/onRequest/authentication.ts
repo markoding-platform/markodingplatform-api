@@ -1,17 +1,17 @@
-import { FastifyReply } from "fastify";
+import {FastifyReply} from 'fastify';
 
-import { verifyToken } from "../../../libs/utils/token";
+import {verifyToken} from '../../../libs/utils/token';
 
 async function authenticate(
   request: AuthenticatedRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ): Promise<void> {
   try {
     const token = request.headers.authorization;
 
     if (!token) {
       reply.status(403).send({
-        message: "unauthenticated request!",
+        message: 'unauthenticated request!',
       });
 
       return;

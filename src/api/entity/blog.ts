@@ -5,33 +5,33 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("blogs")
+@Entity('blogs')
 export class Blog {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   title: string;
 
-  @Column("text")
+  @Column('text')
   description: string;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   imageUrl: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 }
 
 export type BlogInput = Omit<
   Blog,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
