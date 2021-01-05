@@ -10,6 +10,7 @@ import {
   questionPutSchema,
 } from "../schemas/question";
 import authenticate from "../hooks/onRequest/authentication";
+import { queryParamId, queryStringSkipLimit } from "../schemas/common";
 
 @Controller({ route: "/questions" })
 export default class QuestionController {
@@ -19,6 +20,8 @@ export default class QuestionController {
     url: "/channel/:id",
     options: {
       schema: {
+        params: queryParamId,
+        querystring: queryStringSkipLimit,
         response: { 200: { type: "array", items: questionSchema } },
       },
     },
@@ -40,7 +43,7 @@ export default class QuestionController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: questionSchema },
       },
     },
@@ -49,8 +52,8 @@ export default class QuestionController {
     req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Question> {
     const question = await this.service.getById(req.params.id);
-
     if (!question) throw { statusCode: 404, message: "Entity not found" };
+
     return question;
   }
 
@@ -80,10 +83,7 @@ export default class QuestionController {
     url: "/:id",
     options: {
       schema: {
-        params: {
-          type: "object",
-          properties: { id: { type: "string" } },
-        },
+        params: queryParamId,
         body: questionPutSchema,
         response: { 200: questionSchema },
       },
@@ -100,6 +100,7 @@ export default class QuestionController {
     const user = req.user?.user as User;
     const updated = await this.service.update(req.params.id, req.body, user);
     if (!updated) throw { statusCode: 404, message: "Entity not found" };
+
     return camelcaseKeys(updated, { deep: true });
   }
 }

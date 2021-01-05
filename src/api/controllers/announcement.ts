@@ -8,27 +8,25 @@ import {
   announcementSchema,
   announcementInputSchema,
 } from "../schemas/announcement";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/announcements" })
 export default class AnnouncementController {
   constructor(private service: AnnouncementService) {}
 
   @GET({
-    url: "/:announcementId",
+    url: "/:id",
     options: {
       schema: {
-        params: {
-          type: "object",
-          properties: { announcementId: { type: "string" } },
-        },
+        params: queryParamId,
         response: { 200: announcementSchema },
       },
     },
   })
   async getById(
-    req: FastifyRequest<{ Params: { announcementId: string } }>
+    req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Announcement> {
-    const announcement = await this.service.getById(req.params.announcementId);
+    const announcement = await this.service.getById(req.params.id);
     if (!announcement) throw { statusCode: 404, message: "Entity not found" };
 
     return announcement;
@@ -62,13 +60,10 @@ export default class AnnouncementController {
   }
 
   @POST({
-    url: "/:announcementId",
+    url: "/:id",
     options: {
       schema: {
-        params: {
-          type: "object",
-          properties: { announcementId: { type: "string" } },
-        },
+        params: queryParamId,
         body: announcementInputSchema,
         response: { 200: announcementSchema },
       },
@@ -76,17 +71,14 @@ export default class AnnouncementController {
   })
   async update(
     req: FastifyRequest<{
-      Params: { announcementId: string };
+      Params: { id: string };
       Body: AnnouncementInput;
     }>
   ): Promise<Announcement> {
-    const announcement = await this.service.getById(req.params.announcementId);
+    const announcement = await this.service.getById(req.params.id);
     if (!announcement) throw { statusCode: 404, message: "Entity not found" };
 
-    let updated = await this.service.update(
-      req.params.announcementId,
-      req.body
-    );
+    let updated = await this.service.update(req.params.id, req.body);
     updated = camelcaseKeys(updated, { deep: true });
 
     return updated;

@@ -1,10 +1,6 @@
 import { userSchema } from "./user";
 import { channelSchema } from "./channel";
-
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import { timestamps } from "./common";
 
 const properties = {
   content: { type: "string" },

@@ -1,9 +1,5 @@
 import { userInfoSchema } from "./user";
-
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import { timestamps } from "./common";
 
 const properties = {
   content: { type: "string" },

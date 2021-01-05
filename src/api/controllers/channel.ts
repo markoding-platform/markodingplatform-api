@@ -4,6 +4,7 @@ import ChannelService from "../services/channel";
 import { Channel } from "../entity";
 import { channelSchema } from "../schemas/channel";
 import { FastifyRequest } from "fastify";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/channels" })
 export default class ChannelController {
@@ -13,7 +14,7 @@ export default class ChannelController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: channelSchema },
       },
     },

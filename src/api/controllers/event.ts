@@ -5,6 +5,7 @@ import EventService from "../services/event";
 import { Event, EventInput } from "../entity/event";
 import { eventSchema, eventInputSchema } from "../schemas/event";
 import { validateDateInput } from "../../libs/utils";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/events" })
 export default class EventController {
@@ -14,7 +15,7 @@ export default class EventController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: eventSchema },
       },
     },

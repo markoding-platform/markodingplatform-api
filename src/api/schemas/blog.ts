@@ -1,7 +1,4 @@
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import { timestamps } from "./common";
 
 const properties = {
   id: { type: "string", nullable: false },

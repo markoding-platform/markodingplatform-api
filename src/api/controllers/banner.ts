@@ -9,6 +9,7 @@ import {
   bannerInputSchema,
   bannerUpdateSchema,
 } from "../schemas/banner";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/banners" })
 export default class BannerController {
@@ -18,7 +19,7 @@ export default class BannerController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: bannerSchema },
       },
     },
@@ -66,26 +67,21 @@ export default class BannerController {
   }
 
   @PATCH({
-    url: "/:bannerId/inactive",
+    url: "/:id/inactive",
     options: {
       schema: {
-        params: {
-          type: "object",
-          properties: { bannerId: { type: "string" } },
-        },
+        params: queryParamId,
         response: { 200: bannerSchema },
       },
     },
   })
   async inactive(
-    req: FastifyRequest<{
-      Params: { bannerId: string };
-    }>
+    req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Banner> {
-    const banner = await this.service.getById(req.params.bannerId);
+    const banner = await this.service.getById(req.params.id);
     if (!banner) throw { statusCode: 404, message: "Entity not found" };
 
-    let updated = await this.service.update(req.params.bannerId, {
+    let updated = await this.service.update(req.params.id, {
       isActive: false,
     });
     updated = camelcaseKeys(updated, { deep: true });
@@ -94,13 +90,10 @@ export default class BannerController {
   }
 
   @PUT({
-    url: "/:bannerId",
+    url: "/:id",
     options: {
       schema: {
-        params: {
-          type: "object",
-          properties: { bannerId: { type: "string" } },
-        },
+        params: queryParamId,
         body: bannerUpdateSchema,
         response: { 200: bannerSchema },
       },
@@ -108,14 +101,14 @@ export default class BannerController {
   })
   async update(
     req: FastifyRequest<{
-      Params: { bannerId: string };
+      Params: { id: string };
       Body: BannerInput;
     }>
   ): Promise<Banner> {
-    const banner = await this.service.getById(req.params.bannerId);
+    const banner = await this.service.getById(req.params.id);
     if (!banner) throw { statusCode: 404, message: "Entity not found" };
 
-    let updated = await this.service.update(req.params.bannerId, req.body);
+    let updated = await this.service.update(req.params.id, req.body);
     updated = camelcaseKeys(updated, { deep: true });
 
     return updated;

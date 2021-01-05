@@ -1,10 +1,11 @@
+import { timestamps } from "./common";
+
 export const teamSchema = {
   type: "array",
   items: {
     type: "object",
     properties: {
-      createdAt: { type: "string" },
-      updatedAt: { type: "string" },
+      ...timestamps,
       id: { type: "string", nullable: false },
       ideaId: { type: "string", nullable: false },
       userId: { type: "string", nullable: false },

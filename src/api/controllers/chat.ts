@@ -5,6 +5,7 @@ import { Chat, ChatInput, User } from "../entity";
 import { chatSchema, chatInputSchema } from "../schemas/chat";
 import authenticate from "../hooks/onRequest/authentication";
 import ChatService from "../services/chat";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/chats" })
 export default class ChatController {
@@ -31,7 +32,7 @@ export default class ChatController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: chatSchema },
       },
       onRequest: authenticate,
