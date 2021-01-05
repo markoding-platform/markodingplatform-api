@@ -15,13 +15,12 @@ export default class IdeaLikeService {
   }
 
   async storeOrDelete(idea: Idea, user: User): Promise<void> {
-    const liked = await this.repository
-      .find({
-        where: {
-          idea: idea.id,
-          user: user.id,
-        }
-      })
+    const liked = await this.repository.find({
+      where: {
+        idea: idea.id,
+        user: user.id,
+      },
+    });
 
     if (liked.length) {
       await this.repository
@@ -34,8 +33,8 @@ export default class IdeaLikeService {
     }
 
     const ideaLike = new IdeaLike();
-    ideaLike.idea = idea
-    ideaLike.user = user
+    ideaLike.idea = idea;
+    ideaLike.user = user;
     await this.repository.save(ideaLike);
     return;
   }

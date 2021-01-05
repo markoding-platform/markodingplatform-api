@@ -2,18 +2,30 @@ import camelcaseKeys from "camelcase-keys";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Controller, GET, POST, PUT } from "fastify-decorators";
 
-import { UserService, IdeaService, TeamService } from "../services"
+import { UserService, IdeaService, TeamService } from "../services";
 import authenticate from "../hooks/onRequest/authentication";
-import { User, Idea, IdeaInput, Team, TeamInput, TeamPayload, AddToTeamInput } from "../entity";
+import {
+  User,
+  Idea,
+  IdeaInput,
+  Team,
+  TeamInput,
+  TeamPayload,
+  AddToTeamInput,
+} from "../entity";
 import { ideaSchema, ideaInputSchema } from "../schemas/idea";
-import { teamSchema, teamInputSchema, addUserInputSchema } from "../schemas/team";
+import {
+  teamSchema,
+  teamInputSchema,
+  addUserInputSchema,
+} from "../schemas/team";
 
 @Controller({ route: "/ideas" })
 export default class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
-    private teamService: TeamService,
+    private teamService: TeamService
   ) {}
 
   @GET({
@@ -126,11 +138,13 @@ export default class IdeaController {
   ): Promise<Team[]> {
     const user = req.user?.user as User;
 
-    const values: TeamInput[] = [{
-      ideaId: req.params.ideaId,
-      userId: user.id,
-      isLeader: true,
-    }];
+    const values: TeamInput[] = [
+      {
+        ideaId: req.params.ideaId,
+        userId: user.id,
+        isLeader: true,
+      },
+    ];
     req.body.userIds.forEach((userId: string) => {
       values.push({
         ideaId: req.params.ideaId,
@@ -158,24 +172,28 @@ export default class IdeaController {
       Body: AddToTeamInput;
       User: Record<string, unknown>;
     }>,
-    rep: FastifyReply,
+    rep: FastifyReply
   ): Promise<void> {
     const user = req.user?.user as User;
 
     const [userFound, teamFound] = await Promise.all([
       this.userService.getById(user.id),
       this.teamService.getByIdeaId(req.params.ideaId),
-    ])
+    ]);
     if (!userFound) throw { statusCode: 404, message: "User not found" };
     if (!teamFound) throw { statusCode: 404, message: "Team not found" };
-    if (teamFound.length > 2) throw { statusCode: 400, message: "Team size exceeded" };
+    if (teamFound.length > 2)
+      throw { statusCode: 400, message: "Team size exceeded" };
     teamFound.forEach((t: Team) => {
       if (t.userId === user.id && !t.isLeader) {
         throw { statusCode: 400, message: "Only leader can add to team" };
       }
-    })
+    });
 
-    await this.teamService.addToTeam({ ideaId: req.params.ideaId, ...req.body });
+    await this.teamService.addToTeam({
+      ideaId: req.params.ideaId,
+      ...req.body,
+    });
     return rep.code(204).send();
-  } 
+  }
 }
