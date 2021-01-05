@@ -5,7 +5,7 @@ import Database from "../../config/database";
 import { User, UserInput } from "../entity";
 
 @Service()
-class UserService {
+export default class UserService {
   private repository!: Repository<User>;
 
   constructor(private database: Database) {}
@@ -47,6 +47,8 @@ class UserService {
 
     return user;
   }
-}
 
-export default UserService;
+  async getById(id: number): Promise<User | undefined> {
+    return this.repository.findOne({ id });
+  }
+}

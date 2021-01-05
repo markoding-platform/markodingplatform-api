@@ -5,14 +5,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from "typeorm";
+import { IdeaLike } from "."
 
 import { SolutionType } from "../../libs/types";
 
 @Entity("ideas")
 export class Idea {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn("uuid") id: string;
 
   @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
   createdAt: Date;
@@ -42,6 +43,9 @@ export class Idea {
   @Column("simple-array", { nullable: true })
   solutionSupportingPhotos: string[];
   @Column("bool") isDraft: boolean;
+
+  @OneToMany(() => IdeaLike, (like: IdeaLike) => like.idea)
+  likes: IdeaLike[];
 }
 
 export type IdeaInput = Omit<

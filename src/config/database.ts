@@ -5,6 +5,7 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import {
   User,
   Idea,
+  IdeaLike,
   Team,
   Nonce,
   Announcement,
@@ -46,6 +47,7 @@ export default class Database {
       entities: [
         User,
         Idea,
+        IdeaLike,
         Team,
         Nonce,
         Announcement,
