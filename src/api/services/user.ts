@@ -48,7 +48,7 @@ export default class UserService {
     return user;
   }
 
-  async getById(id: string): Promise<User | undefined> {
-    return this.repository.findOne({ id });
+  async getOne(user: Partial<User>): Promise<User | undefined> {
+    return this.repository.findOne(user);
   }
 }

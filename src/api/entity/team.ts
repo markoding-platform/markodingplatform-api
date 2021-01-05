@@ -27,10 +27,10 @@ export type TeamInput = Omit<
 
 export type TeamPayload = {
   ideaId: string;
-  userIds: [string, string],
-}
+  userIds: [string, string];
+};
 
 export type AddToTeamInput = {
   userId: string;
   isLeader: boolean;
-}
+};
