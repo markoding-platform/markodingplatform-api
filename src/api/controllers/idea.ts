@@ -115,8 +115,9 @@ export default class IdeaController {
       }),
     ]);
     if (!userFound) throw { statusCode: 400, message: "User not found" };
-    if (!ideaFound)
+    if (!ideaFound) {
       throw { statusCode: 400, message: "User not on this team idea" };
+    }
 
     let updated = await this.ideaService.update(req.params.ideaId, req.body);
     updated = camelcaseKeys(updated, { deep: true });
