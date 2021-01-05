@@ -17,7 +17,7 @@ export class Team {
   @DeleteDateColumn({ type: "timestamp", nullable: true }) deletedAt: Date;
   @Column("uuid") ideaId: string;
   @Column("uuid") userId: string;
-  @Column("boolean") isLeader: boolean;
+  @Column("boolean", { default: false }) isLeader: boolean;
 }
 
 export type TeamInput = Omit<

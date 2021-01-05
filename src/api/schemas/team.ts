@@ -15,9 +15,8 @@ export const teamSchema = {
 
 export const teamInputSchema = {
   type: "object",
-  required: ["ideaId", "userIds"],
+  required: ["userIds"],
   properties: {
-    ideaId: { type: "string" },
     userIds: {
       type: "array",
       maxItems: 2,

@@ -1,14 +1,20 @@
 import camelcaseKeys from "camelcase-keys";
-import { FastifyRequest } from "fastify";
+import { FastifyRequest, FastifyReply } from "fastify";
 import { Controller, GET, POST, PUT } from "fastify-decorators";
 
-import IdeaService from "../services/idea";
-import { Idea, IdeaInput } from "../entity/idea";
+import { UserService, IdeaService, TeamService } from "../services"
+import authenticate from "../hooks/onRequest/authentication";
+import { User, Idea, IdeaInput, Team, TeamInput, TeamPayload, AddToTeamInput } from "../entity";
 import { ideaSchema, ideaInputSchema } from "../schemas/idea";
+import { teamSchema, teamInputSchema, addUserInputSchema } from "../schemas/team";
 
 @Controller({ route: "/ideas" })
 export default class IdeaController {
-  constructor(private service: IdeaService) {}
+  constructor(
+    private userService: UserService,
+    private ideaService: IdeaService,
+    private teamService: TeamService,
+  ) {}
 
   @GET({
     url: "/:id",
@@ -19,10 +25,10 @@ export default class IdeaController {
       },
     },
   })
-  async getById(
+  async getIdeaById(
     req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Idea> {
-    const idea = await this.service.getById(req.params.id);
+    const idea = await this.ideaService.getById(req.params.id);
 
     if (!idea) throw { statusCode: 404, message: "Entity not found" };
     return idea;
@@ -36,8 +42,8 @@ export default class IdeaController {
       },
     },
   })
-  async getAll(): Promise<Idea[]> {
-    return this.service.getAll();
+  async getAllIdeas(): Promise<Idea[]> {
+    return this.ideaService.getAll();
   }
 
   @POST({
@@ -49,12 +55,12 @@ export default class IdeaController {
       },
     },
   })
-  async create(req: FastifyRequest<{ Body: IdeaInput }>): Promise<Idea> {
+  async createIdea(req: FastifyRequest<{ Body: IdeaInput }>): Promise<Idea> {
     if (!req.body.solutionSupportingPhotos) {
       req.body.solutionSupportingPhotos = [];
     }
 
-    return this.service.store(req.body);
+    return this.ideaService.store(req.body);
   }
 
   @PUT({
@@ -67,13 +73,13 @@ export default class IdeaController {
       },
     },
   })
-  async update(
+  async updateIdea(
     req: FastifyRequest<{
       Params: { ideaId: string };
       Body: IdeaInput;
     }>
   ): Promise<Idea> {
-    let updated = await this.service.update(req.params.ideaId, req.body);
+    let updated = await this.ideaService.update(req.params.ideaId, req.body);
     updated = camelcaseKeys(updated, { deep: true });
     if (!Array.isArray(updated.solutionSupportingPhotos)) {
       updated.solutionSupportingPhotos = [];
@@ -81,4 +87,97 @@ export default class IdeaController {
 
     return updated;
   }
+
+  @GET({
+    url: "/:ideaId/team",
+    options: {
+      schema: {
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        response: { 200: teamSchema },
+      },
+    },
+  })
+  async getTeamById(
+    req: FastifyRequest<{ Params: { ideaId: string } }>
+  ): Promise<Team[]> {
+    const team = await this.teamService.getByIdeaId(req.params.ideaId);
+    if (!team) throw { statusCode: 404, message: "Entity not found" };
+
+    return team;
+  }
+
+  @POST({
+    url: "/:ideaId/team",
+    options: {
+      schema: {
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        body: teamInputSchema,
+        response: { 200: teamSchema },
+      },
+      onRequest: authenticate,
+    },
+  })
+  async createTeam(
+    req: AuthenticatedRequest<{
+      Params: { ideaId: string };
+      Body: TeamPayload;
+      User: Record<string, unknown>;
+    }>
+  ): Promise<Team[]> {
+    const user = req.user?.user as User;
+    user.id = "69932052-ed9b-4497-87a4-e159b1df9927"
+
+    const values: TeamInput[] = [{
+      ideaId: req.params.ideaId,
+      userId: user.id,
+      isLeader: true,
+    }];
+    req.body.userIds.forEach((userId: string) => {
+      values.push({
+        ideaId: req.params.ideaId,
+        userId: userId,
+        isLeader: false,
+      });
+    });
+    return this.teamService.store(values);
+  }
+
+  @POST({
+    url: "/:ideaId/add-to-team",
+    options: {
+      schema: {
+        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        body: addUserInputSchema,
+        response: 204,
+      },
+      onRequest: authenticate,
+    },
+  })
+  async addUserToTeam(
+    req: AuthenticatedRequest<{
+      Params: { ideaId: string };
+      Body: AddToTeamInput;
+      User: Record<string, unknown>;
+    }>,
+    rep: FastifyReply,
+  ): Promise<void> {
+    const user = req.user?.user as User;
+    user.id = "d227f87c-b90f-4b1f-9cb5-0ff5ce200527"
+
+    const [userFound, teamFound] = await Promise.all([
+      this.userService.getById(user.id),
+      this.teamService.getByIdeaId(req.params.ideaId),
+    ])
+    if (!userFound) throw { statusCode: 404, message: "User not found" };
+    if (!teamFound) throw { statusCode: 404, message: "Team not found" };
+    if (teamFound.length > 2) throw { statusCode: 400, message: "Team size exceeded" };
+    teamFound.forEach(t => {
+      if (t.userId === user.id && !t.isLeader) {
+        throw { statusCode: 400, message: "Only leader can add to team" };
+      }
+    })
+
+    await this.teamService.addToTeam({ ideaId: req.params.ideaId, ...req.body });
+    return rep.code(204).send();
+  } 
 }
