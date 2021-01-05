@@ -125,7 +125,6 @@ export default class IdeaController {
     }>
   ): Promise<Team[]> {
     const user = req.user?.user as User;
-    user.id = "69932052-ed9b-4497-87a4-e159b1df9927"
 
     const values: TeamInput[] = [{
       ideaId: req.params.ideaId,
@@ -162,7 +161,6 @@ export default class IdeaController {
     rep: FastifyReply,
   ): Promise<void> {
     const user = req.user?.user as User;
-    user.id = "d227f87c-b90f-4b1f-9cb5-0ff5ce200527"
 
     const [userFound, teamFound] = await Promise.all([
       this.userService.getById(user.id),
@@ -171,7 +169,7 @@ export default class IdeaController {
     if (!userFound) throw { statusCode: 404, message: "User not found" };
     if (!teamFound) throw { statusCode: 404, message: "Team not found" };
     if (teamFound.length > 2) throw { statusCode: 400, message: "Team size exceeded" };
-    teamFound.forEach(t => {
+    teamFound.forEach((t: Team) => {
       if (t.userId === user.id && !t.isLeader) {
         throw { statusCode: 400, message: "Only leader can add to team" };
       }
