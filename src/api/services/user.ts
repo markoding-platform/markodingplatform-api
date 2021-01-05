@@ -48,7 +48,7 @@ export default class UserService {
     return user;
   }
 
-  async getById(id: number): Promise<User | undefined> {
+  async getById(id: string): Promise<User | undefined> {
     return this.repository.findOne({ id });
   }
 }

@@ -25,13 +25,12 @@ export type TeamInput = Omit<
   "id" | "createdAt" | "updatedAt" | "deletedAt"
 >;
 
-export interface TeamInputMany {
+export type TeamPayload = {
   ideaId: string;
-  leaderId: string;
-  userIds: string[];
+  userIds: [string, string],
 }
 
-export interface AddToTeamInput {
+export type AddToTeamInput = {
   userId: string;
   isLeader: boolean;
 }

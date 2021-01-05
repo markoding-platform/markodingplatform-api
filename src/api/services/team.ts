@@ -21,10 +21,8 @@ export default class TeamService {
       .getMany();
   }
 
-  async storeMany(teams: TeamInput[]): Promise<Team[]> {
-    const {
-      generatedMaps,
-    } = await this.repository
+  async store(teams: TeamInput[]): Promise<Team[]> {
+    const { generatedMaps } = await this.repository
       .createQueryBuilder()
       .insert()
       .into(Team)

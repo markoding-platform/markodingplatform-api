@@ -5,7 +5,6 @@ export const teamSchema = {
     properties: {
       createdAt: { type: "string" },
       updatedAt: { type: "string" },
-      deletedAt: { type: "string" },
       id: { type: "string", nullable: false },
       ideaId: { type: "string", nullable: false },
       userId: { type: "string", nullable: false },
@@ -14,15 +13,14 @@ export const teamSchema = {
   },
 };
 
-export const teamInputManySchema = {
+export const teamInputSchema = {
   type: "object",
-  required: ["ideaId", "leaderId", "userIds"],
+  required: ["ideaId", "userIds"],
   properties: {
     ideaId: { type: "string" },
-    leaderId: { type: "string" },
     userIds: {
       type: "array",
-      maxItems: 3,
+      maxItems: 2,
       items: { type: "string" },
     },
   },
@@ -30,9 +28,8 @@ export const teamInputManySchema = {
 
 export const addUserInputSchema = {
   type: "object",
-  required: ["userId", "isLeader"],
+  required: ["userId"],
   properties: {
     userId: { type: "string" },
-    isLeader: { type: "boolean" },
   },
 };

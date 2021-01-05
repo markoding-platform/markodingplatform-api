@@ -1,6 +1,6 @@
 export { User, UserInput } from "./user";
 export { Idea, IdeaInput } from "./idea";
-export { Team, TeamInput, AddToTeamInput } from "./team";
+export { Team, TeamInput, TeamPayload, AddToTeamInput } from "./team";
 export { Nonce, SSORequest, SSOResponse } from "./nonce";
 export { Announcement, AnnouncementInput } from "./announcement";
 export { Event } from "./event";
