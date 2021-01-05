@@ -30,18 +30,13 @@ export default class IdeaLikeController {
     }>,
     reply: FastifyReply
   ): Promise<IdeaLike> {
-    const userLogin = req.user?.user as User;
-    const [idea, user] = await Promise.all([
+    const user = req.user?.user as User;
+    const [userFound, ideaFound] = await Promise.all([
+      this.userService.getOne({ id: user.id }),
       this.ideaService.getOne({ id: req.params.ideaId }),
-      this.userService.getOne({ id: userLogin.id }),
     ]);
-
-    if (!idea) {
-      throw { statusCode: 404, message: "Idea not found" };
-    }
-    if (!user) {
-      throw { statusCode: 404, message: "User not found" };
-    }
+    if (!userFound) throw { statusCode: 404, message: "User not found" };
+    if (!ideaFound) throw { statusCode: 404, message: "Idea not found" };
 
     // @ts-ignore
     await this.service.storeOrDelete(idea, user);
