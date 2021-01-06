@@ -1,11 +1,11 @@
 import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
 
-import {Chat, ChatInput, User} from '../entity';
-import {chatSchema, chatInputSchema} from '../schemas/chat';
-import authenticate from '../hooks/onRequest/authentication';
 import ChatService from '../services/chat';
+import {Chat, ChatInput, User} from '../entity';
+import authenticate from '../hooks/onRequest/authentication';
 import {queryParamId} from '../schemas/common';
+import {chatSchema, chatInputSchema} from '../schemas/chat';
 
 @Controller({route: '/chats'})
 export default class ChatController {

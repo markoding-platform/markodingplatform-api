@@ -1,4 +1,12 @@
-import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import {Profile} from './profile';
 
 @Entity('users')
 export class User {
@@ -16,6 +24,10 @@ export class User {
 
   @Column({default: false})
   isEmailVerified: boolean;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile?: Profile;
 }
 
 export type UserInput = Omit<User, 'id'>;

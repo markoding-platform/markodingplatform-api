@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 
 const {JWT_SECRET} = process.env;
 
-export function verifyToken(token: string): Promise<Record<string, unknown>> {
+export function verifyToken(
+  token: string,
+): Promise<AuthenticatedRequestPayload> {
   return new Promise((resolve, reject) => {
     jwt.verify(token, JWT_SECRET as string, function (err, decoded) {
       if (err) {
@@ -16,7 +18,7 @@ export function verifyToken(token: string): Promise<Record<string, unknown>> {
         });
       }
 
-      return resolve(decoded as Record<string, unknown>);
+      return resolve(decoded as AuthenticatedRequestPayload);
     });
   });
 }

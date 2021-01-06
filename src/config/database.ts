@@ -17,6 +17,7 @@ import {
   QuestionComment,
   QuestionLike,
   Chat,
+  Profile,
 } from '../api/entity';
 
 const {
@@ -59,6 +60,7 @@ export default class Database {
         QuestionComment,
         QuestionLike,
         Chat,
+        Profile,
       ],
       logging: true,
       synchronize: true,

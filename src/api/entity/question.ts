@@ -33,13 +33,10 @@ export class Question {
   @ManyToOne(() => User)
   user: User;
 
-  @OneToMany(
-    () => QuestionComment,
-    (comment: QuestionComment) => comment.question,
-  )
+  @OneToMany(() => QuestionComment, (comment) => comment.question)
   comments: QuestionComment[];
 
-  @OneToMany(() => QuestionLike, (like: QuestionLike) => like.question)
+  @OneToMany(() => QuestionLike, (like) => like.question)
   likes: QuestionLike[];
 }
 
