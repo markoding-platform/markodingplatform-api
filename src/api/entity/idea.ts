@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from "typeorm";
-import { IdeaLike } from "."
+import { IdeaLike } from ".";
 
 import { SolutionType } from "../../libs/types";
 
