@@ -1,3 +1,5 @@
+import { timestamps } from "./common";
+
 const properties = {
   id: { type: "string", nullable: false },
   title: { type: "string" },
@@ -12,7 +14,10 @@ const properties = {
 
 export const eventSchema = {
   type: "object",
-  properties,
+  properties: {
+    ...timestamps,
+    ...properties,
+  },
 };
 
 export const eventInputSchema = {

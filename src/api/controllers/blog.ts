@@ -4,6 +4,7 @@ import { Controller, GET, POST } from "fastify-decorators";
 import BlogService from "../services/blog";
 import { Blog, BlogInput } from "../entity/blog";
 import { blogSchema, blogInputSchema } from "../schemas/blog";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/blogs" })
 export default class BlogController {
@@ -13,7 +14,7 @@ export default class BlogController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: blogSchema },
       },
     },

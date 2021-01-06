@@ -1,8 +1,4 @@
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-  deletedAt: { type: "string" },
-};
+import { timestamps } from "./common";
 
 const properties = {
   title: { type: "string" },

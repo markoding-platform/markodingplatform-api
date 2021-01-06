@@ -19,6 +19,7 @@ import {
   teamInputSchema,
   addUserInputSchema,
 } from "../schemas/team";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/ideas" })
 export default class IdeaController {
@@ -32,7 +33,7 @@ export default class IdeaController {
     url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
+        params: queryParamId,
         response: { 200: ideaSchema },
       },
     },
@@ -90,10 +91,10 @@ export default class IdeaController {
   }
 
   @PUT({
-    url: "/:ideaId",
+    url: "/:id",
     options: {
       schema: {
-        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        params: queryParamId,
         body: ideaInputSchema,
         response: { 200: ideaSchema },
       },
@@ -102,7 +103,7 @@ export default class IdeaController {
   })
   async updateIdea(
     req: AuthenticatedRequest<{
-      Params: { ideaId: string };
+      Params: { id: string };
       Body: IdeaInput;
     }>
   ): Promise<Idea> {
@@ -111,7 +112,7 @@ export default class IdeaController {
       this.userService.getOne({ id: user.id }),
       this.teamService.getOne({
         userId: user.id,
-        ideaId: req.params.ideaId,
+        ideaId: req.params.id,
       }),
     ]);
     if (!userFound) throw { statusCode: 400, message: "User not found" };
@@ -119,7 +120,7 @@ export default class IdeaController {
       throw { statusCode: 400, message: "User not on this team idea" };
     }
 
-    let updated = await this.ideaService.update(req.params.ideaId, req.body);
+    let updated = await this.ideaService.update(req.params.id, req.body);
     updated = camelcaseKeys(updated, { deep: true });
 
     if (!Array.isArray(updated.solutionSupportingPhotos)) {
@@ -130,28 +131,28 @@ export default class IdeaController {
   }
 
   @GET({
-    url: "/:ideaId/team",
+    url: "/:id/team",
     options: {
       schema: {
-        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        params: queryParamId,
         response: { 200: teamSchema },
       },
     },
   })
   async getTeamById(
-    req: FastifyRequest<{ Params: { ideaId: string } }>
+    req: FastifyRequest<{ Params: { id: string } }>
   ): Promise<Team[]> {
-    const team = await this.teamService.getByIdeaId(req.params.ideaId);
+    const team = await this.teamService.getByIdeaId(req.params.id);
     if (!team) throw { statusCode: 404, message: "Entity not found" };
 
     return team;
   }
 
   @POST({
-    url: "/:ideaId/team",
+    url: "/:id/team",
     options: {
       schema: {
-        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        params: queryParamId,
         body: teamInputSchema,
         response: { 200: teamSchema },
       },
@@ -160,7 +161,7 @@ export default class IdeaController {
   })
   async createTeam(
     req: AuthenticatedRequest<{
-      Params: { ideaId: string };
+      Params: { id: string };
       Body: TeamPayload;
       User: Record<string, unknown>;
     }>
@@ -169,14 +170,14 @@ export default class IdeaController {
 
     const values: TeamInput[] = [
       {
-        ideaId: req.params.ideaId,
+        ideaId: req.params.id,
         userId: user.id,
         isLeader: true,
       },
     ];
     req.body.userIds.forEach((userId: string) => {
       values.push({
-        ideaId: req.params.ideaId,
+        ideaId: req.params.id,
         userId: userId,
         isLeader: false,
       });
@@ -185,10 +186,10 @@ export default class IdeaController {
   }
 
   @POST({
-    url: "/:ideaId/add-to-team",
+    url: "/:id/add-to-team",
     options: {
       schema: {
-        params: { type: "object", properties: { ideaId: { type: "string" } } },
+        params: queryParamId,
         body: addUserInputSchema,
         response: 204,
       },
@@ -197,7 +198,7 @@ export default class IdeaController {
   })
   async addUserToTeam(
     req: AuthenticatedRequest<{
-      Params: { ideaId: string };
+      Params: { id: string };
       Body: AddToTeamInput;
       User: Record<string, unknown>;
     }>,
@@ -206,7 +207,7 @@ export default class IdeaController {
     const user = req.user?.user as User;
     const [userFound, teamFound] = await Promise.all([
       this.userService.getOne({ id: user.id }),
-      this.teamService.getByIdeaId(req.params.ideaId),
+      this.teamService.getByIdeaId(req.params.id),
     ]);
     if (!userFound) throw { statusCode: 404, message: "User not found" };
     if (!teamFound) throw { statusCode: 404, message: "Team not found" };
@@ -221,7 +222,7 @@ export default class IdeaController {
     });
 
     await this.teamService.addToTeam({
-      ideaId: req.params.ideaId,
+      ideaId: req.params.id,
       ...req.body,
     });
     return rep.code(204).send();
