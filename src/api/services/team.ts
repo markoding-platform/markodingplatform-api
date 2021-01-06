@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Team, TeamInput } from "../entity";
+import Database from '../../config/database';
+import {Team, TeamInput} from '../entity';
 
 @Service()
 export default class TeamService {
@@ -20,8 +20,8 @@ export default class TeamService {
 
   async getByIdeaId(ideaId: string): Promise<Team[] | undefined> {
     return this.repository
-      .createQueryBuilder("team")
-      .where("idea_id = :ideaId", { ideaId })
+      .createQueryBuilder('team')
+      .where('idea_id = :ideaId', {ideaId})
       .getMany();
   }
 
@@ -33,7 +33,7 @@ export default class TeamService {
       .insert()
       .into(Team)
       .values(teams)
-      .returning("*")
+      .returning('*')
       .execute();
     return generatedMaps as Team[];
   }

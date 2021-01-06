@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { User, UserInput } from "../entity";
+import Database from '../../config/database';
+import {User, UserInput} from '../entity';
 
 @Service()
 export default class UserService {
@@ -36,7 +36,7 @@ export default class UserService {
         },
         {
           isEmailVerified: true,
-        }
+        },
       );
 
       user = {

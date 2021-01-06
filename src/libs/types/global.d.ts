@@ -2,8 +2,8 @@ import {
   FastifyRequest,
   RawRequestDefaultExpression,
   RawServerDefault,
-} from "fastify";
-import { RouteGenericInterface } from "fastify/types/route";
+} from 'fastify';
+import {RouteGenericInterface} from 'fastify/types/route';
 
 declare global {
   interface AuthenticatedRequest<

@@ -68,6 +68,11 @@
     "build",
     "node_modules"
   ],
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": false
+  },
   "dependencies": {
     "@types/pg": "^7.14.6",
     "@types/validator": "^13.1.0",

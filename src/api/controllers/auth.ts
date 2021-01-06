@@ -1,23 +1,23 @@
-import { FastifyRequest } from "fastify";
-import { AuthQuerystring } from "schemas";
-import { Controller, POST } from "fastify-decorators";
+import {FastifyRequest} from 'fastify';
+import {AuthQuerystring} from 'schemas';
+import {Controller, POST} from 'fastify-decorators';
 
-import AuthService from "../services/auth";
-import UserService from "../services/user";
-import { SSORequest } from "../entity";
-import { authQuerySchema } from "../schemas/auth";
+import AuthService from '../services/auth';
+import UserService from '../services/user';
+import {SSORequest} from '../entity';
+import {authQuerySchema} from '../schemas/auth';
 
-const { DEBUGGABLE = false } = process.env;
+const {DEBUGGABLE = false} = process.env;
 
-@Controller({ route: "/auth" })
+@Controller({route: '/auth'})
 class AuthController {
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   @POST({
-    url: "/start",
+    url: '/start',
     options: {
       schema: {
         querystring: authQuerySchema,
@@ -25,7 +25,7 @@ class AuthController {
     },
   })
   async start(
-    request: FastifyRequest<{ Querystring: AuthQuerystring }>
+    request: FastifyRequest<{Querystring: AuthQuerystring}>,
   ): Promise<SSORequest> {
     if (request.query.debug && Boolean(DEBUGGABLE)) {
       const newNonce = await this.authService.generateNonce();
@@ -34,7 +34,7 @@ class AuthController {
         request.query.id,
         request.query.email,
         request.query.isEmailVerified,
-        request.query.name
+        request.query.name,
       );
 
       return payload;
@@ -46,20 +46,20 @@ class AuthController {
     return payload;
   }
 
-  @POST({ url: "/finish" })
+  @POST({url: '/finish'})
   async finish(
-    req: FastifyRequest<{ Body: { sso: string; sig: string } }>
-  ): Promise<{ token: string; data: unknown }> {
-    const { sso, sig } = req.body;
+    req: FastifyRequest<{Body: {sso: string; sig: string}}>,
+  ): Promise<{token: string; data: unknown}> {
+    const {sso, sig} = req.body;
 
     if (!this.authService.verifySSO(sso, sig)) {
-      throw { statusCode: 403, message: "forbidden" };
+      throw {statusCode: 403, message: 'forbidden'};
     }
 
     const payload = this.authService.decodeSSO(sso);
 
     if (!(await this.authService.validateNonce(payload.nonce))) {
-      throw { statusCode: 403, message: "please login again" };
+      throw {statusCode: 403, message: 'please login again'};
     }
 
     const user = await this.userService.findOrCreate({
@@ -70,8 +70,8 @@ class AuthController {
     });
 
     return {
-      token: this.authService.generateJWT({ user }),
-      data: { user },
+      token: this.authService.generateJWT({user}),
+      data: {user},
     };
   }
 }

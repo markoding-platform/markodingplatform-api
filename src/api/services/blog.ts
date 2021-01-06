@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Blog } from "../entity";
+import Database from '../../config/database';
+import {Blog} from '../entity';
 
 @Service()
 export default class BlogService {
@@ -15,7 +15,7 @@ export default class BlogService {
   }
 
   async getById(id: string): Promise<Blog | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({id});
   }
 
   async getAll(offset: number, limit: number): Promise<Blog[]> {
@@ -23,7 +23,7 @@ export default class BlogService {
       .createQueryBuilder()
       .offset(offset)
       .limit(limit)
-      .orderBy("created_at", "DESC")
+      .orderBy('created_at', 'DESC')
       .getMany();
   }
 

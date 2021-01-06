@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { IdeaLike, Idea, User } from "../entity";
+import Database from '../../config/database';
+import {IdeaLike, Idea, User} from '../entity';
 
 @Service()
 export default class IdeaLikeService {
@@ -27,7 +27,7 @@ export default class IdeaLikeService {
         .createQueryBuilder()
         .delete()
         .from(IdeaLike)
-        .where("id = :id", { id: liked[0].id })
+        .where('id = :id', {id: liked[0].id})
         .execute();
       return;
     }
