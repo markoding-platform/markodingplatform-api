@@ -21,6 +21,7 @@ const userAuthSchema = {
 
 const profileAuthSchema = {
   type: "object",
+  nullable: true,
   properties: {
     id: { type: "string" },
     profileType: { type: "string" },

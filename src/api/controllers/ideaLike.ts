@@ -35,11 +35,11 @@ export default class IdeaLikeController {
       this.userService.getOne({ id: user.id }),
       this.ideaService.getOne({ id: req.params.id }),
     ]);
-
     if (!userFound) throw { statusCode: 404, message: "User not found" };
     if (!ideaFound) throw { statusCode: 404, message: "Idea not found" };
-    if (!idea) throw { statusCode: 404, message: "Idea not found" };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     await this.ideaLikeService.storeOrDelete(idea, user);
 
     return reply.code(204).send();
