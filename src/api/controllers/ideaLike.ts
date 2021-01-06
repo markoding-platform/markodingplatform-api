@@ -1,4 +1,3 @@
-
 import {FastifyReply} from 'fastify';
 import {Controller, POST} from 'fastify-decorators';
 
