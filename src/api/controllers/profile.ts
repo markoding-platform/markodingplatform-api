@@ -1,14 +1,18 @@
-import camelcaseKeys from "camelcase-keys";
-import { FastifyRequest } from "fastify";
 import { Controller, GET, POST } from "fastify-decorators";
 
 import ProfileService from "../services/profile";
-import { Profile, ProfileInput } from "../entity/profile";
+import AuthService from "../services/auth";
+import { Profile, ProfileInput } from "../entity";
 import { profileSchema, profileInputSchema } from "../schemas/profile";
+import authenticate from "../hooks/onRequest/authentication";
+import { authResponseSchema } from "../schemas/auth";
 
-@Controller({ route: "/profiles" })
-export default class IdeaController {
-  constructor(private service: ProfileService) {}
+@Controller({ route: "/profile" })
+export default class ProfileController {
+  constructor(
+    private service: ProfileService,
+    private authService: AuthService
+  ) {}
 
   @GET({
     url: "/:id",
@@ -17,27 +21,16 @@ export default class IdeaController {
         params: { type: "object", properties: { id: { type: "string" } } },
         response: { 200: profileSchema },
       },
+      onRequest: authenticate,
     },
   })
   async getById(
-    req: FastifyRequest<{ Params: { id: string } }>
+    req: AuthenticatedRequest<{ Params: { id: string } }>
   ): Promise<Profile> {
-    const idea = await this.service.getById(req.params.id);
+    const profile = await this.service.getById(req.params.id);
 
-    if (!idea) throw { statusCode: 404, message: "Entity not found" };
-    return idea;
-  }
-
-  @GET({
-    url: "/",
-    options: {
-      schema: {
-        response: { 200: { type: "array", items: profileSchema } },
-      },
-    },
-  })
-  async getAll(): Promise<Profile[]> {
-    return this.service.getAll();
+    if (!profile) throw { statusCode: 404, message: "profile not found" };
+    return profile;
   }
 
   @POST({
@@ -45,36 +38,29 @@ export default class IdeaController {
     options: {
       schema: {
         body: profileInputSchema,
-        response: { 200: profileSchema },
+        response: { 200: authResponseSchema },
       },
+      onRequest: authenticate,
     },
   })
-  async create(req: FastifyRequest<{ Body: ProfileInput }>): Promise<Profile> {
-    return this.service.store(req.body);
-  }
-
-  @POST({
-    url: "/:profileId",
-    options: {
-      schema: {
-        params: {
-          type: "object",
-          properties: { profileId: { type: "string" } },
-        },
-        body: profileInputSchema,
-        response: { 200: profileSchema },
-      },
-    },
-  })
-  async update(
-    req: FastifyRequest<{
-      Params: { profileId: string };
+  async upsert(
+    req: AuthenticatedRequest<{
       Body: ProfileInput;
     }>
-  ): Promise<Profile> {
-    let updated = await this.service.update(req.params.profileId, req.body);
-    updated = camelcaseKeys(updated, { deep: true });
+  ): Promise<{ token: string; data: unknown }> {
+    const user = req.user.user;
 
-    return updated;
+    let profile: Profile;
+
+    if (!req.user.profile) {
+      profile = await this.service.store(user.id, req.body);
+    } else {
+      profile = await this.service.update(req.user.profile.id, req.body);
+    }
+
+    return {
+      token: this.authService.generateJWT({ user, profile }),
+      data: { user, profile },
+    };
   }
 }
