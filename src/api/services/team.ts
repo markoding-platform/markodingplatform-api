@@ -14,14 +14,14 @@ export default class TeamService {
     this.repository = this.database.connection.getRepository(Team);
   }
 
-  async getById(ideaId: string): Promise<Team[] | undefined> {
+  async getByIdeaId(ideaId: string): Promise<Team[] | undefined> {
     return this.repository
       .createQueryBuilder("team")
       .where("idea_id = :ideaId", { ideaId })
       .getMany();
   }
 
-  async storeMany(teams: TeamInput[]): Promise<Team[]> {
+  async store(teams: TeamInput[]): Promise<Team[]> {
     const {
       generatedMaps,
     } = await this.repository

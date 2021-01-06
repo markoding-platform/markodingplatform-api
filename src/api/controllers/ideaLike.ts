@@ -35,8 +35,8 @@ export default class IdeaLikeController {
       this.ideaService.getById(req.params.ideaId),
       this.userService.getById(userLogin.id),
     ]);
+
     if (!idea) throw { statusCode: 404, message: "Idea not found" };
-    if (!user) throw { statusCode: 404, message: "User not found" };
 
     await this.ideaLikeService.storeOrDelete(idea, user);
 
