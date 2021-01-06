@@ -1,4 +1,4 @@
-import { FastifyReply } from "fastify"
+import { FastifyReply } from "fastify";
 import { Controller, POST } from "fastify-decorators";
 import { IdeaLike, User } from "../entity";
 import authenticate from "../hooks/onRequest/authentication";
@@ -11,7 +11,7 @@ export default class IdeaLikeController {
   constructor(
     private ideaLikeService: IdeaLikeService,
     private ideaService: IdeaService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   @POST({
@@ -28,19 +28,18 @@ export default class IdeaLikeController {
       Params: { ideaId: string };
       User: Record<string, unknown>;
     }>,
-    reply: FastifyReply,
+    reply: FastifyReply
   ): Promise<IdeaLike> {
     const userLogin = req.user?.user as User;
     const [idea, user] = await Promise.all([
       this.ideaService.getById(req.params.ideaId),
       this.userService.getById(userLogin.id),
-    ])
+    ]);
     if (!idea) throw { statusCode: 404, message: "Idea not found" };
     if (!user) throw { statusCode: 404, message: "User not found" };
 
-    // @ts-ignore
     await this.ideaLikeService.storeOrDelete(idea, user);
 
-    return reply.code(204).send()
+    return reply.code(204).send();
   }
 }
