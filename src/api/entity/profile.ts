@@ -27,45 +27,45 @@ export class Profile {
   })
   profileType: ProfileType;
 
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolName: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolTypeId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolTypeName: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolGradeId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   schoolGradeName: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   classId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   className: string;
 
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   cityId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   cityName: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   provinceId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   provinceName: string;
 
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   workingPosition: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   companyName: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   expertise: string;
 
-  @Column("integer")
+  @Column({ type: "integer", nullable: true })
   startTeachingYear: number;
 
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   lastEducationGradeId: string;
-  @Column("varchar")
+  @Column({ type: "varchar", nullable: true })
   lastEducationGradeName: string;
 }
 

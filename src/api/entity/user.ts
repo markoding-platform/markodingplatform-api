@@ -25,14 +25,9 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  @Column({
-    type: "enum",
-    enum: ["teacher", "student", "mentor"],
-    nullable: true,
-  })
   @OneToOne(() => Profile)
   @JoinColumn()
-  profile: Profile;
+  profile?: Profile;
 }
 
 export type UserInput = Omit<User, "id">;
