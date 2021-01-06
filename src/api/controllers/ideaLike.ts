@@ -38,6 +38,8 @@ export default class IdeaLikeController {
 
     if (!idea) throw { statusCode: 404, message: "Idea not found" };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     await this.ideaLikeService.storeOrDelete(idea, user);
 
     return reply.code(204).send();
