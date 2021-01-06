@@ -16,11 +16,15 @@ export default class UserService {
   }
 
   async findOrCreate(data: UserInput): Promise<User> {
-    let user = await this.repository.findOne({
-      name: data.name,
-      email: data.email,
-      externalId: data.externalId,
-    });
+    let user = await this.repository
+      .createQueryBuilder("user")
+      .where({
+        name: data.name,
+        email: data.email,
+        externalId: data.externalId,
+      })
+      .leftJoinAndSelect("user.profile", "profile")
+      .getOne();
 
     if (!user) {
       user = await this.repository.save({
@@ -45,7 +49,7 @@ export default class UserService {
       };
     }
 
-    return user;
+    return user as User;
   }
 
   async getOne(user: Partial<User>): Promise<User | undefined> {

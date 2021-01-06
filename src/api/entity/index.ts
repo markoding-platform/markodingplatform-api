@@ -12,3 +12,4 @@ export { QuestionLike, QuestionLikeInput } from "./questionLike";
 export { Chat, ChatInput } from "./chat";
 export { Banner, BannerInput } from "./banner";
 export { IdeaLike } from "./ideaLike";
+export { Profile, ProfileInput } from "./profile";

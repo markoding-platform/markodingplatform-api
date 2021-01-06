@@ -9,7 +9,7 @@ import UserService from "../services/user";
 @Controller({ route: "/ideas" })
 export default class IdeaLikeController {
   constructor(
-    private service: IdeaLikeService,
+    private ideaLikeService: IdeaLikeService,
     private ideaService: IdeaService,
     private userService: UserService
   ) {}
@@ -35,11 +35,12 @@ export default class IdeaLikeController {
       this.userService.getOne({ id: user.id }),
       this.ideaService.getOne({ id: req.params.ideaId }),
     ]);
+
     if (!userFound) throw { statusCode: 404, message: "User not found" };
     if (!ideaFound) throw { statusCode: 404, message: "Idea not found" };
+    if (!idea) throw { statusCode: 404, message: "Idea not found" };
 
-    // @ts-ignore
-    await this.service.storeOrDelete(idea, user);
+    await this.ideaLikeService.storeOrDelete(idea, user);
 
     return reply.code(204).send();
   }
