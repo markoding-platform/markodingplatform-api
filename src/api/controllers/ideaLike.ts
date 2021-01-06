@@ -2,9 +2,8 @@ import { FastifyReply } from "fastify";
 import { Controller, POST } from "fastify-decorators";
 import { IdeaLike, User } from "../entity";
 import authenticate from "../hooks/onRequest/authentication";
-import IdeaLikeService from "../services/ideaLike";
-import IdeaService from "../services/idea";
-import UserService from "../services/user";
+import { UserService, IdeaService, IdeaLikeService } from "../services";
+import { queryParamId } from "../schemas/common";
 
 @Controller({ route: "/ideas" })
 export default class IdeaLikeController {
@@ -15,9 +14,10 @@ export default class IdeaLikeController {
   ) {}
 
   @POST({
-    url: "/:ideaId/like",
+    url: "/:id/like",
     options: {
       schema: {
+        params: queryParamId,
         response: 204,
       },
       onRequest: authenticate,
@@ -25,18 +25,18 @@ export default class IdeaLikeController {
   })
   async likeIdea(
     req: AuthenticatedRequest<{
-      Params: { ideaId: string };
+      Params: { id: string };
       User: Record<string, unknown>;
     }>,
     reply: FastifyReply
   ): Promise<IdeaLike> {
-    const userLogin = req.user?.user as User;
-    const [idea, user] = await Promise.all([
-      this.ideaService.getById(req.params.ideaId),
-      this.userService.getById(userLogin.id),
+    const user = req.user?.user as User;
+    const [userFound, ideaFound] = await Promise.all([
+      this.userService.getOne({ id: user.id }),
+      this.ideaService.getOne({ id: req.params.id }),
     ]);
-
-    if (!idea) throw { statusCode: 404, message: "Idea not found" };
+    if (!userFound) throw { statusCode: 404, message: "User not found" };
+    if (!ideaFound) throw { statusCode: 404, message: "Idea not found" };
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

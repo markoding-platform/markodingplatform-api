@@ -14,6 +14,10 @@ export default class TeamService {
     this.repository = this.database.connection.getRepository(Team);
   }
 
+  async getOne(team: Partial<Team>): Promise<Team | undefined> {
+    return this.repository.findOne(team);
+  }
+
   async getByIdeaId(ideaId: string): Promise<Team[] | undefined> {
     return this.repository
       .createQueryBuilder("team")

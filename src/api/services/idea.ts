@@ -14,8 +14,8 @@ export default class IdeaService {
     this.repository = this.database.connection.getRepository(Idea);
   }
 
-  async getById(id: string): Promise<Idea | undefined> {
-    return this.repository.findOne({ id });
+  async getOne(idea: Partial<Idea>): Promise<Idea | undefined> {
+    return this.repository.findOne(idea);
   }
 
   async getAll(): Promise<Idea[]> {
