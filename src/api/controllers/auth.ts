@@ -5,7 +5,7 @@ import { Controller, POST } from "fastify-decorators";
 import AuthService from "../services/auth";
 import UserService from "../services/user";
 import { SSORequest } from "../entity";
-import { authQuerySchema } from "../schemas/auth";
+import { authQuerySchema, authResponseSchema } from "../schemas/auth";
 
 const { DEBUGGABLE = false } = process.env;
 
@@ -46,7 +46,16 @@ class AuthController {
     return payload;
   }
 
-  @POST({ url: "/finish" })
+  @POST({
+    url: "/finish",
+    options: {
+      schema: {
+        response: {
+          200: authResponseSchema,
+        },
+      },
+    },
+  })
   async finish(
     req: FastifyRequest<{ Body: { sso: string; sig: string } }>
   ): Promise<{ token: string; data: unknown }> {
@@ -69,9 +78,13 @@ class AuthController {
       isEmailVerified: payload.isEmailVerified,
     });
 
+    const profile = user.profile;
+
+    Reflect.deleteProperty(user, "profile");
+
     return {
-      token: this.authService.generateJWT({ user }),
-      data: { user },
+      token: this.authService.generateJWT({ user, profile }),
+      data: { user, profile },
     };
   }
 }
