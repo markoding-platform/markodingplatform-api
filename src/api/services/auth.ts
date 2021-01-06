@@ -43,7 +43,7 @@ class AuthService {
     return nonce !== undefined;
   }
 
-  generateJWT(payload: Record<string, unknown>): string {
+  generateJWT(payload: AuthenticatedRequestPayload): string {
     return jwt.sign(payload, JWT_SECRET as string);
   }
 
