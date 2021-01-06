@@ -2,7 +2,10 @@ export const profileInputSchema = {
   type: "object",
   required: ["profileType"],
   properties: {
-    profileType: { type: "string" },
+    profileType: {
+      type: "string",
+      enum: ["student", "teacher", "mentor", "supporter"],
+    },
 
     schoolId: { type: "string" },
     schoolName: { type: "string" },
