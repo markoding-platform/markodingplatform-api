@@ -6,7 +6,7 @@ import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
 import {User, Idea, IdeaInput, IdeaUser} from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
-import {commonParams} from '../schemas/common';
+import {commonParams, commonQueryString} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaController {
@@ -38,12 +38,18 @@ export default class IdeaController {
     url: '/',
     options: {
       schema: {
+        querystring: commonQueryString,
         response: {200: {type: 'array', items: ideaSchema}},
       },
     },
   })
-  async getAllIdeas(): Promise<Idea[]> {
-    return this.ideaService.getAll();
+  async getAllIdeas(
+    req: FastifyRequest<{
+      Params: {id: string};
+      Querystring: {limit: number; offset: number};
+    }>,
+  ): Promise<Idea[]> {
+    return this.ideaService.getAll(req.query.limit, req.query.offset);
   }
 
   @POST({
