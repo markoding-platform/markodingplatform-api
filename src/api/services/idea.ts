@@ -18,8 +18,13 @@ export default class IdeaService {
     return this.repository.findOne(idea);
   }
 
-  async getAll(): Promise<Idea[]> {
-    return this.repository.find({isDraft: false});
+  async getAll(limit: number, offset: number): Promise<Idea[]> {
+    return this.repository
+      .createQueryBuilder('Question')
+      .where('is_draft = false')
+      .limit(limit)
+      .offset(offset)
+      .getMany();
   }
 
   async store(idea: Partial<Idea>): Promise<Idea> {

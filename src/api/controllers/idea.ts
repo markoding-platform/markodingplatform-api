@@ -15,7 +15,7 @@ import {
 } from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
 import {teamSchema, teamInputSchema, addUserInputSchema} from '../schemas/team';
-import {queryParamId} from '../schemas/common';
+import {queryParamId, queryStringSkipLimit} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaController {
@@ -47,12 +47,18 @@ export default class IdeaController {
     url: '/',
     options: {
       schema: {
+        querystring: queryStringSkipLimit,
         response: {200: {type: 'array', items: ideaSchema}},
       },
     },
   })
-  async getAllIdeas(): Promise<Idea[]> {
-    return this.ideaService.getAll();
+  async getAllIdeas(
+    req: FastifyRequest<{
+      Params: {id: string};
+      Querystring: {limit: number; offset: number};
+    }>,
+  ): Promise<Idea[]> {
+    return this.ideaService.getAll(req.query.limit, req.query.offset);
   }
 
   @POST({
