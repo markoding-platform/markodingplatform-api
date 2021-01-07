@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Team, TeamInput } from "../entity";
+import Database from '../../config/database';
+import {Team, TeamInput} from '../entity';
 
 @Service()
 export default class TeamService {
@@ -14,14 +14,18 @@ export default class TeamService {
     this.repository = this.database.connection.getRepository(Team);
   }
 
-  async getById(ideaId: string): Promise<Team[] | undefined> {
+  async getOne(team: Partial<Team>): Promise<Team | undefined> {
+    return this.repository.findOne(team);
+  }
+
+  async getByIdeaId(ideaId: string): Promise<Team[] | undefined> {
     return this.repository
-      .createQueryBuilder("team")
-      .where("idea_id = :ideaId", { ideaId })
+      .createQueryBuilder('team')
+      .where('idea_id = :ideaId', {ideaId})
       .getMany();
   }
 
-  async storeMany(teams: TeamInput[]): Promise<Team[]> {
+  async store(teams: TeamInput[]): Promise<Team[]> {
     const {
       generatedMaps,
     } = await this.repository
@@ -29,7 +33,7 @@ export default class TeamService {
       .insert()
       .into(Team)
       .values(teams)
-      .returning("*")
+      .returning('*')
       .execute();
     return generatedMaps as Team[];
   }

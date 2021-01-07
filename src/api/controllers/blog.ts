@@ -1,14 +1,14 @@
-import { FastifyRequest } from "fastify";
-import { Controller, GET, POST } from "fastify-decorators";
+import {FastifyRequest} from 'fastify';
+import {Controller, GET, POST} from 'fastify-decorators';
+import camelcaseKeys from 'camelcase-keys';
 
-import BlogService from "../services/blog";
-import AdminService from "../services/admin";
-import { User, Blog, BlogInput, BlogAuthor } from "../entity";
-import { blogSchema, blogInputSchema } from "../schemas/blog";
-import authenticate from "../hooks/onRequest/authentication";
-import camelcaseKeys from "camelcase-keys";
+import {AdminService, BlogService} from '../services';
+import {Admin, User, Blog, BlogInput, BlogAuthor} from '../entity';
+import {blogSchema, blogInputSchema} from '../schemas/blog';
+import authenticate from '../hooks/onRequest/authentication';
+import {queryParamId} from '../schemas/common';
 
-@Controller({ route: "/blogs" })
+@Controller({route: '/blogs'})
 export default class BlogController {
   constructor(
     private blogService: BlogService,
@@ -16,33 +16,31 @@ export default class BlogController {
   ) {}
 
   @GET({
-    url: "/:id",
+    url: '/:id',
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
-        response: { 200: blogSchema },
+        params: queryParamId,
+        response: {200: blogSchema},
       },
     },
   })
-  async getById(
-    req: FastifyRequest<{ Params: { id: string } }>
-  ): Promise<Blog> {
+  async getById(req: FastifyRequest<{Params: {id: string}}>): Promise<Blog> {
     const blog = await this.blogService.getById(req.params.id);
+    if (!blog) throw {statusCode: 404, message: 'Entity not found'};
 
-    if (!blog) throw { statusCode: 404, message: "Entity not found" };
     return blog;
   }
 
   @GET({
-    url: "/",
+    url: '/',
     options: {
       schema: {
-        response: { 200: { type: "array", items: blogSchema } },
+        response: {200: {type: 'array', items: blogSchema}},
       },
     },
   })
   async getAll(
-    req: FastifyRequest<{ Querystring: { limit: number; offset: number } }>
+    req: FastifyRequest<{Querystring: {limit: number; offset: number}}>,
   ): Promise<Blog[]> {
     const limit = req.query.limit || 6;
     const offset = req.query.offset || 0;
@@ -50,11 +48,11 @@ export default class BlogController {
   }
 
   @POST({
-    url: "/",
+    url: '/',
     options: {
       schema: {
         body: blogInputSchema,
-        response: { 200: blogSchema },
+        response: {200: blogSchema},
       },
       onRequest: authenticate,
     },
@@ -63,18 +61,23 @@ export default class BlogController {
     req: AuthenticatedRequest<{
       Body: BlogInput;
       User: Record<string, unknown>;
-    }>
+    }>,
   ): Promise<BlogAuthor> {
     const user = req.user?.user as User;
-    const admin = await this.adminService.getById(user.id);
-    if (!admin) throw { statusCode: 404, message: "Admin not found" };
+
+    // how to this??
+    const u = new User();
+    u.id = user.id;
+    const a = new Admin();
+    a.user = u;
+    const admin = await this.adminService.getOne(a);
+    if (!admin) throw {statusCode: 404, message: 'Admin not found'};
 
     const blog = await this.blogService.store(
       camelcaseKeys({
-        // @ts-ignore
-        adminId: user.id,
         ...req.body,
-      })
+        adminId: user.id,
+      }),
     );
 
     return {
@@ -82,7 +85,7 @@ export default class BlogController {
       author: {
         id: admin.id,
         name: admin.name,
-      }
-    }
+      },
+    };
   }
 }

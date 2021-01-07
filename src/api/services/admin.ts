@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Admin, AdminInput } from "../entity";
+import Database from '../../config/database';
+import {Admin, AdminInput} from '../entity';
 
 @Service()
 export default class AdminService {
@@ -18,7 +18,7 @@ export default class AdminService {
     return this.repository.save(admin);
   }
 
-  async getById(id: number): Promise<Admin | undefined> {
-    return this.repository.findOne({ id });
+  async getOne(admin: Partial<Admin>): Promise<Admin | undefined> {
+    return this.repository.findOne(admin);
   }
 }

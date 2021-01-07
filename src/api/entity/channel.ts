@@ -5,22 +5,22 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("channels")
+@Entity('channels')
 export class Channel {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar")
+  @Column('varchar')
   name: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 }

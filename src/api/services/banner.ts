@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Banner, BannerInput } from "../entity";
+import Database from '../../config/database';
+import {Banner, BannerInput} from '../entity';
 
 @Service()
 export default class BannerService {
@@ -15,7 +15,7 @@ export default class BannerService {
   }
 
   async getById(id: string): Promise<Banner | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({id});
   }
 
   async getAll(): Promise<Banner[]> {
@@ -31,12 +31,12 @@ export default class BannerService {
   }
 
   async update(id: string, banner: Partial<BannerInput>): Promise<Banner> {
-    const { raw } = await this.repository
+    const {raw} = await this.repository
       .createQueryBuilder()
       .update(Banner)
       .set(banner)
-      .where("id = :id", { id })
-      .returning("*")
+      .where('id = :id', {id})
+      .returning('*')
       .execute();
     return raw[0];
   }

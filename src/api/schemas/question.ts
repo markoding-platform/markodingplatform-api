@@ -1,39 +1,35 @@
-import { userSchema } from "./user";
-import { channelSchema } from "./channel";
-
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import {userSchema} from './user';
+import {channelSchema} from './channel';
+import {timestamps} from './common';
 
 const properties = {
-  content: { type: "string" },
+  content: {type: 'string'},
 };
 
 export const questionSchema = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "string" },
+    id: {type: 'string'},
     ...timestamps,
     ...properties,
-    comments: { type: "number" },
-    likes: { type: "number" },
+    comments: {type: 'number'},
+    likes: {type: 'number'},
     channel: channelSchema,
     user: userSchema,
   },
 };
 
 export const questionPostSchema = {
-  type: "object",
-  required: ["content", "channel"],
+  type: 'object',
+  required: ['content', 'channel'],
   properties: {
     ...properties,
-    channel: { type: "string" },
+    channel: {type: 'string'},
   },
 };
 
 export const questionPutSchema = {
-  type: "object",
-  required: ["content"],
+  type: 'object',
+  required: ['content'],
   properties,
 };

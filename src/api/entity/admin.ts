@@ -1,34 +1,44 @@
-import { Entity, PrimaryGeneratedColumn, Column,
-CreateDateColumn,
-UpdateDateColumn,
-DeleteDateColumn,
-} from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import {User} from '.';
 
-@Entity("admins")
+@Entity('admins')
 export class Admin {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   name: string;
 
-  @Column("varchar", { length: 255, unique: true })
+  @Column('varchar', {length: 255, unique: true})
   email: string;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   role: Role;
 
-  @Column("text")
+  @Column('text')
   password: string;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }
 
 enum Role {
@@ -36,6 +46,6 @@ enum Role {
   Admin,
 }
 
-export type AdminInput = Omit<Admin, "id">;
+export type AdminInput = Omit<Admin, 'id'>;
 
 export type AdminResponse = Partial<Admin>;

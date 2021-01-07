@@ -1,23 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
-@Entity("users")
+import {Profile} from './profile';
+
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column({unique: true})
   email: string;
 
-  @Column({ unique: true })
+  @Column({unique: true})
   externalId: string;
 
-  @Column({ default: false })
+  @Column({default: false})
   isEmailVerified: boolean;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile?: Profile;
 }
 
-export type UserInput = Omit<User, "id">;
+export type UserInput = Omit<User, 'id'>;
 
 export type UserResponse = Partial<User>;

@@ -5,12 +5,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  Column,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
-import {User, Question} from '.';
+import {User, Idea} from '.';
 
-@Entity('question_likes')
-export class QuestionLike {
+@Entity('idea_likes')
+export class IdeaLike {
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -23,17 +24,10 @@ export class QuestionLike {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column({type: 'boolean', default: () => false})
-  isLike: boolean;
+  @ManyToOne(() => Idea, (idea: Idea) => idea.likes)
+  idea: Idea;
 
-  @ManyToOne(() => Question, (question: Question) => question.likes)
-  question: Question;
-
-  @ManyToOne(() => User)
+  @OneToOne(() => User)
+  @JoinColumn()
   user: User;
 }
-
-export type QuestionLikeInput = Omit<
-  QuestionLike,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
->;

@@ -1,29 +1,26 @@
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import {timestamps} from './common';
 
 const author = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "number" },
-    name: { type: "string" },
-  }
-}
+    id: {type: 'string'},
+    name: {type: 'string'},
+  },
+};
 
 const properties = {
-  id: { type: "string", nullable: false },
-  title: { type: "string" },
-  description: { type: "string" },
-  imageUrl: { type: "string" },
-  date: { type: "string" },
-  startAt: { type: "string" },
-  finishAt: { type: "string" },
+  id: {type: 'string', nullable: false},
+  title: {type: 'string'},
+  description: {type: 'string'},
+  imageUrl: {type: 'string'},
+  date: {type: 'string'},
+  startAt: {type: 'string'},
+  finishAt: {type: 'string'},
   author,
 };
 
 export const blogSchema = {
-  type: "object",
+  type: 'object',
   properties: {
     ...properties,
     ...timestamps,
@@ -31,7 +28,7 @@ export const blogSchema = {
 };
 
 export const blogInputSchema = {
-  type: "object",
-  required: ["title", "description", "date"],
+  type: 'object',
+  required: ['title', 'description', 'date'],
   properties,
 };

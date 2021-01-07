@@ -5,33 +5,32 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("teams")
+@Entity('teams')
 export class Team {
-  @PrimaryGeneratedColumn("uuid") id: string;
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @PrimaryGeneratedColumn('uuid') id: string;
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
-  @DeleteDateColumn({ type: "timestamp", nullable: true }) deletedAt: Date;
-  @Column("uuid") ideaId: string;
-  @Column("uuid") userId: string;
-  @Column("boolean") isLeader: boolean;
+  @DeleteDateColumn({type: 'timestamp', nullable: true}) deletedAt: Date;
+  @Column('uuid') ideaId: string;
+  @Column('uuid') userId: string;
+  @Column('boolean', {default: false}) isLeader: boolean;
 }
 
 export type TeamInput = Omit<
   Team,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
 
-export interface TeamInputMany {
+export type TeamPayload = {
   ideaId: string;
-  leaderId: string;
-  userIds: string[];
-}
+  userIds: [string, string];
+};
 
-export interface AddToTeamInput {
+export type AddToTeamInput = {
   userId: string;
   isLeader: boolean;
-}
+};

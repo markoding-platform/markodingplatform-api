@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Announcement, AnnouncementInput } from "../entity";
+import Database from '../../config/database';
+import {Announcement, AnnouncementInput} from '../entity';
 
 @Service()
 export default class AnnouncementService {
@@ -15,7 +15,7 @@ export default class AnnouncementService {
   }
 
   async getById(id: string): Promise<Announcement | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({id});
   }
 
   async getAll(): Promise<Announcement[]> {
@@ -28,14 +28,14 @@ export default class AnnouncementService {
 
   async update(
     id: string,
-    announcement: Partial<AnnouncementInput>
+    announcement: Partial<AnnouncementInput>,
   ): Promise<Announcement> {
-    const { raw } = await this.repository
+    const {raw} = await this.repository
       .createQueryBuilder()
       .update(Announcement)
       .set(announcement)
-      .where("id = :id", { id })
-      .returning("*")
+      .where('id = :id', {id})
+      .returning('*')
       .execute();
     return raw[0];
   }

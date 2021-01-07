@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Channel } from "../entity";
+import Database from '../../config/database';
+import {Channel} from '../entity';
 
 @Service()
 export default class ChannelService {
@@ -15,7 +15,7 @@ export default class ChannelService {
   }
 
   async getById(id: string): Promise<Channel | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({id});
   }
 
   async getAll(): Promise<Channel[]> {
