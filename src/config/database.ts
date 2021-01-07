@@ -1,6 +1,6 @@
-import { Initializer, Service } from "fastify-decorators";
-import { createConnection, Connection } from "typeorm";
-import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import {Initializer, Service} from 'fastify-decorators';
+import {createConnection, Connection} from 'typeorm';
+import {SnakeNamingStrategy} from 'typeorm-naming-strategies';
 
 import {
   User,
@@ -18,7 +18,7 @@ import {
   QuestionLike,
   Chat,
   Profile,
-} from "../api/entity";
+} from '../api/entity';
 
 const {
   POSTGRES_USER,
@@ -38,8 +38,8 @@ export default class Database {
   @Initializer()
   async init(): Promise<void> {
     this._connection = await createConnection({
-      name: "connection-1",
-      type: "postgres",
+      name: 'connection-1',
+      type: 'postgres',
       host: POSTGRES_URI,
       port: 5432,
       username: POSTGRES_USER,

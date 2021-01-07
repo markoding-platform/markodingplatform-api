@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { User, UserInput } from "../entity";
+import Database from '../../config/database';
+import {User, UserInput} from '../entity';
 
 @Service()
 export default class UserService {
@@ -17,13 +17,13 @@ export default class UserService {
 
   async findOrCreate(data: UserInput): Promise<User> {
     let user = await this.repository
-      .createQueryBuilder("user")
+      .createQueryBuilder('user')
       .where({
         name: data.name,
         email: data.email,
         externalId: data.externalId,
       })
-      .leftJoinAndSelect("user.profile", "profile")
+      .leftJoinAndSelect('user.profile', 'profile')
       .getOne();
 
     if (!user) {
@@ -40,7 +40,7 @@ export default class UserService {
         },
         {
           isEmailVerified: true,
-        }
+        },
       );
 
       user = {

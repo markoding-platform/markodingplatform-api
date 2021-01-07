@@ -7,24 +7,24 @@ import {
   DeleteDateColumn,
   ManyToOne,
   OneToMany,
-} from "typeorm";
-import { User, Channel, QuestionComment, QuestionLike } from ".";
+} from 'typeorm';
+import {User, Channel, QuestionComment, QuestionLike} from '.';
 
-@Entity("questions")
+@Entity('questions')
 export class Question {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column("text")
+  @Column('text')
   content: string;
 
   @ManyToOne(() => Channel)
@@ -42,5 +42,5 @@ export class Question {
 
 export type QuestionInput = Omit<
   Question,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;

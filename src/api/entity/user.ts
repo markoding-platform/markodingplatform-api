@@ -4,25 +4,25 @@ import {
   Column,
   OneToOne,
   JoinColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Profile } from "./profile";
+import {Profile} from './profile';
 
-@Entity("users")
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column({unique: true})
   email: string;
 
-  @Column({ unique: true })
+  @Column({unique: true})
   externalId: string;
 
-  @Column({ default: false })
+  @Column({default: false})
   isEmailVerified: boolean;
 
   @OneToOne(() => Profile)
@@ -30,6 +30,6 @@ export class User {
   profile?: Profile;
 }
 
-export type UserInput = Omit<User, "id">;
+export type UserInput = Omit<User, 'id'>;
 
 export type UserResponse = Partial<User>;

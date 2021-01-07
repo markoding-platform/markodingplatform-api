@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Idea, IdeaInput } from "../entity";
+import Database from '../../config/database';
+import {Idea, IdeaInput} from '../entity';
 
 @Service()
 export default class IdeaService {
@@ -19,7 +19,7 @@ export default class IdeaService {
   }
 
   async getAll(): Promise<Idea[]> {
-    return this.repository.find({ isDraft: false });
+    return this.repository.find({isDraft: false});
   }
 
   async store(idea: Partial<Idea>): Promise<Idea> {
@@ -27,12 +27,12 @@ export default class IdeaService {
   }
 
   async update(id: string, idea: Partial<IdeaInput>): Promise<Idea> {
-    const { raw } = await this.repository
+    const {raw} = await this.repository
       .createQueryBuilder()
       .update(Idea)
       .set(idea)
-      .where("id = :id", { id })
-      .returning("*")
+      .where('id = :id', {id})
+      .returning('*')
       .execute();
     return raw[0];
   }

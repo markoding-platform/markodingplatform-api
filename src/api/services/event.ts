@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Event } from "../entity";
+import Database from '../../config/database';
+import {Event} from '../entity';
 
 @Service()
 export default class EventService {
@@ -15,7 +15,7 @@ export default class EventService {
   }
 
   async getById(id: string): Promise<Event | undefined> {
-    return this.repository.findOne({ id });
+    return this.repository.findOne({id});
   }
 
   async getAll(offset: number, limit: number): Promise<Event[]> {
@@ -23,7 +23,7 @@ export default class EventService {
       .createQueryBuilder()
       .offset(offset)
       .limit(limit)
-      .orderBy("start_date", "ASC")
+      .orderBy('start_date', 'ASC')
       .getMany();
   }
 

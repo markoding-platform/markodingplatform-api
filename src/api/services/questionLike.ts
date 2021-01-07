@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { QuestionLike, QuestionLikeInput } from "../entity";
+import Database from '../../config/database';
+import {QuestionLike, QuestionLikeInput} from '../entity';
 
 @Service()
 export default class QuestionLikeService {
@@ -20,12 +20,12 @@ export default class QuestionLikeService {
       user: data.user,
     });
     if (liked) {
-      const { raw } = await this.repository
+      const {raw} = await this.repository
         .createQueryBuilder()
         .update(QuestionLike)
-        .set({ isLike: !liked.isLike })
-        .where("id = :id", { id: liked.id })
-        .returning("*")
+        .set({isLike: !liked.isLike})
+        .where('id = :id', {id: liked.id})
+        .returning('*')
         .execute();
       return raw[0];
     }

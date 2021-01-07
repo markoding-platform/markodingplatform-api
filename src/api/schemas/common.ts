@@ -1,19 +1,19 @@
 export const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
+  createdAt: {type: 'string'},
+  updatedAt: {type: 'string'},
 };
 
 export const queryParamId = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "string" },
+    id: {type: 'string'},
   },
 };
 
 export const queryStringSkipLimit = {
-  type: "object",
+  type: 'object',
   properties: {
-    limit: { type: "number" },
-    offset: { type: "number" },
+    limit: {type: 'number'},
+    offset: {type: 'number'},
   },
 };

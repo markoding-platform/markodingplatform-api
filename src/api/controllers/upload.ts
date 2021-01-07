@@ -1,22 +1,22 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { Controller, POST } from "fastify-decorators";
-import { S3 } from "aws-sdk";
+import {FastifyRequest, FastifyReply} from 'fastify';
+import {Controller, POST} from 'fastify-decorators';
+import {S3} from 'aws-sdk';
 
-const { AWS_ID, AWS_SECRET } = process.env;
+const {AWS_ID, AWS_SECRET} = process.env;
 
 const s3 = new S3({
   accessKeyId: AWS_ID,
   secretAccessKey: AWS_SECRET,
 });
 
-@Controller({ route: "/uploads" })
+@Controller({route: '/uploads'})
 export default class UploadController {
   @POST({
-    url: "/",
+    url: '/',
     options: {
       schema: {
         response: {
-          200: { type: "object", properties: { url: { type: "string" } } },
+          200: {type: 'object', properties: {url: {type: 'string'}}},
         },
       },
     },
@@ -31,10 +31,10 @@ export default class UploadController {
     });
 
     const params = {
-      Bucket: "markodingplatform",
-      Key: "ideas/" + data.filename,
+      Bucket: 'markodingplatform',
+      Key: 'ideas/' + data.filename,
       Body: data.file,
-      ACL: "public-read",
+      ACL: 'public-read',
     };
 
     s3.upload(
@@ -44,8 +44,8 @@ export default class UploadController {
           throw err;
         }
 
-        return reply.send({ url: data.Location });
-      }
+        return reply.send({url: data.Location});
+      },
     );
   }
 }

@@ -1,14 +1,14 @@
-import { userSchema } from "./user";
-import { timestamps } from "./common";
+import {userSchema} from './user';
+import {timestamps} from './common';
 
 const properties = {
-  isLike: { type: "boolean" },
+  isLike: {type: 'boolean'},
 };
 
 export const questionLikeSchema = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "string" },
+    id: {type: 'string'},
     ...timestamps,
     ...properties,
     user: userSchema,
@@ -16,10 +16,10 @@ export const questionLikeSchema = {
 };
 
 export const questionLikeInputSchema = {
-  type: "object",
-  required: ["isLike", "question"],
+  type: 'object',
+  required: ['isLike', 'question'],
   properties: {
     ...properties,
-    question: { type: "string" },
+    question: {type: 'string'},
   },
 };

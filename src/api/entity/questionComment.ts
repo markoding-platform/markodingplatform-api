@@ -6,25 +6,25 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-} from "typeorm";
-import { User } from "./user";
-import { Question } from "./question";
+} from 'typeorm';
+import {User} from './user';
+import {Question} from './question';
 
-@Entity("question_comments")
+@Entity('question_comments')
 export class QuestionComment {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column("text")
+  @Column('text')
   content: string;
 
   @ManyToOne(() => Question, (question) => question.comments)
@@ -36,5 +36,5 @@ export class QuestionComment {
 
 export type QuestionCommentInput = Omit<
   QuestionComment,
-  "id" | "createdAt" | "updatedAt" | "deletedAt"
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
