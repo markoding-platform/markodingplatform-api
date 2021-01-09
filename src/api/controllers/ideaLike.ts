@@ -41,7 +41,7 @@ export default class IdeaLikeController {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await this.ideaLikeService.storeOrDelete(idea, user);
+    await this.ideaLikeService.storeOrDelete(ideaFound, user);
 
     return reply.code(204).send();
   }
