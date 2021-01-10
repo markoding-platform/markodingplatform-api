@@ -22,7 +22,7 @@ import UserController from './api/controllers/user';
 
 const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
 
-const server = fastify();
+const server = fastify({logger: true});
 server.decorateRequest('user', null);
 server.register(fastifyMultipart);
 server.register(fastifyCors, {
