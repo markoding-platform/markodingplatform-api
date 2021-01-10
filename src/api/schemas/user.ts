@@ -24,6 +24,7 @@ export const userInfoSchema = {
 export const userProfileSchema = {
   type: 'object',
   properties: {
+    id: {type: 'string'},
     ...properties,
     profile: {
       nullable: true,
