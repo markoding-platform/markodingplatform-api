@@ -104,7 +104,7 @@ export default class UserController {
   }
 
   @GET({
-    url: '/my/students/available-for-idea',
+    url: '/my/students/not-in-team',
     options: {
       schema: {
         querystring: commonQueryString,
@@ -113,7 +113,7 @@ export default class UserController {
       onRequest: authenticate,
     },
   })
-  async getUserMyStudentAvailableForIdea(
+  async getUserMyStudentsNotInTeam(
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserStudentNotInTeam(

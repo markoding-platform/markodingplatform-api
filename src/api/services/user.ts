@@ -80,7 +80,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -101,18 +101,18 @@ export default class UserService {
       .orderBy('user.created_at', 'ASC');
 
     if (schoolId) {
-      userQuery = userQuery.leftJoinAndSelect(
+      userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
         'profile.school_id := schoolId AND profile_type := profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect('user.profile', 'profile');
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -128,24 +128,24 @@ export default class UserService {
   ): Promise<User[]> {
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('idea', 'idea', 'user.id != idea.user_id')
+      .leftJoinAndSelect('teams', 'team', 'user.id != team.user_id')
       .limit(limit)
       .offset(offset * limit)
       .orderBy('user.name', 'ASC');
 
     if (schoolId) {
-      userQuery = userQuery.leftJoinAndSelect(
+      userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
         'profile.school_id := schoolId AND profile_type := profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect('user.profile', 'profile');
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -177,7 +177,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -209,7 +209,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
