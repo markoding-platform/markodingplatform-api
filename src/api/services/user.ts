@@ -66,17 +66,22 @@ export default class UserService {
       .createQueryBuilder('user')
       .limit(limit)
       .offset(offset * limit)
-      .orderBy('user.created_at', 'ASC');
+      .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
-      userQuery = userQuery.leftJoinAndSelect(
+      userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
-        'profile.school_id := schoolId AND profile_type := profileType',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
         {schoolId, profileType: 'teacher'},
       );
     } else {
-      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {profileType: 'teacher'},
+      );
     }
 
     if (name) {
@@ -98,17 +103,22 @@ export default class UserService {
       .createQueryBuilder('user')
       .limit(limit)
       .offset(offset * limit)
-      .orderBy('user.created_at', 'ASC');
+      .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
       userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
-        'profile.school_id := schoolId AND profile_type := profileType',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.innerJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {profileType: 'student'},
+      );
     }
 
     if (name) {
@@ -137,11 +147,16 @@ export default class UserService {
       userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
-        'profile.school_id := schoolId AND profile_type := profileType',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.innerJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {profileType: 'student'},
+      );
     }
 
     if (name) {
@@ -163,17 +178,22 @@ export default class UserService {
       .createQueryBuilder('user')
       .limit(limit)
       .offset(offset * limit)
-      .orderBy('user.created_at', 'ASC');
+      .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
-      userQuery = userQuery.leftJoinAndSelect(
+      userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
-        'profile.school_id := schoolId AND profile_type := profileType',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {profileType: 'mentor'},
+      );
     }
 
     if (name) {
@@ -195,17 +215,22 @@ export default class UserService {
       .createQueryBuilder('user')
       .limit(limit)
       .offset(offset * limit)
-      .orderBy('user.created_at', 'ASC');
+      .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
-      userQuery = userQuery.leftJoinAndSelect(
+      userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
-        'profile.school_id := schoolId AND profile_type := profileType',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
         {schoolId, profileType: 'student'},
       );
     } else {
-      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {profileType: 'supporter'},
+      );
     }
 
     if (name) {
