@@ -1,6 +1,9 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
   Column,
   OneToOne,
   JoinColumn,
@@ -12,6 +15,15 @@ import {Profile} from './profile';
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  createdAt: Date;
+
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  updatedAt: Date;
+
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  deletedAt: Date;
 
   @Column()
   name: string;
@@ -30,6 +42,9 @@ export class User {
   profile?: Profile;
 }
 
-export type UserInput = Omit<User, 'id'>;
+export type UserInput = Omit<
+  User,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
+>;
 
 export type UserResponse = Partial<User>;

@@ -18,10 +18,11 @@ import QuestionLikeController from './api/controllers/questionLike';
 import ChatController from './api/controllers/chat';
 import UploadController from './api/controllers/upload';
 import ProfileController from './api/controllers/profile';
+import UserController from './api/controllers/user';
 
 const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
 
-const server = fastify();
+const server = fastify({logger: true});
 server.decorateRequest('user', null);
 server.register(fastifyMultipart);
 server.register(fastifyCors, {
@@ -43,6 +44,7 @@ server.register(bootstrap, {
     ChatController,
     UploadController,
     ProfileController,
+    UserController,
   ],
 });
 

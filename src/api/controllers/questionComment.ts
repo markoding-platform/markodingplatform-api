@@ -8,7 +8,7 @@ import {
 import {QuestionComment, QuestionCommentInput, User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import QuestionCommentService from '../services/questionComment';
-import {queryParamId, queryStringSkipLimit} from '../schemas/common';
+import {commonParams, commonQueryString} from '../schemas/common';
 
 @Controller({route: '/questions/comments'})
 export default class QuestionCommentController {
@@ -18,8 +18,8 @@ export default class QuestionCommentController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
-        querystring: queryStringSkipLimit,
+        params: commonParams,
+        querystring: commonQueryString,
         response: {200: {type: 'array', items: questionCommentSchema}},
       },
     },

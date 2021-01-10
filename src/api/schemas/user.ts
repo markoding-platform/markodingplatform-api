@@ -1,3 +1,5 @@
+import {profileSchema} from './profile';
+
 const properties = {
   name: {type: 'string'},
   email: {type: 'string'},
@@ -16,5 +18,16 @@ export const userInfoSchema = {
   properties: {
     id: {type: 'string'},
     name: {type: 'string'},
+  },
+};
+
+export const userProfileSchema = {
+  type: 'object',
+  properties: {
+    ...properties,
+    profile: {
+      nullable: true,
+      ...profileSchema,
+    },
   },
 };
