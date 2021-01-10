@@ -4,7 +4,7 @@ import {Controller, POST} from 'fastify-decorators';
 import {IdeaLike, User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import {UserService, IdeaService, IdeaLikeService} from '../services';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaLikeController {
@@ -18,7 +18,7 @@ export default class IdeaLikeController {
     url: '/:id/like',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: 204,
       },
       onRequest: authenticate,

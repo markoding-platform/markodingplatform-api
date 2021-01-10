@@ -15,7 +15,7 @@ import {
 } from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
 import {teamSchema, teamInputSchema, addUserInputSchema} from '../schemas/team';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaController {
@@ -29,7 +29,7 @@ export default class IdeaController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: ideaSchema},
       },
     },
@@ -90,7 +90,7 @@ export default class IdeaController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: ideaInputSchema,
         response: {200: ideaSchema},
       },
@@ -130,7 +130,7 @@ export default class IdeaController {
     url: '/:id/team',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: teamSchema},
       },
     },
@@ -148,7 +148,7 @@ export default class IdeaController {
     url: '/:id/team',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: teamInputSchema,
         response: {200: teamSchema},
       },
@@ -185,7 +185,7 @@ export default class IdeaController {
     url: '/:id/add-to-team',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: addUserInputSchema,
         response: 204,
       },

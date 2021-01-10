@@ -9,7 +9,7 @@ import {
   bannerInputSchema,
   bannerUpdateSchema,
 } from '../schemas/banner';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/banners'})
 export default class BannerController {
@@ -19,7 +19,7 @@ export default class BannerController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: bannerSchema},
       },
     },
@@ -68,7 +68,7 @@ export default class BannerController {
     url: '/:id/inactive',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: bannerSchema},
       },
     },
@@ -89,7 +89,7 @@ export default class BannerController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: bannerUpdateSchema,
         response: {200: bannerSchema},
       },
