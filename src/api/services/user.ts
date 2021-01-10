@@ -85,7 +85,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -122,7 +122,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -160,7 +160,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -197,7 +197,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
@@ -234,7 +234,7 @@ export default class UserService {
     }
 
     if (name) {
-      userQuery = userQuery.where('user.name LIKE :name', {name: `%${name}%`});
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
     const users = await userQuery.getMany();
