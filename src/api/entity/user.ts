@@ -42,6 +42,9 @@ export class User {
   profile?: Profile;
 }
 
-export type UserInput = Omit<User, 'id'>;
+export type UserInput = Omit<
+  User,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
+>;
 
 export type UserResponse = Partial<User>;
