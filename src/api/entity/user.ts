@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Column,
+  Index,
   OneToOne,
   JoinColumn,
 } from 'typeorm';
@@ -25,6 +26,7 @@ export class User {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
+  @Index()
   @Column()
   name: string;
 
