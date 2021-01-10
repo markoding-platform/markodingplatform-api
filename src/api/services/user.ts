@@ -55,4 +55,165 @@ export default class UserService {
   async getOne(user: Partial<User>): Promise<User | undefined> {
     return this.repository.findOne(user);
   }
+
+  async getUserTeacher(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<User[]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'ASC');
+
+    if (schoolId) {
+      userQuery = userQuery.leftJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id := schoolId AND profile_type := profileType',
+        {schoolId, profileType: 'teacher'},
+      );
+    } else {
+      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+    }
+
+    const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserStudent(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<User[]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'ASC');
+
+    if (schoolId) {
+      userQuery = userQuery.leftJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id := schoolId AND profile_type := profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+    }
+
+    const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserStudentNotInTeam(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<User[]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('idea', 'idea', 'user.id != idea.user_id')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.name', 'ASC');
+
+    if (schoolId) {
+      userQuery = userQuery.leftJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id := schoolId AND profile_type := profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+    }
+
+    const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserMentor(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<User[]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'ASC');
+
+    if (schoolId) {
+      userQuery = userQuery.leftJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id := schoolId AND profile_type := profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+    }
+
+    const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserSupporter(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<User[]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'ASC');
+
+    if (schoolId) {
+      userQuery = userQuery.leftJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id := schoolId AND profile_type := profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.leftJoinAndSelect('user.profile', 'profile');
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name LIKE %:name%', {name});
+    }
+
+    const users = await userQuery.getMany();
+
+    return users;
+  }
 }
