@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
-import {IdeaLike} from '.';
+import {IdeaLike, IdeaComment} from '.';
 
 import {SolutionType} from '../../libs/types';
 
@@ -46,6 +46,9 @@ export class Idea {
 
   @OneToMany(() => IdeaLike, (like: IdeaLike) => like.idea)
   likes: IdeaLike[];
+
+  @OneToMany(() => IdeaComment, (comment: IdeaComment) => comment.idea)
+  comments: IdeaComment[];
 }
 
 export type IdeaInput = Omit<

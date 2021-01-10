@@ -6,6 +6,7 @@ import fastifyMultipart from 'fastify-multipart';
 
 import IdeaController from './api/controllers/idea';
 import IdeaLikeController from './api/controllers/ideaLike';
+import IdeaCommentController from './api/controllers/ideaComment';
 import EventController from './api/controllers/event';
 import BlogController from './api/controllers/blog';
 import BannerController from './api/controllers/banner';
@@ -31,6 +32,7 @@ server.register(bootstrap, {
   controllers: [
     IdeaController,
     IdeaLikeController,
+    IdeaCommentController,
     EventController,
     BlogController,
     BannerController,

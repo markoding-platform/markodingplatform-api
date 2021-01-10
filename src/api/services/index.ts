@@ -7,6 +7,7 @@ export {default as ChatService} from './chat';
 export {default as EventService} from './event';
 export {default as IdeaService} from './idea';
 export {default as IdeaLikeService} from './ideaLike';
+export {default as IdeaCommentService} from './ideaComment';
 export {default as ProfileService} from './profile';
 export {default as QuestionService} from './question';
 export {default as QuestionCommentService} from './questionComment';

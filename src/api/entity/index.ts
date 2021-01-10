@@ -1,5 +1,7 @@
 export {User, UserInput} from './user';
 export {Idea, IdeaInput} from './idea';
+export {IdeaLike} from './ideaLike';
+export {IdeaComment} from './ideaComment';
 export {Team, TeamInput, TeamPayload, AddToTeamInput} from './team';
 export {Nonce, SSORequest, SSOResponse} from './nonce';
 export {Announcement, AnnouncementInput} from './announcement';
@@ -11,5 +13,4 @@ export {QuestionComment, QuestionCommentInput} from './questionComment';
 export {QuestionLike, QuestionLikeInput} from './questionLike';
 export {Chat, ChatInput} from './chat';
 export {Banner, BannerInput} from './banner';
-export {IdeaLike} from './ideaLike';
 export {Profile, ProfileInput} from './profile';
