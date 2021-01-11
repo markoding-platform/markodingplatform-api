@@ -15,7 +15,7 @@ export default class IdeaLikeController {
   ) {}
 
   @POST({
-    url: '/:id/like',
+    url: '/:id/toggle-like',
     options: {
       schema: {
         params: commonParams,
