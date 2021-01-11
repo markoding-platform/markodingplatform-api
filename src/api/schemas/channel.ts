@@ -1,9 +1,9 @@
 const properties = {
-  id: { type: "string", nullable: false },
-  name: { type: "string" },
+  id: {type: 'string', nullable: false},
+  name: {type: 'string'},
 };
 
 export const channelSchema = {
-  type: "object",
+  type: 'object',
   properties,
 };

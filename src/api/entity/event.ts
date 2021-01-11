@@ -5,45 +5,45 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity("events")
+@Entity('events')
 export class Event {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   title: string;
 
-  @Column("text")
+  @Column('text')
   description: string;
 
-  @Column("date")
+  @Column('date')
   startDate: Date;
 
-  @Column("date")
+  @Column('date')
   finishDate: Date;
 
-  @Column("time")
+  @Column('time')
   startAt: string;
 
-  @Column("time")
+  @Column('time')
   finishAt: string;
 
-  @Column("varchar", { length: 255 })
+  @Column('varchar', {length: 255})
   imageUrl: string;
 
-  @Column("text", { nullable: true })
+  @Column('text', {nullable: true})
   link: string;
 
-  @CreateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp", default: () => "NOW()" })
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 }
 
-export type EventInput = Omit<Event, "id">;
+export type EventInput = Omit<Event, 'id'>;

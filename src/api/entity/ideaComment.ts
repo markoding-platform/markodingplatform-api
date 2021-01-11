@@ -1,25 +1,18 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Column,
+  ManyToOne,
 } from 'typeorm';
+import {User, Idea} from '.';
 
-@Entity('blogs')
-export class Blog {
+@Entity('idea_comments')
+export class IdeaComment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column('varchar', {length: 255})
-  title: string;
-
-  @Column('text')
-  description: string;
-
-  @Column('varchar', {length: 255})
-  imageUrl: string;
 
   @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
@@ -29,9 +22,13 @@ export class Blog {
 
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
-}
 
-export type BlogInput = Omit<
-  Blog,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
->;
+  @Column({type: 'text'})
+  comment: string;
+
+  @ManyToOne(() => Idea, (idea: Idea) => idea.likes)
+  idea: Idea;
+
+  @ManyToOne(() => User)
+  user: User;
+}

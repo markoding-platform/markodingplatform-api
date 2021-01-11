@@ -1,8 +1,8 @@
-import { Initializer, Service } from "fastify-decorators";
-import { Repository } from "typeorm";
+import {Initializer, Service} from 'fastify-decorators';
+import {Repository} from 'typeorm';
 
-import Database from "../../config/database";
-import { Profile, ProfileInput, User } from "../entity";
+import Database from '../../config/database';
+import {Profile, ProfileInput, User} from '../entity';
 
 @Service()
 export default class ProfileService {
@@ -18,7 +18,7 @@ export default class ProfileService {
   }
 
   async getById(id: string): Promise<Profile | undefined> {
-    return this.profileRepository.findOne({ id });
+    return this.profileRepository.findOne({id});
   }
 
   async store(userId: string, profile: Partial<Profile>): Promise<Profile> {
@@ -27,7 +27,7 @@ export default class ProfileService {
     if (!user) {
       throw {
         statusCode: 500,
-        message: "user not found",
+        message: 'user not found',
       };
     }
 
@@ -51,7 +51,7 @@ export default class ProfileService {
     if (!updated) {
       throw {
         statusCode: 500,
-        message: "user is not found",
+        message: 'user is not found',
       };
     }
 

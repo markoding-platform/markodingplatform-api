@@ -1,44 +1,44 @@
-import { Controller, GET, POST } from "fastify-decorators";
+import {Controller, GET, POST} from 'fastify-decorators';
 
-import ProfileService from "../services/profile";
-import AuthService from "../services/auth";
-import { Profile, ProfileInput } from "../entity";
-import { profileSchema, profileInputSchema } from "../schemas/profile";
-import authenticate from "../hooks/onRequest/authentication";
-import { authResponseSchema } from "../schemas/auth";
+import ProfileService from '../services/profile';
+import AuthService from '../services/auth';
+import {Profile, ProfileInput} from '../entity';
+import {profileSchema, profileInputSchema} from '../schemas/profile';
+import authenticate from '../hooks/onRequest/authentication';
+import {authResponseSchema} from '../schemas/auth';
 
-@Controller({ route: "/profile" })
+@Controller({route: '/profile'})
 export default class ProfileController {
   constructor(
     private service: ProfileService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   @GET({
-    url: "/:id",
+    url: '/:id',
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
-        response: { 200: profileSchema },
+        params: {type: 'object', properties: {id: {type: 'string'}}},
+        response: {200: profileSchema},
       },
       onRequest: authenticate,
     },
   })
   async getById(
-    req: AuthenticatedRequest<{ Params: { id: string } }>
+    req: AuthenticatedRequest<{Params: {id: string}}>,
   ): Promise<Profile> {
     const profile = await this.service.getById(req.params.id);
 
-    if (!profile) throw { statusCode: 404, message: "profile not found" };
+    if (!profile) throw {statusCode: 404, message: 'profile not found'};
     return profile;
   }
 
   @POST({
-    url: "/",
+    url: '/',
     options: {
       schema: {
         body: profileInputSchema,
-        response: { 200: authResponseSchema },
+        response: {200: authResponseSchema},
       },
       onRequest: authenticate,
     },
@@ -46,8 +46,8 @@ export default class ProfileController {
   async upsert(
     req: AuthenticatedRequest<{
       Body: ProfileInput;
-    }>
-  ): Promise<{ token: string; data: unknown }> {
+    }>,
+  ): Promise<{token: string; data: unknown}> {
     const user = req.user.user;
 
     let profile: Profile;
@@ -59,8 +59,8 @@ export default class ProfileController {
     }
 
     return {
-      token: this.authService.generateJWT({ user, profile }),
-      data: { user, profile },
+      token: this.authService.generateJWT({user, profile}),
+      data: {user, profile},
     };
   }
 }

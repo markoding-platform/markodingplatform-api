@@ -2,14 +2,14 @@ import {
   FastifyRequest,
   RawRequestDefaultExpression,
   RawServerDefault,
-} from "fastify";
-import { RouteGenericInterface } from "fastify/types/route";
+} from 'fastify';
+import {RouteGenericInterface} from 'fastify/types/route';
 
-import { User, Profile } from "../../api/entity";
+import {User, Profile} from '../../api/entity';
 
 declare global {
   type AuthenticatedRequestPayload = {
-    user: Exclude<User, "profile">;
+    user: Exclude<User, 'profile'>;
     profile?: Profile;
   };
 

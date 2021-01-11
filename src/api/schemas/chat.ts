@@ -1,19 +1,15 @@
-import { userInfoSchema } from "./user";
-
-const timestamps = {
-  createdAt: { type: "string" },
-  updatedAt: { type: "string" },
-};
+import {userInfoSchema} from './user';
+import {timestamps} from './common';
 
 const properties = {
-  content: { type: "string" },
-  type: { type: "string" },
+  content: {type: 'string'},
+  type: {type: 'string'},
 };
 
 export const chatSchema = {
-  type: "object",
+  type: 'object',
   properties: {
-    id: { type: "string" },
+    id: {type: 'string'},
     ...timestamps,
     ...properties,
     user: userInfoSchema,
@@ -21,8 +17,8 @@ export const chatSchema = {
 };
 
 export const chatInputSchema = {
-  type: "object",
-  required: ["content", "type"],
+  type: 'object',
+  required: ['content', 'type'],
   properties: {
     ...properties,
   },
