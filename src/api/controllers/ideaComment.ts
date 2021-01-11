@@ -4,7 +4,7 @@ import {Controller, POST} from 'fastify-decorators';
 import {IdeaComment, User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import {UserService, IdeaService, IdeaCommentService} from '../services';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaCommentController {
@@ -18,7 +18,7 @@ export default class IdeaCommentController {
     url: '/:id/comment',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: {type: 'object', properties: {comment: {type: 'string'}}},
         response: 204,
       },

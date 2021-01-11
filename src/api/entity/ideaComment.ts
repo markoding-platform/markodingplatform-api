@@ -26,7 +26,7 @@ export class IdeaComment {
   @Column({type: 'text'})
   comment: string;
 
-  @ManyToOne(() => Idea, (idea: Idea) => idea.likes)
+  @ManyToOne(() => Idea, (idea: Idea) => idea.comments)
   idea: Idea;
 
   @ManyToOne(() => User)
