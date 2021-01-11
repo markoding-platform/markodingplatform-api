@@ -42,12 +42,12 @@ export class Idea {
   solutionSupportingPhotos: string[];
   @Column('bool') isDraft: boolean;
 
+  @OneToMany(() => IdeaTeam, (team: IdeaTeam) => team.idea)
+  teams: IdeaTeam[];
   @OneToMany(() => IdeaLike, (like: IdeaLike) => like.idea)
   likes: IdeaLike[];
   @OneToMany(() => IdeaComment, (comment: IdeaComment) => comment.idea)
   comments: IdeaComment[];
-  @OneToMany(() => IdeaTeam, (team: IdeaTeam) => team.idea)
-  teams: IdeaTeam[];
 }
 
 export type IdeaInput = Omit<

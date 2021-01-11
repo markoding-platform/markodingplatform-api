@@ -16,11 +16,11 @@ export default class IdeaTeamService {
 
   async getOne(team: Partial<IdeaTeam>): Promise<IdeaTeam | undefined> {
     return this.repository.findOne(team, {
-      relations: ['ideas', 'users'],
+      relations: ['idea', 'user'],
     });
   }
 
-  async getByIdeaId(idea: Idea): Promise<IdeaTeam[] | undefined> {
+  async getAllByIdea(idea: Idea): Promise<IdeaTeam[] | undefined> {
     return this.repository.find({
       where: {idea},
       relations: ['idea', 'user'],
@@ -28,19 +28,10 @@ export default class IdeaTeamService {
   }
 
   async store(teams: IdeaTeamInput[]): Promise<IdeaTeam[]> {
-    const {
-      generatedMaps,
-    } = await this.repository
-      .createQueryBuilder()
-      .insert()
-      .into(IdeaTeam)
-      .values(teams)
-      .returning('*')
-      .execute();
-    return generatedMaps as IdeaTeam[];
+    return this.repository.save(teams);
   }
 
-  async addToIdeaTeam(payload: IdeaTeamInput): Promise<IdeaTeam> {
+  async addToTeam(payload: IdeaTeamInput): Promise<IdeaTeam> {
     return this.repository.save(payload);
   }
 }
