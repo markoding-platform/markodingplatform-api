@@ -2,7 +2,12 @@ export {User, UserInput} from './user';
 export {Idea, IdeaInput} from './idea';
 export {IdeaLike} from './ideaLike';
 export {IdeaComment} from './ideaComment';
-export {Team, TeamInput, TeamPayload, AddToTeamInput} from './team';
+export {
+  IdeaTeam,
+  IdeaTeamInput,
+  IdeaTeamPayload,
+  AddToTeamInput,
+} from './ideaTeam';
 export {Nonce, SSORequest, SSOResponse} from './nonce';
 export {Announcement, AnnouncementInput} from './announcement';
 export {Event} from './event';

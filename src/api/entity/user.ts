@@ -15,7 +15,7 @@ import {Profile} from './profile';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  public id: string;
 
   @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
@@ -28,16 +28,16 @@ export class User {
 
   @Index()
   @Column()
-  name: string;
+  public name: string;
 
   @Column({unique: true})
-  email: string;
+  public email: string;
 
   @Column({unique: true})
-  externalId: string;
+  public externalId: string;
 
   @Column({default: false})
-  isEmailVerified: boolean;
+  public isEmailVerified: boolean;
 
   @OneToOne(() => Profile)
   @JoinColumn()

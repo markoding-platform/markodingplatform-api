@@ -1,4 +1,6 @@
 import {timestamps} from './common';
+import {userSchema} from './user';
+import {ideaSchema} from './idea';
 
 export const teamSchema = {
   type: 'array',
@@ -10,6 +12,8 @@ export const teamSchema = {
       ideaId: {type: 'string', nullable: false},
       userId: {type: 'string', nullable: false},
       isLeader: {type: 'boolean', nullable: false},
+      user: userSchema,
+      idea: ideaSchema,
     },
   },
 };

@@ -22,7 +22,7 @@ export default class IdeaService {
     return this.repository.find({isDraft: false});
   }
 
-  async store(idea: Partial<Idea>): Promise<Idea> {
+  async store(idea: Partial<IdeaInput>): Promise<Idea> {
     return this.repository.save(idea);
   }
 

@@ -6,12 +6,13 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToOne,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import {Idea, User} from '.';
 
-@Entity('teams')
-export class Team {
+@Entity('idea_teams')
+export class IdeaTeam {
   @PrimaryGeneratedColumn('uuid') id: string;
 
   @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
@@ -23,8 +24,7 @@ export class Team {
 
   @Column('boolean', {default: false}) isLeader: boolean;
 
-  @OneToOne(() => Idea)
-  @JoinColumn()
+  @ManyToOne(() => Idea, (idea: Idea) => idea.teams)
   idea: Idea;
 
   @OneToOne(() => User)
@@ -32,12 +32,12 @@ export class Team {
   user: User;
 }
 
-export type TeamInput = Omit<
-  Team,
+export type IdeaTeamInput = Omit<
+  IdeaTeam,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
 
-export type TeamPayload = {
+export type IdeaTeamPayload = {
   ideaId: string;
   userIds: [string, string];
 };
