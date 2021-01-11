@@ -15,7 +15,9 @@ export default class TeamService {
   }
 
   async getOne(team: Partial<Team>): Promise<Team | undefined> {
-    return this.repository.findOne(team);
+    return this.repository.findOne(team, {
+      relations: ['ideas', 'users'],
+    });
   }
 
   async getByIdeaId(ideaId: string): Promise<Team[] | undefined> {

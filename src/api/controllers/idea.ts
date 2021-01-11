@@ -55,7 +55,7 @@ export default class IdeaController {
     return this.ideaService.getAll();
   }
 
-  @POST({
+  /* @POST({
     url: '/',
     options: {
       schema: {
@@ -124,7 +124,7 @@ export default class IdeaController {
     }
 
     return updated;
-  }
+  } */
 
   @GET({
     url: '/:id/team',
@@ -144,7 +144,7 @@ export default class IdeaController {
     return team;
   }
 
-  @POST({
+  /* @POST({
     url: '/:id/team',
     options: {
       schema: {
@@ -222,5 +222,5 @@ export default class IdeaController {
       ...req.body,
     });
     return rep.code(204).send();
-  }
+  } */
 }
