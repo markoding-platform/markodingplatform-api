@@ -19,6 +19,7 @@ import {
   QuestionLike,
   Chat,
   Profile,
+  SubmissionGate,
 } from '../api/entity';
 
 const {
@@ -63,6 +64,7 @@ export default class Database {
         QuestionLike,
         Chat,
         Profile,
+        SubmissionGate,
       ],
       logging: true,
       synchronize: true,

@@ -8,9 +8,10 @@ import {
   Index,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
-import {Profile} from './profile';
+import {Profile, SubmissionGate} from '.';
 
 @Entity('users')
 export class User {
@@ -42,6 +43,13 @@ export class User {
   @OneToOne(() => Profile)
   @JoinColumn()
   profile?: Profile;
+
+  @OneToMany(
+    () => SubmissionGate,
+    (submissionGate) => submissionGate.createdBy,
+    {nullable: true},
+  )
+  submissionGates?: SubmissionGate[];
 }
 
 export type UserInput = Omit<
