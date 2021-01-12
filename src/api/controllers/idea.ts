@@ -2,9 +2,9 @@ import camelcaseKeys from 'camelcase-keys';
 import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
-import {UserService, IdeaService, IdeaTeamService} from '../services';
+import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
-import {User, Idea, IdeaInput, IdeaTeam} from '../entity';
+import {User, Idea, IdeaInput, IdeaUser} from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
 import {commonParams} from '../schemas/common';
 
@@ -13,7 +13,7 @@ export default class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
-    private ideaTeamService: IdeaTeamService,
+    private ideaTeamService: IdeaUserService,
   ) {}
 
   @GET({
@@ -62,7 +62,7 @@ export default class IdeaController {
     const user = req.user?.user as User;
 
     const u: User = generateUserById(user.id);
-    const idea: IdeaTeam = generateIdeaTeamByUser(u);
+    const idea: IdeaUser = generateIdeaUserByUser(u);
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
       this.ideaTeamService.getOne(idea),
@@ -96,7 +96,7 @@ export default class IdeaController {
   ): Promise<Idea> {
     const user = req.user?.user as User;
     const u: User = generateUserById(user.id);
-    const idea: IdeaTeam = generateIdeaTeamByUser(u);
+    const idea: IdeaUser = generateIdeaUserByUser(u);
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
       this.ideaTeamService.getOne(idea),
@@ -123,8 +123,8 @@ function generateUserById(id: string): User {
   return user;
 }
 
-function generateIdeaTeamByUser(user: User): IdeaTeam {
-  const team: IdeaTeam = new IdeaTeam();
+function generateIdeaUserByUser(user: User): IdeaUser {
+  const team: IdeaUser = new IdeaUser();
   team.user = user;
   return team;
 }

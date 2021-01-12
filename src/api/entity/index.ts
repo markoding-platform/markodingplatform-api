@@ -3,11 +3,11 @@ export {Idea, IdeaInput} from './idea';
 export {IdeaLike} from './ideaLike';
 export {IdeaComment} from './ideaComment';
 export {
-  IdeaTeam,
-  IdeaTeamInput,
-  IdeaTeamPayload,
+  IdeaUser,
+  IdeaUserInput,
+  IdeaUserPayload,
   AddToTeamInput,
-} from './ideaTeam';
+} from './ideaUser';
 export {Nonce, SSORequest, SSOResponse} from './nonce';
 export {Announcement, AnnouncementInput} from './announcement';
 export {Event} from './event';

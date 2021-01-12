@@ -1,21 +1,21 @@
 import {FastifyRequest, FastifyReply} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
 
-import {UserService, IdeaService, IdeaTeamService} from '../services';
+import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
 import {
   User,
   Idea,
-  IdeaTeam,
-  IdeaTeamInput,
-  IdeaTeamPayload,
+  IdeaUser,
+  IdeaUserInput,
+  IdeaUserPayload,
   AddToTeamInput,
 } from '../entity';
 import {
   teamSchema,
   teamInputSchema,
   addUserInputSchema,
-} from '../schemas/ideaTeam';
+} from '../schemas/ideaUser';
 import {commonParams} from '../schemas/common';
 
 @Controller({route: '/ideas'})
@@ -23,11 +23,11 @@ export default class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
-    private ideaTeamService: IdeaTeamService,
+    private ideaUserService: IdeaUserService,
   ) {}
 
   @GET({
-    url: '/:id/team',
+    url: '/:id/users',
     options: {
       schema: {
         params: commonParams,
@@ -37,17 +37,17 @@ export default class IdeaController {
   })
   async getTeamById(
     req: FastifyRequest<{Params: {id: string}}>,
-  ): Promise<IdeaTeam[]> {
+  ): Promise<IdeaUser[]> {
     const idea: Idea = new Idea();
     idea.id = req.params.id;
-    const team = await this.ideaTeamService.getAllByIdea(idea);
-    if (!team) throw {statusCode: 404, message: 'Entity not found'};
+    const users = await this.ideaUserService.getAllByIdea(idea);
+    if (!users) throw {statusCode: 404, message: 'Entity not found'};
 
-    return team;
+    return users;
   }
 
   @POST({
-    url: '/:id/team',
+    url: '/:id/users',
     options: {
       schema: {
         params: commonParams,
@@ -60,26 +60,26 @@ export default class IdeaController {
   async createTeam(
     req: AuthenticatedRequest<{
       Params: {id: string};
-      Body: IdeaTeamPayload;
+      Body: IdeaUserPayload;
     }>,
-  ): Promise<IdeaTeam[]> {
+  ): Promise<IdeaUser[]> {
     const userLogin = req.user?.user as User;
 
     const idea: Idea = new Idea();
     idea.id = req.params.id;
     const user: User = new User();
     user.id = userLogin.id;
-    const values: IdeaTeamInput[] = [{idea: idea, user: user, isLeader: true}];
+    const values: IdeaUserInput[] = [{idea: idea, user: user, isLeader: true}];
     req.body.userIds.forEach((userId: string) => {
       const user: User = new User();
       user.id = userId;
       values.push({idea, user, isLeader: false});
     });
-    return this.ideaTeamService.store(values);
+    return this.ideaUserService.store(values);
   }
 
   @POST({
-    url: '/:id/add-to-team',
+    url: '/:id/add-user',
     options: {
       schema: {
         params: commonParams,
@@ -99,25 +99,22 @@ export default class IdeaController {
     const user = req.user?.user as User;
 
     const idea: Idea = generateIdeaById(req.params.id);
-    const [userFound, ideaFound, teamFound] = await Promise.all([
+    const [userFound, ideaFound, ideaUsersFound] = await Promise.all([
       this.userService.getOne({id: req.body.userId}),
       this.ideaService.getOne(idea),
-      this.ideaTeamService.getAllByIdea(idea),
+      this.ideaUserService.getAllByIdea(idea),
     ]);
     if (!userFound) throw {statusCode: 404, message: 'User not found'};
     if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
-    if (!teamFound) throw {statusCode: 404, message: 'Team not found'};
-    if (teamFound.length > 2) {
-      throw {statusCode: 400, message: 'Team size exceeded'};
-    }
+    if (!ideaUsersFound) throw {statusCode: 404, message: 'Team not found'};
 
-    teamFound.forEach((t: IdeaTeam) => {
-      if (t.user.id === user.id && !t.isLeader) {
+    ideaUsersFound.forEach((u: IdeaUser) => {
+      if (u.user.id === user.id && !u.isLeader) {
         throw {statusCode: 400, message: 'Only leader can add to team'};
       }
     });
 
-    await this.ideaTeamService.addToTeam({
+    await this.ideaUserService.addToTeam({
       idea: ideaFound,
       user: userFound,
       ...req.body,
