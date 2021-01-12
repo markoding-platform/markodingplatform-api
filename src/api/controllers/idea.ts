@@ -13,7 +13,7 @@ export default class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
-    private ideaTeamService: IdeaUserService,
+    private ideaUserService: IdeaUserService,
   ) {}
 
   @GET({
@@ -65,7 +65,7 @@ export default class IdeaController {
     const idea: IdeaUser = generateIdeaUserByUser(u);
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.ideaTeamService.getOne(idea),
+      this.ideaUserService.getOne(idea),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (ideaFound) throw {statusCode: 400, message: 'User already on team'};
@@ -99,7 +99,7 @@ export default class IdeaController {
     const idea: IdeaUser = generateIdeaUserByUser(u);
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.ideaTeamService.getOne(idea),
+      this.ideaUserService.getOne(idea),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (!ideaFound) {
