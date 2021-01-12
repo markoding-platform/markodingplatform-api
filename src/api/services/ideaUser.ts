@@ -15,12 +15,10 @@ export default class IdeaUserService {
   }
 
   async getOne(team: Partial<IdeaUser>): Promise<IdeaUser | undefined> {
-    return this.repository.findOne(team, {
-      relations: ['idea', 'user.profile'],
-    });
+    return this.repository.findOne(team);
   }
 
-  async getAllByIdea(idea: Idea): Promise<IdeaUser[] | undefined> {
+  async getAllUsersByIdea(idea: Idea): Promise<IdeaUser[] | undefined> {
     return this.repository.find({
       where: {idea},
       join: {

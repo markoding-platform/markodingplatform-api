@@ -61,11 +61,14 @@ export default class IdeaController {
   ): Promise<Idea> {
     const user = req.user?.user as User;
 
-    const u: User = generateUserById(user.id);
-    const idea: IdeaUser = generateIdeaUserByUser(u);
+    const u: User = new User();
+    u.id = user.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.ideaUserService.getOne(idea),
+      this.ideaUserService.getOne(ideaUser),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (ideaFound) throw {statusCode: 400, message: 'User already on team'};
@@ -95,11 +98,18 @@ export default class IdeaController {
     }>,
   ): Promise<Idea> {
     const user = req.user?.user as User;
-    const u: User = generateUserById(user.id);
-    const idea: IdeaUser = generateIdeaUserByUser(u);
+
+    const u: User = new User();
+    u.id = user.id;
+    const idea: Idea = new Idea();
+    idea.id = req.params.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+    ideaUser.idea = idea;
+
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.ideaUserService.getOne(idea),
+      this.ideaUserService.getOne(ideaUser),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (!ideaFound) {
@@ -115,16 +125,4 @@ export default class IdeaController {
 
     return updated;
   }
-}
-
-function generateUserById(id: string): User {
-  const user: User = new User();
-  user.id = id;
-  return user;
-}
-
-function generateIdeaUserByUser(user: User): IdeaUser {
-  const team: IdeaUser = new IdeaUser();
-  team.user = user;
-  return team;
 }

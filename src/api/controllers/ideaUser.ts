@@ -40,7 +40,7 @@ export default class IdeaController {
   ): Promise<IdeaUser[]> {
     const idea: Idea = new Idea();
     idea.id = req.params.id;
-    const users = await this.ideaUserService.getAllByIdea(idea);
+    const users = await this.ideaUserService.getAllUsersByIdea(idea);
     if (!users) throw {statusCode: 404, message: 'Entity not found'};
 
     return users;
@@ -98,11 +98,12 @@ export default class IdeaController {
   ): Promise<void> {
     const user = req.user?.user as User;
 
-    const idea: Idea = generateIdeaById(req.params.id);
+    const idea: Idea = new Idea();
+    idea.id = req.params.id;
     const [userFound, ideaFound, ideaUsersFound] = await Promise.all([
       this.userService.getOne({id: req.body.userId}),
       this.ideaService.getOne(idea),
-      this.ideaUserService.getAllByIdea(idea),
+      this.ideaUserService.getAllUsersByIdea(idea),
     ]);
     if (!userFound) throw {statusCode: 404, message: 'User not found'};
     if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
@@ -121,10 +122,4 @@ export default class IdeaController {
     });
     return rep.code(204).send();
   }
-}
-
-function generateIdeaById(id: string): Idea {
-  const idea: Idea = new Idea();
-  idea.id = id;
-  return idea;
 }
