@@ -177,7 +177,7 @@ export default class UserController {
     options: {
       schema: {
         params: commonParams,
-        response: {200: {type: 'array', items: userProfileSchema}},
+        response: {200: userProfileSchema},
       },
       onRequest: authenticate,
     },
@@ -185,7 +185,7 @@ export default class UserController {
   async getUserDetail(
     req: AuthenticatedRequest<{Params: {id: string}}>,
   ): Promise<User | undefined> {
-    const user = await this.service.getUserDetail(req.id);
+    const user = await this.service.getUserDetail(req.params.id);
     if (!user) throw {statusCode: 404, message: 'Data not found'};
     return user;
   }
