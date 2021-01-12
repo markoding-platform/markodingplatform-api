@@ -245,10 +245,10 @@ export default class UserService {
   async getUserDetail(id: string): Promise<User | undefined> {
     return this.repository
       .createQueryBuilder('user')
-      .innerJoinAndSelect('user.profile', 'profile')
       .where('user.id = :id', {
         id,
       })
+      .innerJoinAndSelect('user.profile', 'profile')
       .getOne();
   }
 }
