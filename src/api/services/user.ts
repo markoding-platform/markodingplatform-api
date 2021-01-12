@@ -241,4 +241,14 @@ export default class UserService {
 
     return users;
   }
+
+  async getUserDetail(id: string): Promise<User | undefined> {
+    return this.repository
+      .createQueryBuilder('user')
+      .where('user.id = :id', {
+        id,
+      })
+      .innerJoinAndSelect('user.profile', 'profile')
+      .getOne();
+  }
 }

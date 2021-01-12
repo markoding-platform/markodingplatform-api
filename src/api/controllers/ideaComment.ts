@@ -29,7 +29,6 @@ export default class IdeaCommentController {
     req: AuthenticatedRequest<{
       Params: {id: string};
       Body: {comment: string};
-      User: Record<string, unknown>;
     }>,
     reply: FastifyReply,
   ): Promise<IdeaComment> {
