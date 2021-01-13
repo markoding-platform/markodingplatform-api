@@ -26,6 +26,8 @@ export const ideaSchema = {
     id: {type: 'string'},
     ...timestamps,
     ...properties,
+    totalLikes: {type: 'number'},
+    totalComments: {type: 'number'},
   },
 };
 

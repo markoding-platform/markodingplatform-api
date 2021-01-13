@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Idea, IdeaInput} from '../entity';
+import {Idea, IdeaInput, IdeaResponse} from '../entity';
 
 @Service()
 export default class IdeaService {
@@ -14,12 +14,26 @@ export default class IdeaService {
     this.repository = this.database.connection.getRepository(Idea);
   }
 
-  async getOne(idea: Partial<Idea>): Promise<Idea | undefined> {
-    return this.repository.findOne(idea);
+  async getOne(idea: Partial<Idea>): Promise<IdeaResponse | undefined> {
+    const result = await this.repository
+      .createQueryBuilder('ideas')
+      .where('id = :id', idea)
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
+      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
+      .getOne();
+
+    return result as IdeaResponse;
   }
 
-  async getAll(): Promise<Idea[]> {
-    return this.repository.find({isDraft: false});
+  async getAll(limit: number, offset: number): Promise<IdeaResponse[]> {
+    const result = await this.repository
+      .createQueryBuilder('ideas')
+      .limit(limit)
+      .skip(offset)
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
+      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
+      .getMany();
+    return result as IdeaResponse[];
   }
 
   async store(idea: Partial<IdeaInput>): Promise<Idea> {
