@@ -4,7 +4,7 @@ import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
 import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
-import {User, Idea, IdeaInput, IdeaUser} from '../entity';
+import {User, Idea, IdeaInput, IdeaUser, IdeaResponse} from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
 import {commonParams, commonQueryString} from '../schemas/common';
 
@@ -27,7 +27,7 @@ export default class IdeaController {
   })
   async getIdeaById(
     req: FastifyRequest<{Params: {id: string}}>,
-  ): Promise<Idea> {
+  ): Promise<IdeaResponse> {
     const idea = await this.ideaService.getOne({id: req.params.id});
     if (!idea) throw {statusCode: 404, message: 'Idea not found'};
 
@@ -45,10 +45,9 @@ export default class IdeaController {
   })
   async getAllIdeas(
     req: FastifyRequest<{
-      Params: {id: string};
       Querystring: {limit: number; offset: number};
     }>,
-  ): Promise<Idea[]> {
+  ): Promise<IdeaResponse[]> {
     return this.ideaService.getAll(req.query.limit, req.query.offset);
   }
 

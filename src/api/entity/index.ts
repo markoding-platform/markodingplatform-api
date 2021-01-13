@@ -1,5 +1,5 @@
 export {User, UserInput} from './user';
-export {Idea, IdeaInput} from './idea';
+export {Idea, IdeaInput, IdeaResponse} from './idea';
 export {IdeaLike} from './ideaLike';
 export {IdeaComment} from './ideaComment';
 export {
