@@ -12,5 +12,5 @@ export {default as ProfileService} from './profile';
 export {default as QuestionService} from './question';
 export {default as QuestionCommentService} from './questionComment';
 export {default as QuestionLikeService} from './questionLike';
-export {default as TeamService} from './team';
+export {default as IdeaUserService} from './ideaUser';
 export {default as UserService} from './user';
