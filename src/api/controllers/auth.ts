@@ -85,12 +85,15 @@ class AuthController {
     Reflect.deleteProperty(user, 'profile');
 
     data.user = user;
-    data.profile = profile;
 
     if (profile) {
       const ideaUser = await this.ideaUserService.getIdeaByUser(user);
 
-      data.idea = ideaUser?.idea;
+      data.profile = profile;
+      data.idea = ideaUser?.idea || null;
+    } else {
+      data.profile = null;
+      data.idea = null;
     }
 
     return {
