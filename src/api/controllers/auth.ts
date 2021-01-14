@@ -2,10 +2,9 @@ import {FastifyRequest} from 'fastify';
 import {AuthQuerystring} from 'schemas';
 import {Controller, POST} from 'fastify-decorators';
 
-import AuthService from '../services/auth';
-import UserService from '../services/user';
 import {SSORequest} from '../entity';
 import {authQuerySchema, authResponseSchema} from '../schemas/auth';
+import {IdeaUserService, AuthService, UserService} from '../services';
 
 const {DEBUGGABLE = false} = process.env;
 
@@ -14,6 +13,7 @@ class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private ideaUserService: IdeaUserService,
   ) {}
 
   @POST({
@@ -78,13 +78,17 @@ class AuthController {
       isEmailVerified: payload.isEmailVerified,
     });
 
+    const ideaUser = await this.ideaUserService.getIdeaByUser(user);
+
+    const idea = ideaUser?.idea;
+
     const profile = user.profile;
 
     Reflect.deleteProperty(user, 'profile');
 
     return {
       token: this.authService.generateJWT({user, profile}),
-      data: {user, profile},
+      data: {user, profile, idea},
     };
   }
 }
