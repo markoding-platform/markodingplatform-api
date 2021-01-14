@@ -1,36 +1,37 @@
 import {FastifyReply} from 'fastify';
 import {Controller, POST} from 'fastify-decorators';
 
-import {IdeaLike, User} from '../entity';
+import {IdeaComment, User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
-import {UserService, IdeaService, IdeaLikeService} from '../services';
+import {UserService, IdeaService, IdeaCommentService} from '../services';
 import {commonParams} from '../schemas/common';
 
 @Controller({route: '/ideas'})
-export default class IdeaLikeController {
+export default class IdeaCommentController {
   constructor(
-    private ideaLikeService: IdeaLikeService,
+    private ideaCommentService: IdeaCommentService,
     private ideaService: IdeaService,
     private userService: UserService,
   ) {}
 
   @POST({
-    url: '/:id/toggle-like',
+    url: '/:id/comment',
     options: {
       schema: {
         params: commonParams,
+        body: {type: 'object', properties: {comment: {type: 'string'}}},
         response: 204,
       },
       onRequest: authenticate,
     },
   })
-  async likeIdea(
+  async commentIdea(
     req: AuthenticatedRequest<{
       Params: {id: string};
-      User: Record<string, unknown>;
+      Body: {comment: string};
     }>,
     reply: FastifyReply,
-  ): Promise<IdeaLike> {
+  ): Promise<IdeaComment> {
     const user = req.user?.user as User;
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
@@ -39,7 +40,7 @@ export default class IdeaLikeController {
     if (!userFound) throw {statusCode: 404, message: 'User not found'};
     if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
 
-    await this.ideaLikeService.storeOrDelete(ideaFound, userFound);
+    await this.ideaCommentService.store(ideaFound, userFound, req.body.comment);
     return reply.code(204).send();
   }
 }

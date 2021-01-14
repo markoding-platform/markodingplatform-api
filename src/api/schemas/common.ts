@@ -3,17 +3,18 @@ export const timestamps = {
   updatedAt: {type: 'string'},
 };
 
-export const queryParamId = {
+export const commonParams = {
   type: 'object',
   properties: {
     id: {type: 'string'},
   },
 };
 
-export const queryStringSkipLimit = {
+export const commonQueryString = {
   type: 'object',
   properties: {
     limit: {type: 'number'},
     offset: {type: 'number'},
+    search: {type: 'string'},
   },
 };

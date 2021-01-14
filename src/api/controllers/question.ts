@@ -10,7 +10,7 @@ import {
   questionPutSchema,
 } from '../schemas/question';
 import authenticate from '../hooks/onRequest/authentication';
-import {queryParamId, queryStringSkipLimit} from '../schemas/common';
+import {commonParams, commonQueryString} from '../schemas/common';
 
 @Controller({route: '/questions'})
 export default class QuestionController {
@@ -20,8 +20,8 @@ export default class QuestionController {
     url: '/channel/:id',
     options: {
       schema: {
-        params: queryParamId,
-        querystring: queryStringSkipLimit,
+        params: commonParams,
+        querystring: commonQueryString,
         response: {200: {type: 'array', items: questionSchema}},
       },
     },
@@ -43,7 +43,7 @@ export default class QuestionController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: questionSchema},
       },
     },
@@ -83,7 +83,7 @@ export default class QuestionController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: questionPutSchema,
         response: {200: questionSchema},
       },

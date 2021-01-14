@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
-import {IdeaLike} from '.';
+import {IdeaLike, IdeaComment, IdeaUser} from '.';
 
 import {SolutionType} from '../../libs/types';
 
@@ -17,10 +17,8 @@ export class Idea {
 
   @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   createdAt: Date;
-
   @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
   updatedAt: Date;
-
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
@@ -44,8 +42,12 @@ export class Idea {
   solutionSupportingPhotos: string[];
   @Column('bool') isDraft: boolean;
 
+  @OneToMany(() => IdeaUser, (user: IdeaUser) => user.idea)
+  users: IdeaUser[];
   @OneToMany(() => IdeaLike, (like: IdeaLike) => like.idea)
   likes: IdeaLike[];
+  @OneToMany(() => IdeaComment, (comment: IdeaComment) => comment.idea)
+  comments: IdeaComment[];
 }
 
 export type IdeaInput = Omit<

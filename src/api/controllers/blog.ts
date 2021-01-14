@@ -6,7 +6,7 @@ import {AdminService, BlogService} from '../services';
 import {Admin, User, Blog, BlogInput, BlogAuthor} from '../entity';
 import {blogSchema, blogInputSchema} from '../schemas/blog';
 import authenticate from '../hooks/onRequest/authentication';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/blogs'})
 export default class BlogController {
@@ -19,7 +19,7 @@ export default class BlogController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: blogSchema},
       },
     },
@@ -65,7 +65,6 @@ export default class BlogController {
   ): Promise<BlogAuthor> {
     const user = req.user?.user as User;
 
-    // how to this??
     const u = new User();
     u.id = user.id;
     const a = new Admin();
