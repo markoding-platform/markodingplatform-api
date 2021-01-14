@@ -7,9 +7,9 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
-import {IdeaLike, IdeaComment, IdeaUser} from '.';
 
-import {SolutionType} from '../../libs/types';
+import {IdeaLike, IdeaComment, IdeaUser} from '.';
+import {IdeaStatus, SolutionType} from '../../libs/types/';
 
 @Entity('ideas')
 export class Idea {
@@ -22,11 +22,12 @@ export class Idea {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
+  @Column({type: 'enum', enum: IdeaStatus, default: IdeaStatus.PARTICIPANT})
+  status: IdeaStatus;
   @Column('varchar', {length: 255}) schoolId: string;
   @Column('text') schoolName: string;
-  @Column('uuid') teacherId: string;
   @Column('text') solutionName: string;
-  @Column('char', {length: 6}) solutionType: SolutionType;
+  @Column({type: 'enum', enum: SolutionType}) solutionType: SolutionType;
   @Column('varchar', {length: 255}) problemArea: string;
   @Column('text') problemSelection: string;
   @Column('text') problemReasoning: string;
