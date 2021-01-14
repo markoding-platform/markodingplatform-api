@@ -78,13 +78,13 @@ class AuthController {
       isEmailVerified: payload.isEmailVerified,
     });
 
-    const ideaUser = await this.ideaUserService.getIdeaByUser(user);
-
-    const idea = ideaUser?.idea;
-
     const profile = user.profile;
 
     Reflect.deleteProperty(user, 'profile');
+
+    const ideaUser = await this.ideaUserService.getIdeaByUser(user);
+
+    const idea = ideaUser?.idea;
 
     return {
       token: this.authService.generateJWT({user, profile}),
