@@ -60,6 +60,8 @@ class AuthController {
     req: FastifyRequest<{Body: {sso: string; sig: string}}>,
   ): Promise<{token: string; data: unknown}> {
     const {sso, sig} = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = {};
 
     if (!this.authService.verifySSO(sso, sig)) {
       throw {statusCode: 403, message: 'forbidden'};
@@ -82,13 +84,18 @@ class AuthController {
 
     Reflect.deleteProperty(user, 'profile');
 
-    const ideaUser = await this.ideaUserService.getIdeaByUser(user);
+    data.user = user;
+    data.profile = profile;
 
-    const idea = ideaUser?.idea;
+    if (profile) {
+      const ideaUser = await this.ideaUserService.getIdeaByUser(user);
+
+      data.idea = ideaUser?.idea;
+    }
 
     return {
       token: this.authService.generateJWT({user, profile}),
-      data: {user, profile, idea},
+      data,
     };
   }
 }
