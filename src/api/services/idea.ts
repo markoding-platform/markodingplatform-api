@@ -17,7 +17,8 @@ export default class IdeaService {
   async getOne(idea: Partial<Idea>): Promise<IdeaResponse | undefined> {
     const result = await this.repository
       .createQueryBuilder('ideas')
-      .where('id = :id', idea)
+      .where('ideas.id = :id', idea)
+      .leftJoinAndSelect('ideas.comments', 'comments')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
       .getOne();
