@@ -31,6 +31,27 @@ export const ideaSchema = {
   },
 };
 
+export const ideaCommentSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    ...timestamps,
+    ...properties,
+    comments: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: {type: 'string'},
+          comment: {type: 'string'},
+        },
+      },
+    },
+    totalLikes: {type: 'number'},
+    totalComments: {type: 'number'},
+  },
+};
+
 export const ideaInputSchema = {
   type: 'object',
   required: [
