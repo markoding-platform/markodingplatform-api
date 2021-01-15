@@ -5,8 +5,6 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import {User, Idea} from '.';
 
@@ -27,7 +25,6 @@ export class IdeaLike {
   @ManyToOne(() => Idea, (idea: Idea) => idea.likes)
   idea: Idea;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User)
   user: User;
 }
