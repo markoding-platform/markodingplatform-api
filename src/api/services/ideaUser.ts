@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Idea, IdeaUser, IdeaUserInput} from '../entity';
+import {Idea, IdeaUser, IdeaUserInput, User} from '../entity';
 
 @Service()
 export default class IdeaUserService {
@@ -16,6 +16,18 @@ export default class IdeaUserService {
 
   async getOne(team: Partial<IdeaUser>): Promise<IdeaUser | undefined> {
     return this.repository.findOne(team);
+  }
+
+  async getIdeaByUser(user: User): Promise<IdeaUser | undefined> {
+    return this.repository.findOne({
+      where: {user},
+      join: {
+        alias: 'ideaUser',
+        leftJoinAndSelect: {
+          idea: 'ideaUser.idea',
+        },
+      },
+    });
   }
 
   async getAllUsersByIdea(idea: Idea): Promise<IdeaUser[] | undefined> {
