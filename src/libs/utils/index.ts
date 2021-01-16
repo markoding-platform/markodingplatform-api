@@ -15,3 +15,23 @@ export function validateDateInput(inputDate: Date): boolean {
 
   return true;
 }
+
+export function paginateResponse(queryString, rowsAndCount) {
+  const {offset, limit} = queryString;
+  const [rows, count] = rowsAndCount;
+
+  const totalPages = Math.ceil(count / limit);
+  let currentPage = offset / limit + 1;
+  if (currentPage > totalPages) {
+    currentPage = totalPages;
+  }
+
+  return {
+    data: rows,
+    pages: {
+      count,
+      currentPage,
+      totalPages,
+    },
+  };
+}

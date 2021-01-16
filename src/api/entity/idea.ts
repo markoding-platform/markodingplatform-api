@@ -55,3 +55,8 @@ export type IdeaInput = Omit<
   Idea,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
+
+export interface IdeaResponse extends Idea {
+  totalLikes: number;
+  totalComments: number;
+}

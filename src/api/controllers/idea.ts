@@ -4,9 +4,16 @@ import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
 import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
-import {User, Idea, IdeaInput, IdeaUser} from '../entity';
-import {ideaSchema, ideaInputSchema} from '../schemas/idea';
+import {User, Idea, IdeaInput, IdeaUser, IdeaResponse} from '../entity';
+import {
+  ideaSchema,
+  ideaCommentSchema,
+  ideaInputSchema,
+  paginatedIdeaSchema,
+} from '../schemas/idea';
 import {commonParams, commonQueryString} from '../schemas/common';
+import {PaginatedIdeaResponse} from '../../libs/types';
+import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
 export default class IdeaController {
@@ -21,13 +28,13 @@ export default class IdeaController {
     options: {
       schema: {
         params: commonParams,
-        response: {200: ideaSchema},
+        response: {200: ideaCommentSchema},
       },
     },
   })
   async getIdeaById(
     req: FastifyRequest<{Params: {id: string}}>,
-  ): Promise<Idea> {
+  ): Promise<IdeaResponse> {
     const idea = await this.ideaService.getOne({id: req.params.id});
     if (!idea) throw {statusCode: 404, message: 'Idea not found'};
 
@@ -39,17 +46,19 @@ export default class IdeaController {
     options: {
       schema: {
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: ideaSchema}},
+        response: {200: paginatedIdeaSchema},
       },
     },
   })
   async getAllIdeas(
     req: FastifyRequest<{
-      Params: {id: string};
       Querystring: {limit: number; offset: number};
     }>,
-  ): Promise<Idea[]> {
-    return this.ideaService.getAll(req.query.limit, req.query.offset);
+  ): Promise<PaginatedIdeaResponse> {
+    const {limit, offset} = req.query;
+    const response = await this.ideaService.getAll(limit, offset);
+
+    return paginateResponse({limit, offset}, response);
   }
 
   @POST({
