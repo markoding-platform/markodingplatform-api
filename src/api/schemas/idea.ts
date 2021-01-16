@@ -3,7 +3,6 @@ import {timestamps} from './common';
 const properties = {
   schoolId: {type: 'string'},
   schoolName: {type: 'string'},
-  teacherId: {type: 'string'},
   solutionName: {type: 'string'},
   solutionType: {type: 'string'},
   problemArea: {type: 'string'},
@@ -35,7 +34,6 @@ export const ideaInputSchema = {
   required: [
     'schoolId',
     'schoolName',
-    'teacherId',
     'solutionName',
     'solutionType',
     'problemArea',

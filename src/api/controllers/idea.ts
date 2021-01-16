@@ -1,35 +1,26 @@
 import camelcaseKeys from 'camelcase-keys';
-import {FastifyRequest, FastifyReply} from 'fastify';
+import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
-import {UserService, IdeaService, TeamService} from '../services';
+import {UserService, IdeaService, IdeaUserService} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
-import {
-  User,
-  Idea,
-  IdeaInput,
-  Team,
-  TeamInput,
-  TeamPayload,
-  AddToTeamInput,
-} from '../entity';
+import {User, Idea, IdeaInput, IdeaUser} from '../entity';
 import {ideaSchema, ideaInputSchema} from '../schemas/idea';
-import {teamSchema, teamInputSchema, addUserInputSchema} from '../schemas/team';
-import {queryParamId, queryStringSkipLimit} from '../schemas/common';
+import {commonParams, commonQueryString} from '../schemas/common';
 
 @Controller({route: '/ideas'})
 export default class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
-    private teamService: TeamService,
+    private ideaUserService: IdeaUserService,
   ) {}
 
   @GET({
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: ideaSchema},
       },
     },
@@ -47,7 +38,7 @@ export default class IdeaController {
     url: '/',
     options: {
       schema: {
-        querystring: queryStringSkipLimit,
+        querystring: commonQueryString,
         response: {200: {type: 'array', items: ideaSchema}},
       },
     },
@@ -72,15 +63,18 @@ export default class IdeaController {
     },
   })
   async createIdea(
-    req: AuthenticatedRequest<{
-      Body: IdeaInput;
-      User: Record<string, unknown>;
-    }>,
+    req: AuthenticatedRequest<{Body: IdeaInput}>,
   ): Promise<Idea> {
     const user = req.user?.user as User;
+
+    const u: User = new User();
+    u.id = user.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.teamService.getOne({userId: user.id}),
+      this.ideaUserService.getOne(ideaUser),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (ideaFound) throw {statusCode: 400, message: 'User already on team'};
@@ -96,7 +90,7 @@ export default class IdeaController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: ideaInputSchema,
         response: {200: ideaSchema},
       },
@@ -110,12 +104,18 @@ export default class IdeaController {
     }>,
   ): Promise<Idea> {
     const user = req.user?.user as User;
+
+    const u: User = new User();
+    u.id = user.id;
+    const idea: Idea = new Idea();
+    idea.id = req.params.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+    ideaUser.idea = idea;
+
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
-      this.teamService.getOne({
-        userId: user.id,
-        ideaId: req.params.id,
-      }),
+      this.ideaUserService.getOne(ideaUser),
     ]);
     if (!userFound) throw {statusCode: 400, message: 'User not found'};
     if (!ideaFound) {
@@ -130,103 +130,5 @@ export default class IdeaController {
     }
 
     return updated;
-  }
-
-  @GET({
-    url: '/:id/team',
-    options: {
-      schema: {
-        params: queryParamId,
-        response: {200: teamSchema},
-      },
-    },
-  })
-  async getTeamById(
-    req: FastifyRequest<{Params: {id: string}}>,
-  ): Promise<Team[]> {
-    const team = await this.teamService.getByIdeaId(req.params.id);
-    if (!team) throw {statusCode: 404, message: 'Entity not found'};
-
-    return team;
-  }
-
-  @POST({
-    url: '/:id/team',
-    options: {
-      schema: {
-        params: queryParamId,
-        body: teamInputSchema,
-        response: {200: teamSchema},
-      },
-      onRequest: authenticate,
-    },
-  })
-  async createTeam(
-    req: AuthenticatedRequest<{
-      Params: {id: string};
-      Body: TeamPayload;
-      User: Record<string, unknown>;
-    }>,
-  ): Promise<Team[]> {
-    const user = req.user?.user as User;
-
-    const values: TeamInput[] = [
-      {
-        ideaId: req.params.id,
-        userId: user.id,
-        isLeader: true,
-      },
-    ];
-    req.body.userIds.forEach((userId: string) => {
-      values.push({
-        ideaId: req.params.id,
-        userId: userId,
-        isLeader: false,
-      });
-    });
-    return this.teamService.store(values);
-  }
-
-  @POST({
-    url: '/:id/add-to-team',
-    options: {
-      schema: {
-        params: queryParamId,
-        body: addUserInputSchema,
-        response: 204,
-      },
-      onRequest: authenticate,
-    },
-  })
-  async addUserToTeam(
-    req: AuthenticatedRequest<{
-      Params: {id: string};
-      Body: AddToTeamInput;
-      User: Record<string, unknown>;
-    }>,
-    rep: FastifyReply,
-  ): Promise<void> {
-    const user = req.user?.user as User;
-    const [userFound, teamFound] = await Promise.all([
-      this.userService.getOne({id: user.id}),
-      this.teamService.getByIdeaId(req.params.id),
-    ]);
-    if (!userFound) throw {statusCode: 404, message: 'User not found'};
-    if (!teamFound) throw {statusCode: 404, message: 'Team not found'};
-    if (teamFound.length > 2) {
-      throw {statusCode: 400, message: 'Team size exceeded'};
-    }
-
-    teamFound.forEach((t: Team) => {
-      if (t.userId === user.id && !t.isLeader) {
-        throw {statusCode: 400, message: 'Only leader can add to team'};
-      }
-    });
-
-    await this.teamService.addToTeam({
-      ideaId: req.params.id,
-      ...req.body,
-    });
-    return rep.code(204).send();
   }
 }

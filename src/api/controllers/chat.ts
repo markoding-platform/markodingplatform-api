@@ -4,7 +4,7 @@ import {Controller, GET, POST} from 'fastify-decorators';
 import ChatService from '../services/chat';
 import {Chat, ChatInput, User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 import {chatSchema, chatInputSchema} from '../schemas/chat';
 
 @Controller({route: '/chats'})
@@ -32,7 +32,7 @@ export default class ChatController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: chatSchema},
       },
       onRequest: authenticate,

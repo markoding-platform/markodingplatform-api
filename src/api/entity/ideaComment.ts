@@ -4,12 +4,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Column,
   ManyToOne,
 } from 'typeorm';
 import {User, Idea} from '.';
 
-@Entity('idea_likes')
-export class IdeaLike {
+@Entity('idea_comments')
+export class IdeaComment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -22,7 +23,10 @@ export class IdeaLike {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @ManyToOne(() => Idea, (idea: Idea) => idea.likes)
+  @Column({type: 'text'})
+  comment: string;
+
+  @ManyToOne(() => Idea, (idea: Idea) => idea.comments)
   idea: Idea;
 
   @ManyToOne(() => User)

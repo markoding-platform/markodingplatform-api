@@ -46,6 +46,15 @@ const profileAuthSchema = {
   },
 };
 
+const ideaAuthSchema = {
+  type: 'object',
+  nullable: true,
+  properties: {
+    id: {type: 'string'},
+    isDraft: {type: 'boolean'},
+  },
+};
+
 export const authResponseSchema = {
   type: 'object',
   properties: {
@@ -55,6 +64,7 @@ export const authResponseSchema = {
       properties: {
         user: {...userAuthSchema},
         profile: {...profileAuthSchema},
+        idea: {...ideaAuthSchema},
       },
     },
   },

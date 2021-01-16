@@ -8,7 +8,7 @@ import {
   announcementSchema,
   announcementInputSchema,
 } from '../schemas/announcement';
-import {queryParamId} from '../schemas/common';
+import {commonParams} from '../schemas/common';
 
 @Controller({route: '/announcements'})
 export default class AnnouncementController {
@@ -18,7 +18,7 @@ export default class AnnouncementController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         response: {200: announcementSchema},
       },
     },
@@ -63,7 +63,7 @@ export default class AnnouncementController {
     url: '/:id',
     options: {
       schema: {
-        params: queryParamId,
+        params: commonParams,
         body: announcementInputSchema,
         response: {200: announcementSchema},
       },

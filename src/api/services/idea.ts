@@ -27,7 +27,7 @@ export default class IdeaService {
       .getMany();
   }
 
-  async store(idea: Partial<Idea>): Promise<Idea> {
+  async store(idea: Partial<IdeaInput>): Promise<Idea> {
     return this.repository.save(idea);
   }
 
