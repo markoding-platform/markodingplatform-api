@@ -12,7 +12,7 @@ import {
   paginatedIdeaSchema,
 } from '../schemas/idea';
 import {commonParams, commonQueryString} from '../schemas/common';
-import {PaginatedIdeaResponse} from '../../libs/types';
+import {PaginatedResponse} from '../../libs/types';
 import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
@@ -54,7 +54,7 @@ export default class IdeaController {
     req: FastifyRequest<{
       Querystring: {limit: number; offset: number};
     }>,
-  ): Promise<PaginatedIdeaResponse> {
+  ): Promise<PaginatedResponse<Idea>> {
     const {limit, offset} = req.query;
     const response = await this.ideaService.getAll(limit, offset);
 

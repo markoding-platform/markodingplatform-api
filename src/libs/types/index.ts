@@ -17,7 +17,11 @@ type Pagination = {
   currentPage: number;
   totalPages: number;
 };
-export interface PaginatedIdeaResponse {
-  data: Idea[];
+export interface PaginatedResponse<Entity> {
+  data: Entity[];
   pages: Pagination;
 }
+export type CommonQueryString = {
+  limit: number;
+  offset: number;
+};

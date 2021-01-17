@@ -1,3 +1,5 @@
+import {CommonQueryString, PaginatedResponse} from '../types';
+
 export function validateDateInput(inputDate: Date): boolean {
   inputDate = new Date(inputDate);
   const now: Date = new Date();
@@ -16,7 +18,10 @@ export function validateDateInput(inputDate: Date): boolean {
   return true;
 }
 
-export function paginateResponse(queryString, rowsAndCount) {
+export function paginateResponse<Entity>(
+  queryString: CommonQueryString,
+  rowsAndCount: [Entity[], number],
+): PaginatedResponse<Entity> {
   const {offset, limit} = queryString;
   const [rows, count] = rowsAndCount;
 
