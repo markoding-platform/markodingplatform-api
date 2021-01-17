@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import {IdeaLike, IdeaComment, IdeaUser} from '.';
-import {IdeaStatus, SolutionType} from '../../libs/types/';
+import {IdeaStatus, SolutionType} from '../../libs/types';
 
 @Entity('ideas')
 export class Idea {
