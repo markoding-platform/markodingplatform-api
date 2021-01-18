@@ -24,7 +24,16 @@ const profileAuthSchema = {
   nullable: true,
   properties: {
     id: {type: 'string'},
+
+    bio: {type: 'string'},
     profileType: {type: 'string'},
+    gender: {type: 'string'},
+    dateOfBirth: {type: 'string'},
+    telephone: {type: 'string'},
+    linkedinUrl: {type: 'string'},
+    instagramUrl: {type: 'string'},
+    profilePictureUrl: {type: 'string'},
+
     schoolId: {type: 'string'},
     schoolName: {type: 'string'},
     schoolTypeId: {type: 'string'},
@@ -33,14 +42,18 @@ const profileAuthSchema = {
     schoolGradeName: {type: 'string'},
     classId: {type: 'string'},
     className: {type: 'string'},
+
     cityId: {type: 'string'},
     cityName: {type: 'string'},
     provinceId: {type: 'string'},
     provinceName: {type: 'string'},
+
     workingPosition: {type: 'string'},
     companyName: {type: 'string'},
     expertise: {type: 'string'},
+
     startTeachingYear: {type: 'number'},
+
     lastEducationGradeId: {type: 'string'},
     lastEducationGradeName: {type: 'string'},
   },
