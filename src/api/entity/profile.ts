@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
-import {ProfileType} from '../../libs/types/index';
+import {ProfileType, GenderType} from '../../libs/types/index';
 
 @Entity('profiles')
 export class Profile {
@@ -26,6 +26,25 @@ export class Profile {
     default: 'student',
   })
   profileType: ProfileType;
+  @Column({
+    type: 'enum',
+    enum: ['laki-laki', 'perempuan'],
+    nullable: true,
+  })
+  gender: GenderType;
+
+  @Column({type: 'text', nullable: true})
+  bio: string;
+  @Column({type: 'date', nullable: true})
+  dateOfBirth: Date;
+  @Column({type: 'varchar', nullable: true})
+  telephone: string;
+  @Column({type: 'varchar', nullable: true})
+  linkedinUrl: string;
+  @Column({type: 'varchar', nullable: true})
+  instagramUrl: string;
+  @Column({type: 'varchar', nullable: true})
+  profilePictureUrl: string;
 
   @Column({type: 'varchar', nullable: true})
   schoolId: string;

@@ -1,11 +1,10 @@
 import {Controller, GET, POST} from 'fastify-decorators';
 
-import ProfileService from '../services/profile';
-import AuthService from '../services/auth';
-import {Profile, ProfileInput} from '../entity';
-import {profileSchema, profileInputSchema} from '../schemas/profile';
 import authenticate from '../hooks/onRequest/authentication';
 import {authResponseSchema} from '../schemas/auth';
+import {Profile, ProfileInput} from '../entity';
+import {ProfileService, AuthService} from '../services';
+import {profileSchema, profileInputSchema} from '../schemas/profile';
 
 @Controller({route: '/profile'})
 export default class ProfileController {
