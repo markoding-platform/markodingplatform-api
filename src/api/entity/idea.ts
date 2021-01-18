@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import {IdeaLike, IdeaComment, IdeaUser} from '.';
-import {IdeaStatus, SolutionType} from '../../libs/types/';
+import {IdeaStatus, SolutionType} from '../../libs/types';
 
 @Entity('ideas')
 export class Idea {
@@ -55,3 +55,8 @@ export type IdeaInput = Omit<
   Idea,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
+
+export interface IdeaResponse extends Idea {
+  totalLikes: number;
+  totalComments: number;
+}

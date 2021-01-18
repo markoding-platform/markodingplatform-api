@@ -1,3 +1,5 @@
+import {Idea} from '../../api/entity';
+
 export type ChatType = 'text' | 'image';
 export type ProfileType = 'student' | 'teacher' | 'mentor' | 'supporter';
 export type GenderType = 'perempuan' | 'laki-laki';
@@ -11,3 +13,16 @@ export enum IdeaStatus {
   FINALIST = 'Finalis',
   WINNER = 'Pemenang',
 }
+type Pagination = {
+  count: number;
+  currentPage: number;
+  totalPages: number;
+};
+export interface PaginatedResponse<Entity> {
+  data: Entity[];
+  pages: Pagination;
+}
+export type CommonQueryString = {
+  limit: number;
+  offset: number;
+};
