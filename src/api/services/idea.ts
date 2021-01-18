@@ -3,6 +3,7 @@ import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
 import {Idea, IdeaInput, IdeaResponse} from '../entity';
+import {OrderQuery, SolutionType} from '../../libs/types';
 
 @Service()
 export default class IdeaService {
@@ -26,13 +27,28 @@ export default class IdeaService {
     return result as IdeaResponse;
   }
 
-  async getAll(limit: number, offset: number): Promise<[Idea[], number]> {
-    return this.repository
-      .createQueryBuilder('ideas')
+  async getAll(
+    limit: number,
+    offset: number,
+    order: OrderQuery,
+    solutionType: SolutionType | undefined,
+  ): Promise<[Idea[], number]> {
+    let query = this.repository.createQueryBuilder('ideas');
+
+    if (solutionType)
+      query = query.where('solution_type = :solutionType', {solutionType});
+    if (order) query = query.orderBy(order);
+
+    return query
       .limit(limit)
       .offset(offset)
-      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
-      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
+      .orderBy(order)
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes', 'total_likes')
+      .loadRelationCountAndMap(
+        'ideas.totalComments',
+        'ideas.comments',
+        'total_comments',
+      )
       .getManyAndCount();
   }
 

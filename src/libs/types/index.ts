@@ -1,5 +1,3 @@
-import {Idea} from '../../api/entity';
-
 export type ChatType = 'text' | 'image';
 export type ProfileType = 'student' | 'teacher' | 'mentor' | 'supporter';
 export type GenderType = 'perempuan' | 'laki-laki';
@@ -25,4 +23,15 @@ export interface PaginatedResponse<Entity> {
 export type CommonQueryString = {
   limit: number;
   offset: number;
+  sort: string;
+  solutionType: string;
 };
+export type OrderQuery =
+  | {
+      'ideas.solution_name': 'ASC' | 'DESC';
+    }
+  | {
+      'ideas.totalLikes': 'ASC' | 'DESC';
+      'ideas.totalComments': 'ASC' | 'DESC';
+    }
+  | {};
