@@ -1,8 +1,13 @@
 export {User, UserInput} from './user';
-export {Idea, IdeaInput} from './idea';
+export {Idea, IdeaInput, IdeaResponse} from './idea';
 export {IdeaLike} from './ideaLike';
 export {IdeaComment} from './ideaComment';
-export {Team, TeamInput, TeamPayload, AddToTeamInput} from './team';
+export {
+  IdeaUser,
+  IdeaUserInput,
+  IdeaUserPayload,
+  AddToTeamInput,
+} from './ideaUser';
 export {Nonce, SSORequest, SSOResponse} from './nonce';
 export {Announcement, AnnouncementInput} from './announcement';
 export {Event} from './event';

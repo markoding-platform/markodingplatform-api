@@ -5,6 +5,7 @@ import {bootstrap} from 'fastify-decorators';
 import fastifyMultipart from 'fastify-multipart';
 
 import IdeaController from './api/controllers/idea';
+import IdeaUserController from './api/controllers/ideaUser';
 import IdeaLikeController from './api/controllers/ideaLike';
 import IdeaCommentController from './api/controllers/ideaComment';
 import EventController from './api/controllers/event';
@@ -32,6 +33,7 @@ server.register(fastifyCors, {
 server.register(bootstrap, {
   controllers: [
     IdeaController,
+    IdeaUserController,
     IdeaLikeController,
     IdeaCommentController,
     EventController,

@@ -1,9 +1,8 @@
-import {timestamps} from './common';
+import {timestamps, commonPagination} from './common';
 
 const properties = {
   schoolId: {type: 'string'},
   schoolName: {type: 'string'},
-  teacherId: {type: 'string'},
   solutionName: {type: 'string'},
   solutionType: {type: 'string'},
   problemArea: {type: 'string'},
@@ -27,6 +26,37 @@ export const ideaSchema = {
     id: {type: 'string'},
     ...timestamps,
     ...properties,
+    totalLikes: {type: 'number'},
+    totalComments: {type: 'number'},
+  },
+};
+
+export const paginatedIdeaSchema = {
+  type: 'object',
+  properties: {
+    pages: commonPagination,
+    data: {type: 'array', items: ideaSchema},
+  },
+};
+
+export const ideaCommentSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    ...timestamps,
+    ...properties,
+    comments: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: {type: 'string'},
+          comment: {type: 'string'},
+        },
+      },
+    },
+    totalLikes: {type: 'number'},
+    totalComments: {type: 'number'},
   },
 };
 
@@ -35,7 +65,6 @@ export const ideaInputSchema = {
   required: [
     'schoolId',
     'schoolName',
-    'teacherId',
     'solutionName',
     'solutionType',
     'problemArea',

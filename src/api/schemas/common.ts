@@ -13,8 +13,17 @@ export const commonParams = {
 export const commonQueryString = {
   type: 'object',
   properties: {
-    limit: {type: 'number'},
-    offset: {type: 'number'},
+    limit: {type: 'number', default: 9},
+    offset: {type: 'number', default: 0},
     search: {type: 'string'},
+  },
+};
+
+export const commonPagination = {
+  type: 'object',
+  properties: {
+    count: {type: 'number'},
+    currentPage: {type: 'number'},
+    totalPages: {type: 'number'},
   },
 };
