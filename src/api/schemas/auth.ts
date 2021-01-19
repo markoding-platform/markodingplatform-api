@@ -14,7 +14,7 @@ const userAuthSchema = {
   properties: {
     id: {type: 'string'},
     name: {type: 'string'},
-    externalId: {type: 'number'},
+    externalId: {type: 'string'},
     isEmailVerified: {type: 'boolean'},
   },
 };
