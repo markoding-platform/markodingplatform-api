@@ -15,7 +15,7 @@ export const commonQueryString = {
   properties: {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
-    search: {type: 'string'},
+    search: {type: 'string', default: ''},
   },
 };
 

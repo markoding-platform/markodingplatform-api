@@ -8,9 +8,12 @@ import {
   questionSchema,
   questionPostSchema,
   questionPutSchema,
+  paginatedQuestionSchema,
 } from '../schemas/question';
 import authenticate from '../hooks/onRequest/authentication';
 import {commonParams, commonQueryString} from '../schemas/common';
+import {PaginatedResponse} from '../../libs/types';
+import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/questions'})
 export default class QuestionController {
@@ -22,21 +25,21 @@ export default class QuestionController {
       schema: {
         params: commonParams,
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: questionSchema}},
+        response: {200: paginatedQuestionSchema},
       },
     },
   })
   async getByChannel(
     req: FastifyRequest<{
       Params: {id: string};
-      Querystring: {limit: number; offset: number};
+      Querystring: {limit: number; offset: number; search: string};
     }>,
-  ): Promise<Question[]> {
-    return this.service.getByChannel(
-      req.params.id,
-      req.query.limit || 10,
-      req.query.offset || 0,
-    );
+  ): Promise<PaginatedResponse<Question>> {
+    const {limit, offset, search} = req.query;
+    const {id} = req.params;
+    const response = await this.service.getByChannel(id, limit, offset, search);
+    console.log('rrr', response);
+    return paginateResponse({limit, offset}, response);
   }
 
   @GET({
