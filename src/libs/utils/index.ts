@@ -22,7 +22,7 @@ export function paginateResponse<Entity>(
   queryString: CommonQueryString,
   rowsAndCount: [Entity[], number],
 ): PaginatedResponse<Entity> {
-  const {offset, limit} = queryString;
+  const {offset, limit, sort} = queryString;
   const [rows, count] = rowsAndCount;
 
   const totalPages = Math.ceil(count / limit);
@@ -37,6 +37,9 @@ export function paginateResponse<Entity>(
       count,
       currentPage,
       totalPages,
+      params: {
+        sorts: [sort],
+      },
     },
   };
 }

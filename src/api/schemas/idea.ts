@@ -2,6 +2,7 @@ import {timestamps, commonPagination} from './common';
 
 const properties = {
   schoolId: {type: 'string'},
+  status: {type: 'string'},
   schoolName: {type: 'string'},
   solutionName: {type: 'string'},
   solutionType: {type: 'string'},
@@ -77,5 +78,6 @@ export const ideaInputSchema = {
     'targetOutcomes',
     'targetCustomer',
   ],
+  additionalProperties: false,
   properties,
 };

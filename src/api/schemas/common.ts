@@ -15,16 +15,8 @@ export const commonQueryString = {
   properties: {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
-    search: {type: 'string'},
-    sort: {
-      type: 'string',
-      default: 'created_at',
-      enum: ['created_at', 'solution_name', 'popularity'],
-    },
-    solutionType: {
-      type: 'string',
-      enum: ['Web', 'Mobile', 'Game'],
-    },
+    search: {type: 'string', default: ''},
+    sort: {type: 'string'},
   },
 };
 
@@ -34,5 +26,14 @@ export const commonPagination = {
     count: {type: 'number'},
     currentPage: {type: 'number'},
     totalPages: {type: 'number'},
+    params: {
+      type: 'object',
+      properties: {
+        sorts: {
+          type: 'array',
+          items: {type: 'string'},
+        },
+      },
+    },
   },
 };

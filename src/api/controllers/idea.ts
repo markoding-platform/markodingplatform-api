@@ -12,7 +12,7 @@ import {
   paginatedIdeaSchema,
 } from '../schemas/idea';
 import {commonParams, commonQueryString} from '../schemas/common';
-import {PaginatedResponse, OrderQuery, SolutionType} from '../../libs/types';
+import {PaginatedResponse, CommonQueryString} from '../../libs/types';
 import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
@@ -51,47 +51,10 @@ export default class IdeaController {
     },
   })
   async getAllIdeas(
-    req: FastifyRequest<{
-      Querystring: {
-        limit: number;
-        offset: number;
-        sort: string;
-        solutionType: SolutionType;
-      };
-    }>,
+    req: FastifyRequest<{Querystring: CommonQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
-    const {limit, offset, sort, solutionType} = req.query;
-    const order: OrderQuery = {};
-    switch (sort) {
-      case 'solution_name':
-        {
-          if (sort.startsWith('-')) {
-            order['ideas.solution_name'] = 'DESC';
-          } else {
-            order['ideas.solution_name'] = 'ASC';
-          }
-        }
-        break;
-      case 'popularity':
-        {
-          if (sort.startsWith('-')) {
-            order['total_likes'] = 'DESC';
-            order['total_comments'] = 'DESC';
-          } else {
-            order['total_likes'] = 'ASC';
-            order['total_comments'] = 'ASC';
-          }
-        }
-        break;
-    }
-    const response = await this.ideaService.getAll(
-      limit,
-      offset,
-      order,
-      solutionType,
-    );
-
-    return paginateResponse({limit, offset, sort, solutionType}, response);
+    const response = await this.ideaService.getAll(req.query);
+    return paginateResponse(req.query, response);
   }
 
   @POST({
