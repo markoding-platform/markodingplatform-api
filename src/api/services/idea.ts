@@ -29,6 +29,7 @@ export default class IdeaService {
   async getAll(limit: number, offset: number): Promise<[Idea[], number]> {
     return this.repository
       .createQueryBuilder('ideas')
+      .where('is_draft = false')
       .limit(limit)
       .offset(offset)
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
