@@ -25,9 +25,6 @@ export function paginateResponse<Entity>(
   const {offset, limit, sort, keyword} = queryString;
   const [rows, count] = rowsAndCount;
 
-  console.log('loll');
-  console.log(sort, keyword);
-
   const totalPages = Math.ceil(count / limit);
   let currentPage = offset / limit + 1;
   if (currentPage > totalPages) {
