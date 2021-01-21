@@ -25,7 +25,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserTeacher(
-      req.query.search,
+      req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
@@ -48,7 +48,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserTeacher(
-      req.query.search,
+      req.query.keyword,
       req.user.profile?.schoolId,
       req.query.limit,
       req.query.skip,
@@ -71,7 +71,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserStudent(
-      req.query.search,
+      req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
@@ -94,7 +94,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserStudent(
-      req.query.search,
+      req.query.keyword,
       req.user.profile?.schoolId,
       req.query.limit,
       req.query.skip,
@@ -117,7 +117,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserStudentNotInTeam({
-      name: req.query.search,
+      name: req.query.keyword,
       schoolId: req.user.profile?.schoolId,
       selfUserId: req.user.user.id,
       limit: req.query.limit,
@@ -141,7 +141,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserMentor(
-      req.query.search,
+      req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
@@ -164,7 +164,7 @@ export default class UserController {
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<User[]> {
     const userTeachers = await this.service.getUserSupporter(
-      req.query.search,
+      req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
