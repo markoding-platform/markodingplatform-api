@@ -38,7 +38,6 @@ export default class QuestionController {
     const {limit, offset, search} = req.query;
     const {id} = req.params;
     const response = await this.service.getByChannel(id, limit, offset, search);
-    console.log('rrr', response);
     return paginateResponse({limit, offset}, response);
   }
 

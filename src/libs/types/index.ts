@@ -1,5 +1,3 @@
-import {Idea} from '../../api/entity';
-
 export type ChatType = 'text' | 'image';
 export type ProfileType = 'student' | 'teacher' | 'mentor' | 'supporter';
 export type GenderType = 'perempuan' | 'laki-laki';
@@ -17,6 +15,9 @@ type Pagination = {
   count: number;
   currentPage: number;
   totalPages: number;
+  params: {
+    sorts: Array<string | undefined>;
+  };
 };
 export interface PaginatedResponse<Entity> {
   data: Entity[];
@@ -25,4 +26,5 @@ export interface PaginatedResponse<Entity> {
 export type CommonQueryString = {
   limit: number;
   offset: number;
+  sort?: string;
 };

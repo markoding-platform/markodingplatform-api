@@ -16,6 +16,7 @@ export const commonQueryString = {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
     search: {type: 'string', default: ''},
+    sort: {type: 'string'},
   },
 };
 
@@ -25,5 +26,14 @@ export const commonPagination = {
     count: {type: 'number'},
     currentPage: {type: 'number'},
     totalPages: {type: 'number'},
+    params: {
+      type: 'object',
+      properties: {
+        sorts: {
+          type: 'array',
+          items: {type: 'string'},
+        },
+      },
+    },
   },
 };
