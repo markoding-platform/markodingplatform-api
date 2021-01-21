@@ -17,6 +17,7 @@ type Pagination = {
   totalPages: number;
   params: {
     sorts: Array<string | undefined>;
+    keyword: string | undefined;
   };
 };
 export interface PaginatedResponse<Entity> {
@@ -27,4 +28,5 @@ export type CommonQueryString = {
   limit: number;
   offset: number;
   sort?: string;
+  keyword?: string;
 };

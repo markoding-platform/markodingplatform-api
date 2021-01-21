@@ -22,14 +22,20 @@ export function paginateResponse<Entity>(
   queryString: CommonQueryString,
   rowsAndCount: [Entity[], number],
 ): PaginatedResponse<Entity> {
-  const {offset, limit, sort} = queryString;
+  const {offset, limit, sort, keyword} = queryString;
   const [rows, count] = rowsAndCount;
+
+  console.log('loll');
+  console.log(sort, keyword);
 
   const totalPages = Math.ceil(count / limit);
   let currentPage = offset / limit + 1;
   if (currentPage > totalPages) {
     currentPage = totalPages;
   }
+
+  const sortValue = sort || '';
+  const keywordValue = keyword || '';
 
   return {
     data: rows,
@@ -38,7 +44,8 @@ export function paginateResponse<Entity>(
       currentPage,
       totalPages,
       params: {
-        sorts: [sort],
+        sorts: [sortValue],
+        keyword: keywordValue,
       },
     },
   };
