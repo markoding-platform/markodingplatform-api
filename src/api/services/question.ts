@@ -18,14 +18,14 @@ export default class QuestionService {
     channelId: string,
     limit: number,
     offset: number,
-    search: string,
+    keyword: string,
   ): Promise<[Question[], number]> {
     return this.repository
       .createQueryBuilder('Question')
       .where('channel_id = :channelId', {
         channelId,
       })
-      .andWhere('content LIKE :search', {search: `%${search}%`})
+      .andWhere('content LIKE :keyword', {keyword: `%${keyword}%`})
       .loadRelationCountAndMap(
         'Question.comments',
         'Question.comments',

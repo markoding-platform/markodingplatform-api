@@ -6,7 +6,7 @@ declare module 'schemas' {
   interface CommonQueryString {
     skip: number;
     limit: number;
-    search: string;
+    keyword: string;
   }
 
   interface AuthQuerystring {

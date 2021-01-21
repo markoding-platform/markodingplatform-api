@@ -32,12 +32,17 @@ export default class QuestionController {
   async getByChannel(
     req: FastifyRequest<{
       Params: {id: string};
-      Querystring: {limit: number; offset: number; search: string};
+      Querystring: {limit: number; offset: number; keyword: string};
     }>,
   ): Promise<PaginatedResponse<Question>> {
-    const {limit, offset, search} = req.query;
+    const {limit, offset, keyword} = req.query;
     const {id} = req.params;
-    const response = await this.service.getByChannel(id, limit, offset, search);
+    const response = await this.service.getByChannel(
+      id,
+      limit,
+      offset,
+      keyword,
+    );
     return paginateResponse({limit, offset}, response);
   }
 

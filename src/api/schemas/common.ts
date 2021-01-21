@@ -15,8 +15,8 @@ export const commonQueryString = {
   properties: {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
-    search: {type: 'string', default: ''},
-    sort: {type: 'string'},
+    keyword: {type: 'string', default: ''},
+    sort: {type: 'string', default: ''},
   },
 };
 
@@ -33,6 +33,7 @@ export const commonPagination = {
           type: 'array',
           items: {type: 'string'},
         },
+        keyword: {type: 'string'},
       },
     },
   },
