@@ -43,12 +43,8 @@ export default class IdeaService {
       .where('is_draft = false')
       .limit(limit)
       .offset(offset)
-      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes', 'total_likes')
-      .loadRelationCountAndMap(
-        'ideas.totalComments',
-        'ideas.comments',
-        'total_comments',
-      )
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
+      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
       .getManyAndCount();
   }
 
