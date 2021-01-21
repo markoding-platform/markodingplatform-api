@@ -78,5 +78,6 @@ export const ideaInputSchema = {
     'targetOutcomes',
     'targetCustomer',
   ],
+  additionalProperties: false,
   properties,
 };
