@@ -62,4 +62,13 @@ export default class IdeaService {
       .execute();
     return raw[0];
   }
+
+  async getSearch(keyword: string): Promise<Idea[]> {
+    return this.repository
+      .createQueryBuilder('ideas')
+      .where('is_draft = false')
+      .andWhere('solution_name ILIKE :keyword', {keyword: `%${keyword}%`})
+      .limit(5)
+      .getMany();
+  }
 }

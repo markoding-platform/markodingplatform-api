@@ -1,43 +1,10 @@
-import {userSchema} from './user';
-import {channelSchema} from './channel';
-import {commonPagination, timestamps} from './common';
+import {ideaSchemaSearch} from './idea';
+import {eventSchemaSearch} from './event';
 
-const properties = {
-  content: {type: 'string'},
-};
-
-export const questionSchema = {
+export const searchSchema = {
   type: 'object',
   properties: {
-    id: {type: 'string'},
-    ...timestamps,
-    ...properties,
-    comments: {type: 'number'},
-    likes: {type: 'number'},
-    channel: channelSchema,
-    user: userSchema,
+    idea: {type: 'array', items: ideaSchemaSearch},
+    events: {type: 'array', items: eventSchemaSearch},
   },
-};
-
-export const paginatedQuestionSchema = {
-  type: 'object',
-  properties: {
-    pages: commonPagination,
-    data: {type: 'array', items: questionSchema},
-  },
-};
-
-export const questionPostSchema = {
-  type: 'object',
-  required: ['content', 'channel'],
-  properties: {
-    ...properties,
-    channel: {type: 'string'},
-  },
-};
-
-export const questionPutSchema = {
-  type: 'object',
-  required: ['content'],
-  properties,
 };

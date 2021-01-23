@@ -30,3 +30,7 @@ export type CommonQueryString = {
   sort?: string;
   keyword?: string;
 };
+export interface SearchResponse<Idea, Event> {
+  idea: Idea[];
+  events: Event[];
+}

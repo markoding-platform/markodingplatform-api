@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Event} from '../entity';
+import {Event, Idea} from '../entity';
 
 @Service()
 export default class EventService {
@@ -29,5 +29,13 @@ export default class EventService {
 
   async store(event: Partial<Event>): Promise<Event> {
     return this.repository.save(event);
+  }
+
+  async getSearch(keyword: string): Promise<Event[]> {
+    return this.repository
+      .createQueryBuilder()
+      .where('title ILIKE :keyword', {keyword: `%${keyword}%`})
+      .limit(5)
+      .getMany();
   }
 }

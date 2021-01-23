@@ -20,6 +20,18 @@ export default class QuestionController {
   constructor(private service: QuestionService) {}
 
   @GET({
+    url: '/',
+    options: {
+      schema: {
+        response: {200: {type: 'array', items: questionSchema}},
+      },
+    },
+  })
+  async get(): Promise<Question[]> {
+    return await this.service.getLatest();
+  }
+
+  @GET({
     url: '/channel/:id',
     options: {
       schema: {
