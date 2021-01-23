@@ -20,7 +20,7 @@ export const commonQueryString = {
   },
 };
 
-export const commonPagination = {
+export const pagination = {
   type: 'object',
   properties: {
     count: {type: 'number'},

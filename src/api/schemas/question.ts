@@ -1,6 +1,6 @@
 import {userSchema} from './user';
 import {channelSchema} from './channel';
-import {commonPagination, timestamps} from './common';
+import {pagination, timestamps} from './common';
 
 const properties = {
   content: {type: 'string'},
@@ -22,7 +22,7 @@ export const questionSchema = {
 export const paginatedQuestionSchema = {
   type: 'object',
   properties: {
-    pages: commonPagination,
+    pages: pagination,
     data: {type: 'array', items: questionSchema},
   },
 };

@@ -1,4 +1,4 @@
-import {timestamps, commonPagination, commonQueryString} from './common';
+import {timestamps, pagination, commonQueryString} from './common';
 
 const properties = {
   id: {type: 'string'},
@@ -35,7 +35,7 @@ export const ideaSchema = {
 export const paginatedIdeaSchema = {
   type: 'object',
   properties: {
-    pages: commonPagination,
+    pages: pagination,
     data: {
       type: 'array',
       items: ideaSchema,
