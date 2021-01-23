@@ -1,4 +1,4 @@
-import {CommonQueryString, PaginatedResponse} from '../types';
+import {PaginatedResponse, QueryString} from '../types';
 
 export function validateDateInput(inputDate: Date): boolean {
   inputDate = new Date(inputDate);
@@ -19,16 +19,26 @@ export function validateDateInput(inputDate: Date): boolean {
 }
 
 export function paginateResponse<Entity>(
-  queryString: CommonQueryString,
+  queryString: QueryString,
   rowsAndCount: [Entity[], number],
 ): PaginatedResponse<Entity> {
-  const {offset, limit, sort} = queryString;
+  const {offset, limit, sort, keyword, solutionType} = queryString;
   const [rows, count] = rowsAndCount;
 
   const totalPages = Math.ceil(count / limit);
   let currentPage = offset / limit + 1;
   if (currentPage > totalPages) {
     currentPage = totalPages;
+  }
+
+  const keywordValue = keyword || '';
+  const filters = {};
+  if (solutionType) {
+    const st: string[] = [];
+    solutionType.split(',').forEach((s: string) => {
+      st.push(s);
+    });
+    filters['solutionType'] = st;
   }
 
   return {
@@ -38,7 +48,9 @@ export function paginateResponse<Entity>(
       currentPage,
       totalPages,
       params: {
-        sorts: [sort],
+        sorts: sort ? sort.split(',') : [],
+        filters,
+        keyword: keywordValue,
       },
     },
   };

@@ -1,6 +1,7 @@
-import {timestamps, commonPagination} from './common';
+import {timestamps, commonPagination, commonQueryString} from './common';
 
 const properties = {
+  id: {type: 'string'},
   schoolId: {type: 'string'},
   status: {type: 'string'},
   schoolName: {type: 'string'},
@@ -24,7 +25,6 @@ const properties = {
 export const ideaSchema = {
   type: 'object',
   properties: {
-    id: {type: 'string'},
     ...timestamps,
     ...properties,
     totalLikes: {type: 'number'},
@@ -36,14 +36,16 @@ export const paginatedIdeaSchema = {
   type: 'object',
   properties: {
     pages: commonPagination,
-    data: {type: 'array', items: ideaSchema},
+    data: {
+      type: 'array',
+      items: ideaSchema,
+    },
   },
 };
 
 export const ideaCommentSchema = {
   type: 'object',
   properties: {
-    id: {type: 'string'},
     ...timestamps,
     ...properties,
     comments: {
@@ -80,4 +82,13 @@ export const ideaInputSchema = {
   ],
   additionalProperties: false,
   properties,
+};
+
+export const ideaQueryStringSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...commonQueryString.properties,
+    solutionType: {type: 'string'},
+  },
 };
