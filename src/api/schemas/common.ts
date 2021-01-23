@@ -16,6 +16,7 @@ export const commonQueryString = {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
     sort: {type: 'string'},
+    keyword: {type: 'string', default: ''},
   },
 };
 

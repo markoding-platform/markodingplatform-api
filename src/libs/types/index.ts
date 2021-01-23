@@ -46,6 +46,3 @@ export type QueryString = {
 export type IdeaQueryString = CommonQueryString & {
   solutionType?: string;
 };
-export type QuestionQueryString = CommonQueryString & {
-  keyword?: string;
-};
