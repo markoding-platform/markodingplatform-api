@@ -7,7 +7,6 @@ const properties = {
   schoolName: {type: 'string'},
   solutionName: {type: 'string'},
   solutionType: {type: 'string'},
-  problemArea: {type: 'string'},
   problemSelection: {type: 'string'},
   problemReasoning: {type: 'string'},
   solutionVision: {type: 'string'},
@@ -22,11 +21,21 @@ const properties = {
   isDraft: {type: 'boolean'},
 };
 
+const problemAreaSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'number'},
+    ...timestamps,
+    problemArea: {type: 'string'},
+  },
+};
+
 export const ideaSchema = {
   type: 'object',
   properties: {
     ...timestamps,
     ...properties,
+    problemArea: problemAreaSchema,
     totalLikes: {type: 'number'},
     totalComments: {type: 'number'},
   },
@@ -48,6 +57,7 @@ export const ideaCommentSchema = {
   properties: {
     ...timestamps,
     ...properties,
+    problemArea: problemAreaSchema,
     comments: {
       type: 'array',
       items: {
@@ -70,7 +80,7 @@ export const ideaInputSchema = {
     'schoolName',
     'solutionName',
     'solutionType',
-    'problemArea',
+    'problemAreaId',
     'problemSelection',
     'problemReasoning',
     'solutionVision',
@@ -81,7 +91,10 @@ export const ideaInputSchema = {
     'targetCustomer',
   ],
   additionalProperties: false,
-  properties,
+  properties: {
+    ...properties,
+    problemAreaId: {type: 'number'},
+  },
 };
 
 export const ideaQueryStringSchema = {
@@ -90,5 +103,18 @@ export const ideaQueryStringSchema = {
   properties: {
     ...commonQueryString.properties,
     solutionType: {type: 'string'},
+    problemAreaId: {type: 'string'},
+  },
+};
+
+export const ideaProblemAreaSchema = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      id: {type: 'number'},
+      ...timestamps,
+      problemArea: problemAreaSchema,
+    },
   },
 };

@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
 import {IdeaLike, IdeaComment, IdeaUser} from '.';
@@ -28,7 +29,6 @@ export class Idea {
   @Column('text') schoolName: string;
   @Column('text') solutionName: string;
   @Column({type: 'enum', enum: SolutionType}) solutionType: SolutionType;
-  @Column('varchar', {length: 255}) problemArea: string;
   @Column('text') problemSelection: string;
   @Column('text') problemReasoning: string;
   @Column('text') solutionVision: string;
@@ -43,6 +43,8 @@ export class Idea {
   solutionSupportingPhotos: string[];
   @Column('bool') isDraft: boolean;
 
+  @ManyToOne(() => IdeaProblemArea)
+  problemArea: IdeaProblemArea;
   @OneToMany(() => IdeaUser, (user: IdeaUser) => user.idea)
   users: IdeaUser[];
   @OneToMany(() => IdeaLike, (like: IdeaLike) => like.idea)
@@ -59,4 +61,18 @@ export type IdeaInput = Omit<
 export interface IdeaResponse extends Idea {
   totalLikes: number;
   totalComments: number;
+}
+
+@Entity('idea_problem_areas')
+export class IdeaProblemArea {
+  @PrimaryGeneratedColumn() id: number;
+
+  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  createdAt: Date;
+  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  updatedAt: Date;
+  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  deletedAt: Date;
+
+  @Column('varchar', {length: 255}) problemArea: string;
 }

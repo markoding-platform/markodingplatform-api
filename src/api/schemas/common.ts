@@ -36,8 +36,14 @@ export const pagination = {
         filters: {
           type: 'object',
           properties: {
-            solutionType: {type: 'array'},
-            items: {type: 'string'},
+            solutionType: {
+              type: 'array',
+              items: {type: 'string'},
+            },
+            problemAreaId: {
+              type: 'array',
+              items: {type: 'number'},
+            },
           },
         },
         keyword: {type: 'string'},
