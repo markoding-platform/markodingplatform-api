@@ -35,6 +35,7 @@ export type CommonQueryString = {
   sort?: string;
   keyword?: string;
 };
+
 export type QueryString = {
   limit: number;
   offset: number;
@@ -48,3 +49,8 @@ export type IdeaQueryString = CommonQueryString & {
   solutionType?: string;
   problemAreaId?: string;
 };
+
+export interface SearchResponse<Idea, Event> {
+  ideas: Idea[];
+  events: Event[];
+}

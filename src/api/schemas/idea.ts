@@ -116,5 +116,13 @@ export const ideaProblemAreaSchema = {
       ...timestamps,
       problemArea: problemAreaSchema,
     },
+  }
+};
+    
+export const ideaSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    solutionName: {type: 'string'},
   },
 };

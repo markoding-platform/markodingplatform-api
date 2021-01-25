@@ -41,4 +41,12 @@ export default class EventService {
   async store(event: Partial<Event>): Promise<Event> {
     return this.repository.save(event);
   }
+
+  async getSearch(keyword: string): Promise<Event[]> {
+    return this.repository
+      .createQueryBuilder()
+      .where('title ILIKE :keyword', {keyword: `%${keyword}%`})
+      .limit(5)
+      .getMany();
+  }
 }
