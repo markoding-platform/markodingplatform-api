@@ -2,7 +2,8 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Idea, IdeaInput} from '../entity';
+import {Idea, IdeaInput, IdeaResponse} from '../entity';
+import {CommonQueryString} from '../../libs/types';
 
 @Service()
 export default class IdeaService {
@@ -14,12 +15,37 @@ export default class IdeaService {
     this.repository = this.database.connection.getRepository(Idea);
   }
 
-  async getOne(idea: Partial<Idea>): Promise<Idea | undefined> {
-    return this.repository.findOne(idea);
+  async getOne(idea: Partial<Idea>): Promise<IdeaResponse | undefined> {
+    const result = await this.repository
+      .createQueryBuilder('ideas')
+      .where('ideas.id = :id', idea)
+      .leftJoinAndSelect('ideas.comments', 'comments')
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
+      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
+      .getOne();
+
+    return result as IdeaResponse;
   }
 
-  async getAll(): Promise<Idea[]> {
-    return this.repository.find({isDraft: false});
+  async getAll(queryString: CommonQueryString): Promise<[Idea[], number]> {
+    const {limit, offset, sort} = queryString;
+    let query = this.repository.createQueryBuilder('ideas');
+
+    if (sort) {
+      if (sort.startsWith('-')) {
+        query = query.orderBy('ideas.solution_name', 'DESC');
+      } else {
+        query = query.orderBy('ideas.solution_name', 'ASC');
+      }
+    }
+
+    return query
+      .where('is_draft = false')
+      .limit(limit)
+      .offset(offset)
+      .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
+      .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
+      .getManyAndCount();
   }
 
   async store(idea: Partial<IdeaInput>): Promise<Idea> {

@@ -2,10 +2,9 @@ import {FastifyRequest} from 'fastify';
 import {AuthQuerystring} from 'schemas';
 import {Controller, POST} from 'fastify-decorators';
 
-import AuthService from '../services/auth';
-import UserService from '../services/user';
 import {SSORequest} from '../entity';
 import {authQuerySchema, authResponseSchema} from '../schemas/auth';
+import {IdeaUserService, AuthService, UserService} from '../services';
 
 const {DEBUGGABLE = false} = process.env;
 
@@ -14,6 +13,7 @@ class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private ideaUserService: IdeaUserService,
   ) {}
 
   @POST({
@@ -60,6 +60,8 @@ class AuthController {
     req: FastifyRequest<{Body: {sso: string; sig: string}}>,
   ): Promise<{token: string; data: unknown}> {
     const {sso, sig} = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data: any = {};
 
     if (!this.authService.verifySSO(sso, sig)) {
       throw {statusCode: 403, message: 'forbidden'};
@@ -82,9 +84,21 @@ class AuthController {
 
     Reflect.deleteProperty(user, 'profile');
 
+    data.user = user;
+
+    if (profile) {
+      const ideaUser = await this.ideaUserService.getIdeaByUser(user);
+
+      data.profile = profile;
+      data.idea = ideaUser?.idea || null;
+    } else {
+      data.profile = null;
+      data.idea = null;
+    }
+
     return {
       token: this.authService.generateJWT({user, profile}),
-      data: {user, profile},
+      data,
     };
   }
 }

@@ -4,6 +4,14 @@ import {Repository} from 'typeorm';
 import Database from '../../config/database';
 import {User, UserInput} from '../entity';
 
+export interface NotInTeamParams {
+  name?: string;
+  schoolId?: string;
+  selfUserId?: string;
+  limit?: number;
+  offset?: number;
+}
+
 @Service()
 export default class UserService {
   private repository!: Repository<User>;
@@ -130,25 +138,23 @@ export default class UserService {
     return users;
   }
 
-  async getUserStudentNotInTeam(
-    name?: string,
-    schoolId?: string,
-    limit = 10,
-    offset = 0,
-  ): Promise<User[]> {
+  async getUserStudentNotInTeam(params: NotInTeamParams): Promise<User[]> {
+    const limit = params?.limit || 10;
+    const offset = params?.offset || 0;
+
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('teams', 'team', 'user.id != team.user_id')
+      .leftJoin('teams', 'team', 'user.id != team.user_id')
       .limit(limit)
       .offset(offset * limit)
       .orderBy('user.name', 'ASC');
 
-    if (schoolId) {
+    if (params?.schoolId) {
       userQuery = userQuery.innerJoinAndSelect(
         'user.profile',
         'profile',
         'profile.school_id = :schoolId AND profile.profile_type = :profileType',
-        {schoolId, profileType: 'student'},
+        {schoolId: params.schoolId, profileType: 'student'},
       );
     } else {
       userQuery = userQuery.innerJoinAndSelect(
@@ -159,8 +165,14 @@ export default class UserService {
       );
     }
 
-    if (name) {
-      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
+    if (params?.name) {
+      userQuery = userQuery
+        .where('user.name ILIKE :name', {name: `%${params.name}%`})
+        .andWhere('user.id != :selfId', {selfId: params.selfUserId});
+    } else {
+      userQuery = userQuery.where('user.id != :selfId', {
+        selfId: params.selfUserId,
+      });
     }
 
     const users = await userQuery.getMany();
