@@ -25,3 +25,11 @@ export const eventInputSchema = {
   required: ['title', 'description', 'date'],
   properties,
 };
+
+export const eventSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string', nullable: false},
+    title: {type: 'string'},
+  },
+};
