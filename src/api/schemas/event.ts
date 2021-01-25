@@ -26,7 +26,7 @@ export const eventInputSchema = {
   properties,
 };
 
-export const eventSchemaSearch = {
+export const eventSearchSchema = {
   type: 'object',
   properties: {
     id: {type: 'string', nullable: false},

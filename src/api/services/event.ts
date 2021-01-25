@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Event, Idea} from '../entity';
+import {Event} from '../entity';
 
 @Service()
 export default class EventService {

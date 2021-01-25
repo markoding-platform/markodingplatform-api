@@ -1,10 +1,10 @@
-import {ideaSchemaSearch} from './idea';
-import {eventSchemaSearch} from './event';
+import {ideaSearchSchema} from './idea';
+import {eventSearchSchema} from './event';
 
 export const searchSchema = {
   type: 'object',
   properties: {
-    idea: {type: 'array', items: ideaSchemaSearch},
-    events: {type: 'array', items: eventSchemaSearch},
+    ideas: {type: 'array', items: ideaSearchSchema},
+    events: {type: 'array', items: eventSearchSchema},
   },
 };

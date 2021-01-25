@@ -29,11 +29,11 @@ export default class QuestionController {
     }>,
   ): Promise<SearchResponse<Idea, Event>> {
     const {keyword} = req.query;
-    const idea = await this.ideaService.getSearch(keyword);
-    const event = await this.eventService.getSearch(keyword);
+    const ideas = await this.ideaService.getSearch(keyword);
+    const events = await this.eventService.getSearch(keyword);
     return {
-      idea: idea,
-      events: event,
+      ideas: ideas,
+      events: events,
     };
   }
 }

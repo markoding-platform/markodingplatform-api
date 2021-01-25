@@ -82,7 +82,7 @@ export const ideaInputSchema = {
   properties,
 };
 
-export const ideaSchemaSearch = {
+export const ideaSearchSchema = {
   type: 'object',
   properties: {
     id: {type: 'string'},
