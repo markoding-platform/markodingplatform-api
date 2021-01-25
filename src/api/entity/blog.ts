@@ -12,9 +12,6 @@ export class Blog {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('uuid')
-  adminId: string;
-
   @Column('varchar', {length: 255})
   title: string;
 
@@ -24,7 +21,7 @@ export class Blog {
   @Column('varchar', {length: 255})
   imageUrl: string;
 
-  @Column('date')
+  @Column('date', {nullable: true})
   date: Date;
 
   @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
@@ -39,7 +36,7 @@ export class Blog {
 
 export type BlogInput = Omit<
   Blog,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'adminId'
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >;
 
 type Author = {

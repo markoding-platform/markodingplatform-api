@@ -14,4 +14,3 @@ export {default as QuestionCommentService} from './questionComment';
 export {default as QuestionLikeService} from './questionLike';
 export {default as IdeaUserService} from './ideaUser';
 export {default as UserService} from './user';
-export {default as AdminService} from './admin';

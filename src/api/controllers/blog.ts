@@ -1,19 +1,14 @@
 import {FastifyRequest} from 'fastify';
-import {Controller, GET, POST} from 'fastify-decorators';
-import camelcaseKeys from 'camelcase-keys';
+import {Controller, GET} from 'fastify-decorators';
 
-import {AdminService, BlogService} from '../services';
-import {Admin, User, Blog, BlogInput, BlogAuthor} from '../entity';
-import {blogSchema, blogInputSchema} from '../schemas/blog';
-import authenticate from '../hooks/onRequest/authentication';
+import {BlogService} from '../services';
+import {Blog} from '../entity';
+import {blogSchema} from '../schemas/blog';
 import {commonParams} from '../schemas/common';
 
 @Controller({route: '/blogs'})
 export default class BlogController {
-  constructor(
-    private blogService: BlogService,
-    private adminService: AdminService,
-  ) {}
+  constructor(private service: BlogService) {}
 
   @GET({
     url: '/:id',
@@ -25,7 +20,7 @@ export default class BlogController {
     },
   })
   async getById(req: FastifyRequest<{Params: {id: string}}>): Promise<Blog> {
-    const blog = await this.blogService.getById(req.params.id);
+    const blog = await this.service.getById(req.params.id);
     if (!blog) throw {statusCode: 404, message: 'Entity not found'};
 
     return blog;
@@ -44,47 +39,6 @@ export default class BlogController {
   ): Promise<Blog[]> {
     const limit = req.query.limit || 6;
     const offset = req.query.offset || 0;
-    return this.blogService.getAll(offset, limit);
-  }
-
-  @POST({
-    url: '/',
-    options: {
-      schema: {
-        body: blogInputSchema,
-        response: {200: blogSchema},
-      },
-      onRequest: authenticate,
-    },
-  })
-  async createOrUpdate(
-    req: AuthenticatedRequest<{
-      Body: BlogInput;
-      User: Record<string, unknown>;
-    }>,
-  ): Promise<BlogAuthor> {
-    const user = req.user?.user as User;
-
-    const u = new User();
-    u.id = user.id;
-    const a = new Admin();
-    a.user = u;
-    const admin = await this.adminService.getOne(a);
-    if (!admin) throw {statusCode: 404, message: 'Admin not found'};
-
-    const blog = await this.blogService.store(
-      camelcaseKeys({
-        ...req.body,
-        adminId: user.id,
-      }),
-    );
-
-    return {
-      ...blog,
-      author: {
-        id: admin.id,
-        name: admin.name,
-      },
-    };
+    return this.service.getAll(offset, limit);
   }
 }
