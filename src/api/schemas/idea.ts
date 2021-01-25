@@ -90,5 +90,13 @@ export const ideaQueryStringSchema = {
   properties: {
     ...commonQueryString.properties,
     solutionType: {type: 'string'},
+  }
+};
+    
+export const ideaSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    solutionName: {type: 'string'},
   },
 };

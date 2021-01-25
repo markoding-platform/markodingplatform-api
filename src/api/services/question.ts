@@ -14,6 +14,27 @@ export default class QuestionService {
     this.repository = this.database.connection.getRepository(Question);
   }
 
+  async getLatest(): Promise<Question[]> {
+    return this.repository
+      .createQueryBuilder('Question')
+      .loadRelationCountAndMap(
+        'Question.comments',
+        'Question.comments',
+        'comments',
+      )
+      .loadRelationCountAndMap(
+        'Question.likes',
+        'Question.likes',
+        'likes',
+        (qb) => qb.andWhere('likes.isLike = :isLike', {isLike: true}),
+      )
+      .leftJoinAndSelect('Question.user', 'user')
+      .leftJoinAndSelect('Question.channel', 'channel')
+      .orderBy('Question.created_at', 'DESC')
+      .limit(3)
+      .getMany();
+  }
+
   async getByChannel(
     channelId: string,
     limit: number,
@@ -25,7 +46,7 @@ export default class QuestionService {
       .where('channel_id = :channelId', {
         channelId,
       })
-      .andWhere('content LIKE :keyword', {keyword: `%${keyword}%`})
+      .andWhere('content ILIKE :keyword', {keyword: `%${keyword}%`})
       .loadRelationCountAndMap(
         'Question.comments',
         'Question.comments',
