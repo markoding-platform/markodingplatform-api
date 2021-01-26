@@ -20,6 +20,7 @@ const properties = {
   potentialCollaboration: {type: 'string'},
   solutionSupportingPhotos: {type: 'array'},
   isDraft: {type: 'boolean'},
+  liked: {type: 'number'},
 };
 
 export const ideaSchema = {

@@ -14,7 +14,7 @@ export default class IdeaLikeService {
     this.repository = this.database.connection.getRepository(IdeaLike);
   }
 
-  async storeOrDelete(idea: Idea, user: User): Promise<void> {
+  async storeOrDelete(idea: Idea, user: User): Promise<boolean> {
     const liked = await this.repository.find({
       where: {
         idea: idea.id,
@@ -29,13 +29,13 @@ export default class IdeaLikeService {
         .from(IdeaLike)
         .where('id = :id', {id: liked[0].id})
         .execute();
-      return;
+      return true;
     }
 
     const ideaLike = new IdeaLike();
     ideaLike.idea = idea;
     ideaLike.user = user;
     await this.repository.save(ideaLike);
-    return;
+    return false;
   }
 }
