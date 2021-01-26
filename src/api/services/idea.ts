@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {Idea, IdeaInput, IdeaResponse} from '../entity';
+import {Idea, IdeaInput, IdeaProblemArea, IdeaResponse} from '../entity';
 import {IdeaQueryString} from '../../libs/types';
 
 @Service()
@@ -19,6 +19,7 @@ export default class IdeaService {
     const result = await this.repository
       .createQueryBuilder('ideas')
       .where('ideas.id = :id', idea)
+      .leftJoinAndSelect('ideas.problemArea', 'problemArea')
       .leftJoinAndSelect('ideas.comments', 'comments')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
@@ -28,14 +29,20 @@ export default class IdeaService {
   }
 
   async getAll(queryString: IdeaQueryString): Promise<[Idea[], number]> {
-    const {limit, offset, sort, solutionType} = queryString;
+    const {limit, offset, sort, solutionType, problemAreaId} = queryString;
     let query = this.repository
       .createQueryBuilder('ideas')
       .where('is_draft = false');
 
     if (solutionType) {
-      query = query.andWhere(`ideas.solutionType IN (:...solutionType)`, {
+      query = query.andWhere(`ideas.solution_type IN (:...solutionType)`, {
         solutionType: solutionType.split(','),
+      });
+    }
+
+    if (problemAreaId) {
+      query = query.andWhere(`ideas.problem_area_id IN (:...problemAreaId)`, {
+        problemAreaId: problemAreaId.split(','),
       });
     }
 
@@ -50,6 +57,7 @@ export default class IdeaService {
     return query
       .limit(limit)
       .offset(offset)
+      .leftJoinAndSelect('ideas.problemArea', 'problemArea')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
       .getManyAndCount();
@@ -77,5 +85,20 @@ export default class IdeaService {
       .andWhere('solution_name ILIKE :keyword', {keyword: `%${keyword}%`})
       .limit(5)
       .getMany();
+  }
+}
+
+@Service()
+export class IdeaProblemAreaService {
+  private repository!: Repository<IdeaProblemArea>;
+  constructor(private database: Database) {}
+
+  @Initializer([Database])
+  async init(): Promise<void> {
+    this.repository = this.database.connection.getRepository(IdeaProblemArea);
+  }
+
+  async getAll(): Promise<IdeaProblemArea[]> {
+    return this.repository.find();
   }
 }

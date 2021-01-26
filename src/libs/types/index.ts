@@ -42,10 +42,12 @@ export type QueryString = {
   keyword?: string;
   sort?: string;
   solutionType?: string;
+  problemAreaId?: string;
 };
 
 export type IdeaQueryString = CommonQueryString & {
   solutionType?: string;
+  problemAreaId?: string;
 };
 
 export interface SearchResponse<Idea, Event> {

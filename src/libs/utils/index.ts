@@ -22,7 +22,14 @@ export function paginateResponse<Entity>(
   queryString: QueryString,
   rowsAndCount: [Entity[], number],
 ): PaginatedResponse<Entity> {
-  const {offset, limit, sort, keyword, solutionType} = queryString;
+  const {
+    offset,
+    limit,
+    sort,
+    keyword,
+    solutionType,
+    problemAreaId,
+  } = queryString;
   const [rows, count] = rowsAndCount;
 
   const totalPages = Math.ceil(count / limit);
@@ -39,6 +46,13 @@ export function paginateResponse<Entity>(
       st.push(s);
     });
     filters['solutionType'] = st;
+  }
+  if (problemAreaId) {
+    const pa: string[] = [];
+    problemAreaId.split(',').forEach((s: string) => {
+      pa.push(s);
+    });
+    filters['problemAreaId'] = pa;
   }
 
   return {
