@@ -10,9 +10,10 @@ import {
   ideaCommentSchema,
   ideaInputSchema,
   paginatedIdeaSchema,
+  ideaQueryStringSchema,
 } from '../schemas/idea';
-import {commonParams, commonQueryString} from '../schemas/common';
-import {PaginatedResponse, CommonQueryString} from '../../libs/types';
+import {commonParams} from '../schemas/common';
+import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
 import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
@@ -45,13 +46,13 @@ export default class IdeaController {
     url: '/',
     options: {
       schema: {
-        querystring: commonQueryString,
+        querystring: ideaQueryStringSchema,
         response: {200: paginatedIdeaSchema},
       },
     },
   })
   async getAllIdeas(
-    req: FastifyRequest<{Querystring: CommonQueryString}>,
+    req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
     const response = await this.ideaService.getAll(req.query);
     return paginateResponse(req.query, response);

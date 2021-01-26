@@ -3,6 +3,7 @@ import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
 import {Event} from '../entity';
+import {CommonQueryString} from '../../libs/types';
 
 @Service()
 export default class EventService {
@@ -18,13 +19,23 @@ export default class EventService {
     return this.repository.findOne({id});
   }
 
-  async getAll(offset: number, limit: number): Promise<Event[]> {
-    return this.repository
-      .createQueryBuilder()
+  async getAll(queryString: CommonQueryString): Promise<[Event[], number]> {
+    const {limit, offset, sort} = queryString;
+    let query = this.repository.createQueryBuilder('events');
+
+    if (sort) {
+      if (sort.startsWith('-')) {
+        query = query.orderBy('events.title', 'DESC');
+      } else {
+        query = query.orderBy('events.title', 'ASC');
+      }
+    }
+
+    return query
       .offset(offset)
       .limit(limit)
-      .orderBy('start_date', 'ASC')
-      .getMany();
+      .addOrderBy('events.start_date', 'ASC')
+      .getManyAndCount();
   }
 
   async store(event: Partial<Event>): Promise<Event> {
