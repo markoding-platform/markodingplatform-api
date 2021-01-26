@@ -19,6 +19,7 @@ const properties = {
   potentialCollaboration: {type: 'string'},
   solutionSupportingPhotos: {type: 'array'},
   isDraft: {type: 'boolean'},
+  liked: {type: 'number'},
 };
 
 const problemAreaSchema = {
@@ -116,9 +117,9 @@ export const ideaProblemAreaSchema = {
       ...timestamps,
       problemArea: problemAreaSchema,
     },
-  }
+  },
 };
-    
+
 export const ideaSearchSchema = {
   type: 'object',
   properties: {
