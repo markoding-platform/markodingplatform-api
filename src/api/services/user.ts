@@ -1,5 +1,6 @@
 import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
+import {camelCase} from 'lodash';
 
 import Database from '../../config/database';
 import {User, UserInput, UserUpdateInput} from '../entity';
@@ -276,7 +277,10 @@ export default class UserService {
       .returning('*')
       .execute();
 
-    console.log(raw);
+    Reflect.ownKeys(raw[0]).forEach((key) => {
+      Reflect.set(raw[0], camelCase(key as string), raw[0][key]);
+    });
+
     return raw[0];
   }
 }
