@@ -79,6 +79,7 @@
     "aws-sdk": "^2.820.0",
     "camelcase-keys": "^6.2.2",
     "date-fns": "^2.16.1",
+    "date-fns-tz": "^1.0.12",
     "dotenv": "^8.2.0",
     "fastify": "^3.7.0",
     "fastify-cors": "^5.1.0",

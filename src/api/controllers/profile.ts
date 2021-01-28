@@ -3,7 +3,7 @@ import {Controller, GET, POST} from 'fastify-decorators';
 import authenticate from '../hooks/onRequest/authentication';
 import {authResponseSchema} from '../schemas/auth';
 import {Profile, ProfileInput} from '../entity';
-import {ProfileService, AuthService} from '../services';
+import {ProfileService, AuthService, UserPointService} from '../services';
 import {profileSchema, profileInputSchema} from '../schemas/profile';
 
 @Controller({route: '/profile'})
@@ -11,6 +11,7 @@ export default class ProfileController {
   constructor(
     private service: ProfileService,
     private authService: AuthService,
+    private userPointService: UserPointService,
   ) {}
 
   @GET({
@@ -55,6 +56,8 @@ export default class ProfileController {
       profile = await this.service.store(user.id, req.body);
     } else {
       profile = await this.service.update(req.user.profile.id, req.body);
+
+      await this.userPointService.addUserPoint(user.id, 'completeProfile');
     }
 
     return {

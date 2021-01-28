@@ -1,4 +1,4 @@
-export {User, UserInput} from './user';
+export {User, UserInput, UserUpdateInput} from './user';
 export {Idea, IdeaInput, IdeaResponse, IdeaProblemArea} from './idea';
 export {IdeaLike} from './ideaLike';
 export {IdeaComment} from './ideaComment';
@@ -19,3 +19,4 @@ export {QuestionLike, QuestionLikeInput} from './questionLike';
 export {Chat, ChatInput} from './chat';
 export {Banner, BannerInput} from './banner';
 export {Profile, ProfileInput} from './profile';
+export {UserPoint} from './userPoint';
