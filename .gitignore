@@ -2,3 +2,10 @@ node_modules
 build
 .vscode
 .env
+
+*.pem
+.idea
+docker-compose.local.yaml
+src/config/firebase-service-account.json
+
+.DS_Store

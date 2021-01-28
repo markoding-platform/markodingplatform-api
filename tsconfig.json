@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [ "ES6"],
+    "lib": ["ES6"],
     "target": "ES5",
     "module": "commonjs",
     "outDir": "./dist",
@@ -10,5 +10,6 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
+  },
+  "exclude": ["migrations"]
 }

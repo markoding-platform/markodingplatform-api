@@ -1,80 +1,168 @@
-import camelcaseKeys from "camelcase-keys";
-import { FastifyRequest } from "fastify";
-import { Controller, GET, POST } from "fastify-decorators";
+import camelcaseKeys from 'camelcase-keys';
+import {FastifyRequest} from 'fastify';
+import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
-import IdeaService from "../services/idea";
-import { Idea, IdeaInput } from "../entity/idea";
-import { ideaSchema, ideaInputSchema } from "../schemas/idea";
+import {
+  UserService,
+  IdeaService,
+  IdeaUserService,
+  IdeaProblemAreaService,
+} from '../services';
+import authenticate from '../hooks/onRequest/authentication';
+import {
+  User,
+  Idea,
+  IdeaInput,
+  IdeaUser,
+  IdeaResponse,
+  IdeaProblemArea,
+} from '../entity';
+import {
+  ideaSchema,
+  ideaCommentSchema,
+  ideaInputSchema,
+  paginatedIdeaSchema,
+  ideaQueryStringSchema,
+  ideaProblemAreaSchema,
+} from '../schemas/idea';
+import {commonParams} from '../schemas/common';
+import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
+import {paginateResponse} from '../../libs/utils';
 
-@Controller({ route: "/ideas" })
+@Controller({route: '/ideas'})
 export default class IdeaController {
-  constructor(private service: IdeaService) {}
+  constructor(
+    private userService: UserService,
+    private ideaService: IdeaService,
+    private ideaUserService: IdeaUserService,
+    private ideaProblemAreaService: IdeaProblemAreaService,
+  ) {}
 
   @GET({
-    url: "/:id",
+    url: '/:id',
     options: {
       schema: {
-        params: { type: "object", properties: { id: { type: "string" } } },
-        response: { 200: ideaSchema },
+        params: commonParams,
+        response: {200: ideaCommentSchema},
       },
     },
   })
-  async getById(
-    req: FastifyRequest<{ Params: { id: string } }>
-  ): Promise<Idea> {
-    const idea = await this.service.getById(req.params.id);
+  async getIdeaById(
+    req: FastifyRequest<{Params: {id: string}}>,
+  ): Promise<IdeaResponse> {
+    const idea = await this.ideaService.getOne({id: req.params.id});
+    if (!idea) throw {statusCode: 404, message: 'Idea not found'};
 
-    if (!idea) throw { statusCode: 404, message: "Entity not found" };
     return idea;
   }
 
   @GET({
-    url: "/",
+    url: '/',
     options: {
       schema: {
-        response: { 200: { type: "array", items: ideaSchema } },
+        querystring: ideaQueryStringSchema,
+        response: {200: paginatedIdeaSchema},
       },
     },
   })
-  async getAll(): Promise<Idea[]> {
-    return this.service.getAll();
+  async getAllIdeas(
+    req: FastifyRequest<{Querystring: IdeaQueryString}>,
+  ): Promise<PaginatedResponse<Idea>> {
+    const response = await this.ideaService.getAll(req.query);
+    return paginateResponse(req.query, response);
   }
 
   @POST({
-    url: "/",
+    url: '/',
     options: {
       schema: {
         body: ideaInputSchema,
-        response: { 200: ideaSchema },
+        response: {200: ideaSchema},
       },
+      onRequest: authenticate,
     },
   })
-  async create(req: FastifyRequest<{ Body: IdeaInput }>): Promise<Idea> {
-    return this.service.store(req.body);
-  }
-
-  @POST({
-    url: "/:ideaId",
-    options: {
-      schema: {
-        params: { type: "object", properties: { ideaId: { type: "string" } } },
-        body: ideaInputSchema,
-        response: { 200: ideaSchema },
-      },
-    },
-  })
-  async update(
-    req: FastifyRequest<{
-      Params: { ideaId: string };
-      Body: IdeaInput;
-    }>
+  async createIdea(
+    req: AuthenticatedRequest<{Body: IdeaInput & {problemAreaId: number}}>,
   ): Promise<Idea> {
-    let updated = await this.service.update(req.params.ideaId, req.body);
-    updated = camelcaseKeys(updated, { deep: true });
+    const user = req.user?.user as User;
+
+    const u: User = new User();
+    u.id = user.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+
+    const [userFound, ideaFound] = await Promise.all([
+      this.userService.getOne({id: user.id}),
+      this.ideaUserService.getOne(ideaUser),
+    ]);
+    if (!userFound) throw {statusCode: 400, message: 'User not found'};
+    if (ideaFound) throw {statusCode: 400, message: 'User already on team'};
+
+    if (!req.body.solutionSupportingPhotos) {
+      req.body.solutionSupportingPhotos = [];
+    }
+
+    const problemArea = new IdeaProblemArea();
+    problemArea.id = req.body.problemAreaId;
+    return this.ideaService.store({...req.body, problemArea});
+  }
+
+  @PUT({
+    url: '/:id',
+    options: {
+      schema: {
+        params: commonParams,
+        body: ideaInputSchema,
+        response: {200: ideaSchema},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async updateIdea(
+    req: AuthenticatedRequest<{
+      Params: {id: string};
+      Body: IdeaInput;
+    }>,
+  ): Promise<Idea> {
+    const user = req.user?.user as User;
+
+    const u: User = new User();
+    u.id = user.id;
+    const idea: Idea = new Idea();
+    idea.id = req.params.id;
+    const ideaUser: IdeaUser = new IdeaUser();
+    ideaUser.user = u;
+    ideaUser.idea = idea;
+
+    const [userFound, ideaFound] = await Promise.all([
+      this.userService.getOne({id: user.id}),
+      this.ideaUserService.getOne(ideaUser),
+    ]);
+    if (!userFound) throw {statusCode: 400, message: 'User not found'};
+    if (!ideaFound) {
+      throw {statusCode: 400, message: 'User not on this team idea'};
+    }
+
+    let updated = await this.ideaService.update(req.params.id, req.body);
+    updated = camelcaseKeys(updated, {deep: true});
+
     if (!Array.isArray(updated.solutionSupportingPhotos)) {
       updated.solutionSupportingPhotos = [];
     }
 
     return updated;
+  }
+
+  @GET({
+    url: '/problem-area',
+    options: {
+      schema: {
+        response: {200: ideaProblemAreaSchema},
+      },
+    },
+  })
+  async getAllIdeaProblemAreas(): Promise<IdeaProblemArea[]> {
+    return this.ideaProblemAreaService.getAll();
   }
 }

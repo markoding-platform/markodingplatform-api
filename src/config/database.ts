@@ -1,10 +1,33 @@
-import { Initializer, Service } from "fastify-decorators";
-import { createConnection, Connection } from "typeorm";
-import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import {Initializer, Service} from 'fastify-decorators';
+import {createConnection, Connection} from 'typeorm';
+import {SnakeNamingStrategy} from 'typeorm-naming-strategies';
 
-import { Idea, Team } from "../api/entity";
+import {
+  User,
+  Idea,
+  IdeaLike,
+  IdeaComment,
+  IdeaUser,
+  IdeaProblemArea,
+  Nonce,
+  Announcement,
+  Event,
+  Blog,
+  Banner,
+  Channel,
+  Question,
+  QuestionComment,
+  QuestionLike,
+  Chat,
+  Profile,
+} from '../api/entity';
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB } = process.env;
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_URI,
+} = process.env;
 
 @Service()
 export default class Database {
@@ -17,15 +40,34 @@ export default class Database {
   @Initializer()
   async init(): Promise<void> {
     this._connection = await createConnection({
-      name: "connection-1",
-      type: "postgres",
-      host: "d-markoding-postgres",
+      name: 'connection-1',
+      type: 'postgres',
+      host: POSTGRES_URI,
       port: 5432,
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [Idea, Team],
+      entities: [
+        User,
+        Idea,
+        IdeaLike,
+        IdeaComment,
+        IdeaUser,
+        IdeaProblemArea,
+        Nonce,
+        Announcement,
+        Event,
+        Blog,
+        Banner,
+        Channel,
+        Question,
+        QuestionComment,
+        QuestionLike,
+        Chat,
+        Profile,
+      ],
       logging: true,
+      // synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
     });
   }

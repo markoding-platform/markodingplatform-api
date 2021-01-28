@@ -15,6 +15,8 @@ module.exports = {
       }
     )
 
+    config.optimization = { minimize: false }
+
     return config
   }
 }
