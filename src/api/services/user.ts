@@ -2,7 +2,7 @@ import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
-import {User, UserInput} from '../entity';
+import {User, UserInput, UserUpdateInput} from '../entity';
 
 export interface NotInTeamParams {
   name?: string;
@@ -262,5 +262,21 @@ export default class UserService {
       })
       .innerJoinAndSelect('user.profile', 'profile')
       .getOne();
+  }
+
+  async updateById(
+    id: string,
+    userData: Partial<UserUpdateInput>,
+  ): Promise<User> {
+    const {raw} = await this.repository
+      .createQueryBuilder()
+      .update(User)
+      .set(userData)
+      .where('id = :id', {id})
+      .returning('*')
+      .execute();
+
+    console.log(raw);
+    return raw[0];
   }
 }

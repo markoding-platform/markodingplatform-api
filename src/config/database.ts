@@ -20,6 +20,7 @@ import {
   QuestionLike,
   Chat,
   Profile,
+  UserPoint,
 } from '../api/entity';
 
 const {
@@ -65,6 +66,7 @@ export default class Database {
         QuestionLike,
         Chat,
         Profile,
+        UserPoint,
       ],
       logging: true,
       synchronize: true,

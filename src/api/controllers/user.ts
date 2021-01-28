@@ -1,11 +1,11 @@
-import {Controller, GET} from 'fastify-decorators';
+import {Controller, GET, PUT} from 'fastify-decorators';
 import {CommonQueryString} from 'schemas';
 
 import UserService from '../services/user';
 import authenticate from '../hooks/onRequest/authentication';
 import {User} from '../entity/user';
 import {commonQueryString, commonParams} from '../schemas/common';
-import {userProfileSchema} from '../schemas/user';
+import {userSchema, userProfileSchema} from '../schemas/user';
 
 @Controller({route: '/users'})
 export default class UserController {
@@ -188,6 +188,30 @@ export default class UserController {
   ): Promise<User | undefined> {
     const user = await this.service.getUserDetail(req.params.id);
     if (!user) throw {statusCode: 404, message: 'Data not found'};
+    return user;
+  }
+
+  @PUT({
+    url: '/skilvul-point',
+    options: {
+      schema: {
+        params: commonParams,
+        response: {200: userSchema},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async updateUserPoint(
+    req: AuthenticatedRequest<{
+      Body: {skilvulPoint: number};
+    }>,
+  ): Promise<User | undefined> {
+    const user = await this.service.updateById(req.user.user.id, {
+      skilvulPoint: req.body.skilvulPoint,
+    });
+
+    if (!user) throw {statusCode: 404, message: 'Data not found'};
+
     return user;
   }
 }

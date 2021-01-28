@@ -8,9 +8,10 @@ import {
   Index,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
-import {Profile} from './profile';
+import {Profile, UserPoint} from '.';
 
 @Entity('users')
 export class User {
@@ -42,11 +43,31 @@ export class User {
   @OneToOne(() => Profile)
   @JoinColumn()
   profile?: Profile;
+
+  @Column({type: 'bigint', default: 0})
+  skilvulPoint: number;
+
+  @Column({type: 'bigint', default: 0})
+  markodingPoint: number;
+
+  @OneToMany(() => UserPoint, (point) => point.user)
+  points: UserPoint[];
 }
 
 export type UserInput = Omit<
   User,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'deletedAt'
+  | 'skilvulPoint'
+  | 'markodingPoint'
+  | 'points'
+>;
+
+export type UserUpdateInput = Omit<
+  User,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'points'
 >;
 
 export type UserResponse = Partial<User>;
