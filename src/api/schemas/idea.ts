@@ -110,14 +110,7 @@ export const ideaQueryStringSchema = {
 
 export const ideaProblemAreaSchema = {
   type: 'array',
-  items: {
-    type: 'object',
-    properties: {
-      id: {type: 'number'},
-      ...timestamps,
-      problemArea: problemAreaSchema,
-    },
-  },
+  items: {...problemAreaSchema},
 };
 
 export const ideaSearchSchema = {
