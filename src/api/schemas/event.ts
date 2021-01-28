@@ -1,4 +1,4 @@
-import {timestamps} from './common';
+import {timestamps, pagination} from './common';
 
 const properties = {
   id: {type: 'string', nullable: false},
@@ -20,8 +20,27 @@ export const eventSchema = {
   },
 };
 
+export const paginatedEventSchema = {
+  type: 'object',
+  properties: {
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: eventSchema,
+    },
+  },
+};
+
 export const eventInputSchema = {
   type: 'object',
   required: ['title', 'description', 'date'],
   properties,
+};
+
+export const eventSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string', nullable: false},
+    title: {type: 'string'},
+  },
 };

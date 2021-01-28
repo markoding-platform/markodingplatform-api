@@ -1,10 +1,13 @@
 import {FastifyRequest} from 'fastify';
 import {Controller, GET} from 'fastify-decorators';
+import {snakeCase} from 'lodash';
 
-import {BlogService} from '../services';
-import {Blog} from '../entity';
-import {blogSchema} from '../schemas/blog';
-import {commonParams} from '../schemas/common';
+import BlogService from '../services/blog';
+import {Blog} from '../entity/blog';
+import {blogSchema, paginatedBlogSchema} from '../schemas/blog';
+import {commonParams, commonQueryString} from '../schemas/common';
+import {paginateResponse} from '../../libs/utils';
+import {CommonQueryString, PaginatedResponse} from '../../libs/types';
 
 @Controller({route: '/blogs'})
 export default class BlogController {
@@ -30,15 +33,29 @@ export default class BlogController {
     url: '/',
     options: {
       schema: {
-        response: {200: {type: 'array', items: blogSchema}},
+        querystring: commonQueryString,
+        response: {200: paginatedBlogSchema},
       },
     },
   })
   async getAll(
-    req: FastifyRequest<{Querystring: {limit: number; offset: number}}>,
-  ): Promise<Blog[]> {
-    const limit = req.query.limit || 6;
-    const offset = req.query.offset || 0;
-    return this.service.getAll(offset, limit);
+    req: FastifyRequest<{Querystring: CommonQueryString}>,
+  ): Promise<PaginatedResponse<Blog>> {
+    const {limit, offset, sort} = req.query;
+    const orderEnum = ['title', 'createdAt'];
+
+    let sorts = '';
+    if (sort) {
+      sort.split(',').forEach((s: string) => {
+        if (orderEnum.indexOf(s, 1) < 0) {
+          return;
+        }
+
+        sorts += snakeCase(s);
+      });
+    }
+
+    const response = await this.service.getAll({limit, offset, sort: sorts});
+    return paginateResponse(req.query, response);
   }
 }

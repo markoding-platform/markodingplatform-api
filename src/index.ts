@@ -21,6 +21,7 @@ import ChatController from './api/controllers/chat';
 import UploadController from './api/controllers/upload';
 import ProfileController from './api/controllers/profile';
 import UserController from './api/controllers/user';
+import SearchController from './api/controllers/search';
 
 const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
 
@@ -49,6 +50,7 @@ server.register(bootstrap, {
     UploadController,
     ProfileController,
     UserController,
+    SearchController,
   ],
 });
 

@@ -2,17 +2,31 @@ import camelcaseKeys from 'camelcase-keys';
 import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
-import {UserService, IdeaService, IdeaUserService} from '../services';
+import {
+  UserService,
+  IdeaService,
+  IdeaUserService,
+  IdeaProblemAreaService,
+} from '../services';
 import authenticate from '../hooks/onRequest/authentication';
-import {User, Idea, IdeaInput, IdeaUser, IdeaResponse} from '../entity';
+import {
+  User,
+  Idea,
+  IdeaInput,
+  IdeaUser,
+  IdeaResponse,
+  IdeaProblemArea,
+} from '../entity';
 import {
   ideaSchema,
   ideaCommentSchema,
   ideaInputSchema,
   paginatedIdeaSchema,
+  ideaQueryStringSchema,
+  ideaProblemAreaSchema,
 } from '../schemas/idea';
-import {commonParams, commonQueryString} from '../schemas/common';
-import {PaginatedResponse, CommonQueryString} from '../../libs/types';
+import {commonParams} from '../schemas/common';
+import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
 import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
@@ -21,6 +35,7 @@ export default class IdeaController {
     private userService: UserService,
     private ideaService: IdeaService,
     private ideaUserService: IdeaUserService,
+    private ideaProblemAreaService: IdeaProblemAreaService,
   ) {}
 
   @GET({
@@ -45,13 +60,13 @@ export default class IdeaController {
     url: '/',
     options: {
       schema: {
-        querystring: commonQueryString,
+        querystring: ideaQueryStringSchema,
         response: {200: paginatedIdeaSchema},
       },
     },
   })
   async getAllIdeas(
-    req: FastifyRequest<{Querystring: CommonQueryString}>,
+    req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
     const response = await this.ideaService.getAll(req.query);
     return paginateResponse(req.query, response);
@@ -68,7 +83,7 @@ export default class IdeaController {
     },
   })
   async createIdea(
-    req: AuthenticatedRequest<{Body: IdeaInput}>,
+    req: AuthenticatedRequest<{Body: IdeaInput & {problemAreaId: number}}>,
   ): Promise<Idea> {
     const user = req.user?.user as User;
 
@@ -88,7 +103,9 @@ export default class IdeaController {
       req.body.solutionSupportingPhotos = [];
     }
 
-    return this.ideaService.store(req.body);
+    const problemArea = new IdeaProblemArea();
+    problemArea.id = req.body.problemAreaId;
+    return this.ideaService.store({...req.body, problemArea});
   }
 
   @PUT({
@@ -135,5 +152,17 @@ export default class IdeaController {
     }
 
     return updated;
+  }
+
+  @GET({
+    url: '/problem-area',
+    options: {
+      schema: {
+        response: {200: ideaProblemAreaSchema},
+      },
+    },
+  })
+  async getAllIdeaProblemAreas(): Promise<IdeaProblemArea[]> {
+    return this.ideaProblemAreaService.getAll();
   }
 }

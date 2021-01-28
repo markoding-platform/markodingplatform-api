@@ -15,12 +15,12 @@ export const commonQueryString = {
   properties: {
     limit: {type: 'number', default: 9},
     offset: {type: 'number', default: 0},
+    sort: {type: 'string'},
     keyword: {type: 'string', default: ''},
-    sort: {type: 'string', default: ''},
   },
 };
 
-export const commonPagination = {
+export const pagination = {
   type: 'object',
   properties: {
     count: {type: 'number'},
@@ -32,6 +32,19 @@ export const commonPagination = {
         sorts: {
           type: 'array',
           items: {type: 'string'},
+        },
+        filters: {
+          type: 'object',
+          properties: {
+            solutionType: {
+              type: 'array',
+              items: {type: 'string'},
+            },
+            problemAreaId: {
+              type: 'array',
+              items: {type: 'number'},
+            },
+          },
         },
         keyword: {type: 'string'},
       },

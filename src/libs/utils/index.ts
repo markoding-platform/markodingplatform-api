@@ -1,4 +1,4 @@
-import {CommonQueryString, PaginatedResponse} from '../types';
+import {PaginatedResponse, QueryString} from '../types';
 
 export function validateDateInput(inputDate: Date): boolean {
   inputDate = new Date(inputDate);
@@ -19,10 +19,17 @@ export function validateDateInput(inputDate: Date): boolean {
 }
 
 export function paginateResponse<Entity>(
-  queryString: CommonQueryString,
+  queryString: QueryString,
   rowsAndCount: [Entity[], number],
 ): PaginatedResponse<Entity> {
-  const {offset, limit, sort, keyword} = queryString;
+  const {
+    offset,
+    limit,
+    sort,
+    keyword,
+    solutionType,
+    problemAreaId,
+  } = queryString;
   const [rows, count] = rowsAndCount;
 
   const totalPages = Math.ceil(count / limit);
@@ -31,8 +38,22 @@ export function paginateResponse<Entity>(
     currentPage = totalPages;
   }
 
-  const sortValue = sort || '';
   const keywordValue = keyword || '';
+  const filters = {};
+  if (solutionType) {
+    const st: string[] = [];
+    solutionType.split(',').forEach((s: string) => {
+      st.push(s);
+    });
+    filters['solutionType'] = st;
+  }
+  if (problemAreaId) {
+    const pa: string[] = [];
+    problemAreaId.split(',').forEach((s: string) => {
+      pa.push(s);
+    });
+    filters['problemAreaId'] = pa;
+  }
 
   return {
     data: rows,
@@ -41,7 +62,8 @@ export function paginateResponse<Entity>(
       currentPage,
       totalPages,
       params: {
-        sorts: [sortValue],
+        sorts: sort ? sort.split(',') : [],
+        filters,
         keyword: keywordValue,
       },
     },

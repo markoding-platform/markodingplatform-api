@@ -5,7 +5,7 @@ export {default as BlogService} from './blog';
 export {default as ChannelService} from './channel';
 export {default as ChatService} from './chat';
 export {default as EventService} from './event';
-export {default as IdeaService} from './idea';
+export {default as IdeaService, IdeaProblemAreaService} from './idea';
 export {default as IdeaLikeService} from './ideaLike';
 export {default as IdeaCommentService} from './ideaComment';
 export {default as ProfileService} from './profile';

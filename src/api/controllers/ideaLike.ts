@@ -1,7 +1,7 @@
 import {FastifyReply} from 'fastify';
 import {Controller, POST} from 'fastify-decorators';
 
-import {IdeaLike, User} from '../entity';
+import {User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import {UserService, IdeaService, IdeaLikeService} from '../services';
 import {commonParams} from '../schemas/common';
@@ -30,7 +30,7 @@ export default class IdeaLikeController {
       User: Record<string, unknown>;
     }>,
     reply: FastifyReply,
-  ): Promise<IdeaLike> {
+  ): Promise<void> {
     const user = req.user?.user as User;
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
@@ -39,7 +39,19 @@ export default class IdeaLikeController {
     if (!userFound) throw {statusCode: 404, message: 'User not found'};
     if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
 
-    await this.ideaLikeService.storeOrDelete(ideaFound, userFound);
+    const isLiked = await this.ideaLikeService.storeOrDelete(
+      ideaFound,
+      userFound,
+    );
+
+    if (isLiked) {
+      ideaFound.liked -= 1;
+      this.ideaService.update(req.params.id, ideaFound.toIdea());
+    } else {
+      ideaFound.liked += 1;
+      this.ideaService.update(req.params.id, ideaFound.toIdea());
+    }
+
     return reply.code(204).send();
   }
 }

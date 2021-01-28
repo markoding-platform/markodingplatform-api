@@ -1,12 +1,12 @@
-import {timestamps, commonPagination} from './common';
+import {timestamps, pagination, commonQueryString} from './common';
 
 const properties = {
+  id: {type: 'string'},
   schoolId: {type: 'string'},
   status: {type: 'string'},
   schoolName: {type: 'string'},
   solutionName: {type: 'string'},
   solutionType: {type: 'string'},
-  problemArea: {type: 'string'},
   problemSelection: {type: 'string'},
   problemReasoning: {type: 'string'},
   solutionVision: {type: 'string'},
@@ -19,14 +19,24 @@ const properties = {
   potentialCollaboration: {type: 'string'},
   solutionSupportingPhotos: {type: 'array'},
   isDraft: {type: 'boolean'},
+  liked: {type: 'number'},
+};
+
+const problemAreaSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'number'},
+    ...timestamps,
+    problemArea: {type: 'string'},
+  },
 };
 
 export const ideaSchema = {
   type: 'object',
   properties: {
-    id: {type: 'string'},
     ...timestamps,
     ...properties,
+    problemArea: problemAreaSchema,
     totalLikes: {type: 'number'},
     totalComments: {type: 'number'},
   },
@@ -35,17 +45,20 @@ export const ideaSchema = {
 export const paginatedIdeaSchema = {
   type: 'object',
   properties: {
-    pages: commonPagination,
-    data: {type: 'array', items: ideaSchema},
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: ideaSchema,
+    },
   },
 };
 
 export const ideaCommentSchema = {
   type: 'object',
   properties: {
-    id: {type: 'string'},
     ...timestamps,
     ...properties,
+    problemArea: problemAreaSchema,
     comments: {
       type: 'array',
       items: {
@@ -68,7 +81,7 @@ export const ideaInputSchema = {
     'schoolName',
     'solutionName',
     'solutionType',
-    'problemArea',
+    'problemAreaId',
     'problemSelection',
     'problemReasoning',
     'solutionVision',
@@ -79,5 +92,31 @@ export const ideaInputSchema = {
     'targetCustomer',
   ],
   additionalProperties: false,
-  properties,
+  properties: {
+    ...properties,
+    problemAreaId: {type: 'number'},
+  },
+};
+
+export const ideaQueryStringSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    ...commonQueryString.properties,
+    solutionType: {type: 'string'},
+    problemAreaId: {type: 'string'},
+  },
+};
+
+export const ideaProblemAreaSchema = {
+  type: 'array',
+  items: {...problemAreaSchema},
+};
+
+export const ideaSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    solutionName: {type: 'string'},
+  },
 };

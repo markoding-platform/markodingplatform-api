@@ -3,9 +3,14 @@ import {Controller, GET, POST} from 'fastify-decorators';
 
 import EventService from '../services/event';
 import {Event, EventInput} from '../entity/event';
-import {eventSchema, eventInputSchema} from '../schemas/event';
-import {validateDateInput} from '../../libs/utils';
-import {commonParams} from '../schemas/common';
+import {
+  eventSchema,
+  eventInputSchema,
+  paginatedEventSchema,
+} from '../schemas/event';
+import {commonParams, commonQueryString} from '../schemas/common';
+import {validateDateInput, paginateResponse} from '../../libs/utils';
+import {CommonQueryString, PaginatedResponse} from '../../libs/types';
 
 @Controller({route: '/events'})
 export default class EventController {
@@ -31,16 +36,16 @@ export default class EventController {
     url: '/',
     options: {
       schema: {
-        response: {200: {type: 'array', items: eventSchema}},
+        querystring: commonQueryString,
+        response: {200: paginatedEventSchema},
       },
     },
   })
   async getAll(
-    req: FastifyRequest<{Querystring: {limit: number; offset: number}}>,
-  ): Promise<Event[]> {
-    const limit = req.query.limit || 6;
-    const offset = req.query.offset || 0;
-    return this.service.getAll(offset, limit);
+    req: FastifyRequest<{Querystring: CommonQueryString}>,
+  ): Promise<PaginatedResponse<Event>> {
+    const response = await this.service.getAll(req.query);
+    return paginateResponse(req.query, response);
   }
 
   @POST({
