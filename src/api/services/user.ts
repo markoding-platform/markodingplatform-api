@@ -40,18 +40,19 @@ export default class UserService {
       });
     }
 
-    if (!user?.isEmailVerified && data.isEmailVerified) {
+    if (user) {
       await this.repository.update(
         {
           id: user.id,
         },
         {
-          isEmailVerified: true,
+          ...data,
         },
       );
 
       user = {
         ...user,
+        ...data,
         isEmailVerified: true,
       };
     }
