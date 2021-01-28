@@ -28,8 +28,6 @@ export default class UserService {
     let user = await this.repository
       .createQueryBuilder('user')
       .where({
-        name: data.name,
-        email: data.email,
         externalId: data.externalId,
       })
       .leftJoinAndSelect('user.profile', 'profile')
