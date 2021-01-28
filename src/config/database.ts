@@ -67,7 +67,6 @@ export default class Database {
         Profile,
       ],
       logging: true,
-      // synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
     });
   }
