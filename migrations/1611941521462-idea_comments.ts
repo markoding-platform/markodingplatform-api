@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import {MigrationInterface, QueryRunner} from 'typeorm';
 
 export class ideaComments1611941521462 implements MigrationInterface {
   async up(queryRunner: QueryRunner): Promise<void> {
@@ -16,7 +16,7 @@ export class ideaComments1611941521462 implements MigrationInterface {
         CONSTRAINT "FK_user_id" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id"),
         PRIMARY KEY ("id")
       );
-    `)
+    `);
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {

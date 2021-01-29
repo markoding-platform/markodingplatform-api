@@ -8,7 +8,7 @@
     "build": "rimraf ./build && backpack build",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix --ext ts",
-    "prettier": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier --write '**/*.ts'",
     "start": "node -r dotenv/config ./build/main.js",
     "migration:create": "typeorm migration:create",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",

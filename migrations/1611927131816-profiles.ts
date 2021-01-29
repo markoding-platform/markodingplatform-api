@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import {MigrationInterface, QueryRunner} from 'typeorm';
 
 export class profiles1611927131816 implements MigrationInterface {
   async up(queryRunner: QueryRunner): Promise<void> {
@@ -9,10 +9,10 @@ export class profiles1611927131816 implements MigrationInterface {
         'teacher',
         'student'
       );
-    `)
+    `);
     await queryRunner.query(`
       CREATE TYPE "public"."profiles_gender_enum" AS ENUM ('perempuan', 'laki-laki');
-    `)
+    `);
     await queryRunner.query(`
       CREATE TABLE "public"."profiles" (
         "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
@@ -48,7 +48,7 @@ export class profiles1611927131816 implements MigrationInterface {
 
         PRIMARY KEY ("id")
       );
-    `)
+    `);
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {

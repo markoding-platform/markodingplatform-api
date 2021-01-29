@@ -48,8 +48,12 @@ export class Ideas1611846774662 implements MigrationInterface {
       );
     `);
 
-    await queryRunner.query(`CREATE INDEX "idx_status" ON "public"."ideas" ("status");`);
-    await queryRunner.query(`CREATE INDEX "idx_solution_type" ON "public"."ideas" ("solution_type");`);
+    await queryRunner.query(
+      `CREATE INDEX "idx_status" ON "public"."ideas" ("status");`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "idx_solution_type" ON "public"."ideas" ("solution_type");`,
+    );
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
