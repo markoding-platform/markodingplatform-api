@@ -10,7 +10,6 @@
     "lint:fix": "eslint . --fix --ext ts",
     "prettier": "prettier --write 'src/**/*.ts'",
     "start": "node -r dotenv/config ./build/main.js",
-    "migration:generate": "typeorm migration:generate",
     "migration:create": "typeorm migration:create",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
