@@ -17,7 +17,7 @@ export class ideaProblemAreas1611846774662 implements MigrationInterface {
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "idea_problem_areas"`);
-    await queryRunner.query(`DROP SEQUENCE "idea_problem_areas_id_seq;"`);
+    await queryRunner.query(`DROP TABLE "idea_problem_areas";`);
+    await queryRunner.query(`DROP SEQUENCE "idea_problem_areas_id_seq";`);
   }
 }

@@ -53,7 +53,7 @@ export class Ideas1611846774662 implements MigrationInterface {
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "ideas;"`);
+    await queryRunner.query(`DROP TABLE "ideas";`);
     await queryRunner.query(`DROP TYPE "ideas_status_enum";`);
     await queryRunner.query(`DROP TYPE "ideas_solution_type_enum";`);
   }

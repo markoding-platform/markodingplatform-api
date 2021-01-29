@@ -18,9 +18,9 @@ export class users1611929499637 implements MigrationInterface {
         PRIMARY KEY ("id")
       );
     `)
-    await queryRunner.query(`CREATE UNIQUE INDEX "idx_email" ON "public"."ideas" ("email");`);
-    await queryRunner.query(`CREATE UNIQUE INDEX "idx_external_id" ON "public"."ideas" ("external_id");`);
-    await queryRunner.query(`CREATE INDEX "idx_name" ON "public"."ideas" ("name");`);
+    await queryRunner.query(`CREATE UNIQUE INDEX "idx_email" ON "public"."users" ("email");`);
+    await queryRunner.query(`CREATE UNIQUE INDEX "idx_external_id" ON "public"."users" ("external_id");`);
+    await queryRunner.query(`CREATE INDEX "idx_name" ON "public"."users" ("name");`);
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
