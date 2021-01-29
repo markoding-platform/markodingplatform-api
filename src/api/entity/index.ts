@@ -11,7 +11,7 @@ export {
 export {Nonce, SSORequest, SSOResponse} from './nonce';
 export {Announcement, AnnouncementInput} from './announcement';
 export {Event} from './event';
-export {Blog} from './blog';
+export {Blog, BlogInput, BlogAuthor} from './blog';
 export {Channel} from './channel';
 export {Question, QuestionInput} from './question';
 export {QuestionComment, QuestionCommentInput} from './questionComment';
