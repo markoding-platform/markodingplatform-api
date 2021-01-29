@@ -9,10 +9,11 @@ import Database from '../../config/database';
 import {Chat, ChatInput} from '../entity';
 
 const params = serviceAccount as any;
+const {FIREBASE_RDB_URL} = process.env;
 
 firebase.initializeApp({
   credential: firebase.credential.cert(params),
-  databaseURL: 'https://markoding-platform.firebaseio.com',
+  databaseURL: FIREBASE_RDB_URL,
 });
 
 @Service()
@@ -27,14 +28,14 @@ export default class ChatService {
     this.rdb = firebase.database();
   }
 
-  async getRecent(limit: number, offset: number): Promise<Chat[]> {
+  async getRecent(limit: number, offset: number): Promise<[Chat[], number]> {
     return this.repository
-      .createQueryBuilder('Chat')
-      .leftJoinAndSelect('Chat.user', 'user')
-      .orderBy('Chat.created_at', 'DESC')
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.user', 'user')
+      .orderBy('chat.created_at', 'DESC')
       .limit(limit)
       .offset(offset)
-      .getMany();
+      .getManyAndCount();
   }
 
   async getById(id: number): Promise<Chat | undefined> {

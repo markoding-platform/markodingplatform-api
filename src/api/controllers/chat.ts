@@ -2,10 +2,16 @@ import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
 
 import ChatService from '../services/chat';
-import {Chat, ChatInput, User} from '../entity';
+import {Chat, ChatInput} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
-import {commonParams} from '../schemas/common';
-import {chatSchema, chatInputSchema} from '../schemas/chat';
+import {commonParams, commonQueryString} from '../schemas/common';
+import {
+  chatSchema,
+  chatInputSchema,
+  paginatedChatSchema,
+} from '../schemas/chat';
+import {CommonQueryString, PaginatedResponse} from '../../libs/types';
+import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/chats'})
 export default class ChatController {
@@ -15,17 +21,20 @@ export default class ChatController {
     url: '/',
     options: {
       schema: {
-        response: {200: {type: 'array', items: chatSchema}},
+        querystring: commonQueryString,
+        response: {200: paginatedChatSchema},
       },
       onRequest: authenticate,
     },
   })
   async getRecent(
-    req: FastifyRequest<{
-      Querystring: {limit: number; offset: number};
-    }>,
-  ): Promise<Chat[]> {
-    return this.service.getRecent(req.query.limit || 6, req.query.offset || 0);
+    req: FastifyRequest<{Querystring: CommonQueryString}>,
+  ): Promise<PaginatedResponse<Chat>> {
+    const response = await this.service.getRecent(
+      req.query.limit || 6,
+      req.query.offset || 0,
+    );
+    return paginateResponse(req.query, response);
   }
 
   @GET({
@@ -58,10 +67,9 @@ export default class ChatController {
   async create(
     req: AuthenticatedRequest<{
       Body: ChatInput;
-      User: Record<string, unknown>;
     }>,
   ): Promise<Chat> {
-    const user = req.user?.user as User;
+    const user = req.user.user;
     const data = req.body;
     data.user = user;
     return this.service.store(data);
