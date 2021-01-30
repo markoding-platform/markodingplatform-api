@@ -3,6 +3,14 @@ import {profileSchema} from './profile';
 const properties = {
   name: {type: 'string'},
   email: {type: 'string'},
+  skilvulPoint: {
+    type: 'number',
+    nullable: true,
+  },
+  markodingPoint: {
+    type: 'number',
+    nullable: true,
+  },
 };
 
 export const userSchema = {

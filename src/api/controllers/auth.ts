@@ -4,7 +4,12 @@ import {Controller, POST} from 'fastify-decorators';
 
 import {SSORequest} from '../entity';
 import {authQuerySchema, authResponseSchema} from '../schemas/auth';
-import {IdeaUserService, AuthService, UserService} from '../services';
+import {
+  IdeaUserService,
+  AuthService,
+  UserService,
+  UserPointService,
+} from '../services';
 
 const {DEBUGGABLE = false} = process.env;
 
@@ -14,6 +19,7 @@ class AuthController {
     private authService: AuthService,
     private userService: UserService,
     private ideaUserService: IdeaUserService,
+    private userPointService: UserPointService,
   ) {}
 
   @POST({
@@ -79,6 +85,8 @@ class AuthController {
       externalId: payload.id,
       isEmailVerified: payload.isEmailVerified,
     });
+
+    await this.userPointService.addUserPoint(user.id, 'login');
 
     const profile = user.profile;
 

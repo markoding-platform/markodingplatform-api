@@ -1,8 +1,9 @@
 import {Initializer, Service} from 'fastify-decorators';
 import {Repository} from 'typeorm';
+import {camelCase} from 'lodash';
 
 import Database from '../../config/database';
-import {User, UserInput} from '../entity';
+import {User, UserInput, UserUpdateInput} from '../entity';
 
 export interface NotInTeamParams {
   name?: string;
@@ -27,8 +28,6 @@ export default class UserService {
     let user = await this.repository
       .createQueryBuilder('user')
       .where({
-        name: data.name,
-        email: data.email,
         externalId: data.externalId,
       })
       .leftJoinAndSelect('user.profile', 'profile')
@@ -41,18 +40,19 @@ export default class UserService {
       });
     }
 
-    if (!user?.isEmailVerified && data.isEmailVerified) {
+    if (user) {
       await this.repository.update(
         {
           id: user.id,
         },
         {
-          isEmailVerified: true,
+          ...data,
         },
       );
 
       user = {
         ...user,
+        ...data,
         isEmailVerified: true,
       };
     }
@@ -262,5 +262,24 @@ export default class UserService {
       })
       .innerJoinAndSelect('user.profile', 'profile')
       .getOne();
+  }
+
+  async updateById(
+    id: string,
+    userData: Partial<UserUpdateInput>,
+  ): Promise<User> {
+    const {raw} = await this.repository
+      .createQueryBuilder()
+      .update(User)
+      .set(userData)
+      .where('id = :id', {id})
+      .returning('*')
+      .execute();
+
+    Reflect.ownKeys(raw[0]).forEach((key) => {
+      Reflect.set(raw[0], camelCase(key as string), raw[0][key]);
+    });
+
+    return raw[0];
   }
 }

@@ -1,5 +1,5 @@
 import {userInfoSchema} from './user';
-import {timestamps} from './common';
+import {pagination, timestamps} from './common';
 
 const properties = {
   content: {type: 'string'},
@@ -21,5 +21,16 @@ export const chatInputSchema = {
   required: ['content', 'type'],
   properties: {
     ...properties,
+  },
+};
+
+export const paginatedChatSchema = {
+  type: 'object',
+  properties: {
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: chatSchema,
+    },
   },
 };

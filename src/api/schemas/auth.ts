@@ -16,6 +16,14 @@ const userAuthSchema = {
     name: {type: 'string'},
     externalId: {type: 'string'},
     isEmailVerified: {type: 'boolean'},
+    skilvulPoint: {
+      type: 'number',
+      nullable: true,
+    },
+    markodingPoint: {
+      type: 'number',
+      nullable: true,
+    },
   },
 };
 

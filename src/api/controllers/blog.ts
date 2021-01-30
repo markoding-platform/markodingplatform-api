@@ -1,14 +1,10 @@
 import {FastifyRequest} from 'fastify';
-import {Controller, GET, POST} from 'fastify-decorators';
+import {Controller, GET} from 'fastify-decorators';
 import {snakeCase} from 'lodash';
 
 import BlogService from '../services/blog';
-import {Blog, BlogInput} from '../entity/blog';
-import {
-  blogSchema,
-  blogInputSchema,
-  paginatedBlogSchema,
-} from '../schemas/blog';
+import {Blog} from '../entity/blog';
+import {blogSchema, paginatedBlogSchema} from '../schemas/blog';
 import {commonParams, commonQueryString} from '../schemas/common';
 import {paginateResponse} from '../../libs/utils';
 import {CommonQueryString, PaginatedResponse} from '../../libs/types';
@@ -28,8 +24,8 @@ export default class BlogController {
   })
   async getById(req: FastifyRequest<{Params: {id: string}}>): Promise<Blog> {
     const blog = await this.service.getById(req.params.id);
-
     if (!blog) throw {statusCode: 404, message: 'Entity not found'};
+
     return blog;
   }
 
@@ -61,18 +57,5 @@ export default class BlogController {
 
     const response = await this.service.getAll({limit, offset, sort: sorts});
     return paginateResponse(req.query, response);
-  }
-
-  @POST({
-    url: '/',
-    options: {
-      schema: {
-        body: blogInputSchema,
-        response: {200: blogSchema},
-      },
-    },
-  })
-  async createOrUpdate(req: FastifyRequest<{Body: BlogInput}>): Promise<Blog> {
-    return await this.service.store(req.body);
   }
 }
