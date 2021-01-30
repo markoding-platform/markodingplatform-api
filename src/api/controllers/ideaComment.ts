@@ -28,7 +28,7 @@ export default class IdeaCommentController {
       onRequest: authenticate,
     },
   })
-  async commentIdea(
+  async commentByIdeaId(
     req: AuthenticatedRequest<{
       Params: {id: string};
       Body: {comment: string};
@@ -57,7 +57,7 @@ export default class IdeaCommentController {
       },
     },
   })
-  async getAllCommentsById(
+  async getAllCommentsByIdeaId(
     req: AuthenticatedRequest<{
       Params: {id: string};
       Querystring: CommonQueryString;
@@ -66,7 +66,7 @@ export default class IdeaCommentController {
     const idea = await this.ideaService.getOne({id: req.params.id});
     if (!idea) throw {statusCode: 404, message: 'Idea not found'};
 
-    const response = await this.ideaCommentService.getAllById(
+    const response = await this.ideaCommentService.getAllByIdeaId(
       req.params.id,
       req.query,
     );

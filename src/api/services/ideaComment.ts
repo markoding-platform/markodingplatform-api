@@ -24,7 +24,7 @@ export default class IdeaCommentService {
     return;
   }
 
-  async getAllById(
+  async getAllByIdeaId(
     id: string,
     queryString: CommonQueryString,
   ): Promise<[IdeaComment[], number]> {
