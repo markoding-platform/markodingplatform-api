@@ -195,7 +195,7 @@ export class LeaderboardController {
       },
     },
   })
-  async getAllIdeas(
+  async getTeamLeaderboard(
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
     const orderEnum = ['liked'];
