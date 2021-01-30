@@ -54,14 +54,14 @@ export default class BlogController {
         }
 
         if (sorts.length) {
-          sorts += ','
+          sorts += ',';
           sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
         } else {
           sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
         }
       });
     }
-    console.log(sorts)
+    console.log(sorts);
 
     const response = await this.service.getAll({limit, offset, sort: sorts});
     return paginateResponse(req.query, response);

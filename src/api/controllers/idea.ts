@@ -71,7 +71,7 @@ export class IdeaController {
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
     const orderEnum = ['solutionType', 'solutionName', 'liked'];
-    let sorts = ''
+    let sorts = '';
     if (req.query.sort) {
       sorts = transformSort(req.query.sort, orderEnum);
     }
@@ -155,8 +155,11 @@ export class IdeaController {
     const problemArea = new IdeaProblemArea();
     problemArea.id = req.body.problemAreaId;
     // @ts-ignore
-    delete req.body.problemAreaId
-    let updated = await this.ideaService.update(req.params.id, {...req.body, problemArea});
+    delete req.body.problemAreaId;
+    let updated = await this.ideaService.update(req.params.id, {
+      ...req.body,
+      problemArea,
+    });
     updated = camelcaseKeys(updated, {deep: true});
 
     if (!Array.isArray(updated.solutionSupportingPhotos)) {
@@ -216,7 +219,7 @@ function transformSort(sort: string, order: string[]): string {
     }
 
     if (sorts.length) {
-      sorts += ','
+      sorts += ',';
       sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
     } else {
       sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
