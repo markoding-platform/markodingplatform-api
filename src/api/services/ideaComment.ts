@@ -3,6 +3,7 @@ import {Repository} from 'typeorm';
 
 import Database from '../../config/database';
 import {IdeaComment, Idea, User} from '../entity';
+import {CommonQueryString} from '../../libs/types';
 
 @Service()
 export default class IdeaCommentService {
@@ -21,5 +22,18 @@ export default class IdeaCommentService {
     ideaComment.comment = comment;
     await this.repository.save(ideaComment);
     return;
+  }
+
+  async getAllById(
+    id: string,
+    queryString: CommonQueryString,
+  ): Promise<[IdeaComment[], number]> {
+    const {limit, offset} = queryString;
+    return this.repository
+      .createQueryBuilder()
+      .where('idea_id = :id', {id})
+      .limit(limit)
+      .offset(offset)
+      .getManyAndCount();
   }
 }

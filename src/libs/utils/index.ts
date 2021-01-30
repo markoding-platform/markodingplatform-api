@@ -33,7 +33,7 @@ export function paginateResponse<Entity>(
   const [rows, count] = rowsAndCount;
 
   const totalPages = Math.ceil(count / limit);
-  let currentPage = offset / limit + 1;
+  let currentPage = Math.ceil(offset / limit + 1);
   if (currentPage > totalPages) {
     currentPage = totalPages;
   }
