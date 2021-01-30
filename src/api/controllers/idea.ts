@@ -70,12 +70,13 @@ export class IdeaController {
   async getAllIdeas(
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
-    const orderEnum = ['solutionType', 'liked'];
+    const orderEnum = ['solutionType', 'solutionName', 'liked'];
+    let sorts = ''
     if (req.query.sort) {
-      req.query.sort = transformSort(req.query.sort, orderEnum);
+      sorts = transformSort(req.query.sort, orderEnum);
     }
 
-    const response = await this.ideaService.getAll(req.query);
+    const response = await this.ideaService.getAll({...req.query, sort: sorts});
     return paginateResponse(req.query, response);
   }
 
@@ -129,7 +130,7 @@ export class IdeaController {
   async updateIdea(
     req: AuthenticatedRequest<{
       Params: {id: string};
-      Body: IdeaInput;
+      Body: IdeaInput & {problemAreaId: number};
     }>,
   ): Promise<Idea> {
     const user = req.user?.user as User;
@@ -151,7 +152,11 @@ export class IdeaController {
       throw {statusCode: 400, message: 'User not on this team idea'};
     }
 
-    let updated = await this.ideaService.update(req.params.id, req.body);
+    const problemArea = new IdeaProblemArea();
+    problemArea.id = req.body.problemAreaId;
+    // @ts-ignore
+    delete req.body.problemAreaId
+    let updated = await this.ideaService.update(req.params.id, {...req.body, problemArea});
     updated = camelcaseKeys(updated, {deep: true});
 
     if (!Array.isArray(updated.solutionSupportingPhotos)) {
@@ -190,7 +195,7 @@ export class LeaderboardController {
   async getAllIdeas(
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
-    const orderEnum = ['solutionType', 'liked'];
+    const orderEnum = ['liked'];
 
     if (req.query.sort) {
       req.query.sort = transformSort(req.query.sort, orderEnum);
@@ -210,7 +215,12 @@ function transformSort(sort: string, order: string[]): string {
       return;
     }
 
-    sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+    if (sorts.length) {
+      sorts += ','
+      sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+    } else {
+      sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+    }
   });
   return sorts;
 }
