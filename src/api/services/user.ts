@@ -144,7 +144,7 @@ export default class UserService {
 
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .leftJoin('teams', 'team', 'user.id != team.user_id')
+      .leftJoin('idea_users', 'ideaUser', 'user.id != ideaUser.user_id')
       .limit(limit)
       .offset(offset * limit)
       .orderBy('user.name', 'ASC');
