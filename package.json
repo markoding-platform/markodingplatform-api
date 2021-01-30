@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "backpack -r dotenv/config",
     "build": "rimraf ./build && backpack build",
-    "lint": "eslint . --ext ts",
+    "lint": "eslint . --ext ts --ignore-pattern 'migrations/**/*.ts'",
     "lint:fix": "eslint . --fix --ext ts",
     "prettier": "prettier --write '**/*.ts'",
     "start": "node -r dotenv/config ./build/main.js",
