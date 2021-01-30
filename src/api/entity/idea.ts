@@ -91,13 +91,24 @@ export interface IdeaResponse extends Idea {
 @Entity('idea_problem_areas')
 export class IdeaProblemArea {
   @PrimaryGeneratedColumn() id: number;
-
-  @CreateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'NOW()',
+  })
   createdAt: Date;
-  @UpdateDateColumn({type: 'timestamp', default: () => 'NOW()'})
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'NOW()',
+  })
   updatedAt: Date;
-  @DeleteDateColumn({type: 'timestamp', nullable: true})
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    type: 'timestamp',
+    nullable: true,
+  })
   deletedAt: Date;
 
-  @Column('varchar', {length: 255}) problemArea: string;
+  @Column('varchar', {name: 'problem_area', length: 255}) problemArea: string;
 }

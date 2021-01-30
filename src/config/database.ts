@@ -69,7 +69,6 @@ export default class Database {
         UserPoint,
       ],
       logging: true,
-      synchronize: true,
       namingStrategy: new SnakeNamingStrategy(),
     });
   }

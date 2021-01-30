@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 module.exports = {
-  webpack: (config, _options, _webpack) => {
+  webpack: (config) => {
     config.entry.main = ['./src/index.ts']
 
     config.resolve = {
