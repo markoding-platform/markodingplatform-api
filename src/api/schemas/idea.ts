@@ -62,8 +62,9 @@ export const paginatedLeaderboardSchema = {
       items: {
         type: 'object',
         properties: {
-          ...properties,
-          problemArea: problemAreaSchema,
+          solutionName: {type: 'string'},
+          solutionSupportingPhotos: {type: 'array'},
+          liked: {type: 'number'},
         },
       },
     },
