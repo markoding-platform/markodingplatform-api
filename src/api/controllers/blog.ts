@@ -42,20 +42,26 @@ export default class BlogController {
     req: FastifyRequest<{Querystring: CommonQueryString}>,
   ): Promise<PaginatedResponse<Blog>> {
     const {limit, offset, sort} = req.query;
-    const orderEnum = ['title', 'createdAt'];
+    const orderEnum = ['title', 'date'];
 
     let sorts = '';
     if (sort) {
       sort.split(',').forEach((s: string) => {
         let ss = s;
         if (ss.startsWith('-')) ss = s.slice(1);
-        if (orderEnum.indexOf(s, 1) < 0) {
+        if (orderEnum.indexOf(ss) < 0) {
           return;
         }
 
-        sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+        if (sorts.length) {
+          sorts += ',';
+          sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+        } else {
+          sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+        }
       });
     }
+    console.log(sorts);
 
     const response = await this.service.getAll({limit, offset, sort: sorts});
     return paginateResponse(req.query, response);
