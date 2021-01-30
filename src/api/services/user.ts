@@ -282,4 +282,12 @@ export default class UserService {
 
     return raw[0];
   }
+
+  async getUserLeader(): Promise<User[]> {
+    return this.repository
+      .createQueryBuilder('user')
+      .limit(10)
+      .orderBy('user.skilvulPoint + user.markodingPoint', 'DESC')
+      .getMany();
+  }
 }

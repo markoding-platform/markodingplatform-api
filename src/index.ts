@@ -4,7 +4,14 @@ import fastifyCors from 'fastify-cors';
 import {bootstrap} from 'fastify-decorators';
 import fastifyMultipart from 'fastify-multipart';
 
-import {IdeaController, LeaderboardController} from './api/controllers/idea';
+import {
+  UserController,
+  LeaderboardUserController,
+} from './api/controllers/user';
+import {
+  IdeaController,
+  LeaderboardTeamController,
+} from './api/controllers/idea';
 import IdeaUserController from './api/controllers/ideaUser';
 import IdeaLikeController from './api/controllers/ideaLike';
 import IdeaCommentController from './api/controllers/ideaComment';
@@ -20,7 +27,6 @@ import QuestionLikeController from './api/controllers/questionLike';
 import ChatController from './api/controllers/chat';
 import UploadController from './api/controllers/upload';
 import ProfileController from './api/controllers/profile';
-import UserController from './api/controllers/user';
 import SearchController from './api/controllers/search';
 
 const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
@@ -33,7 +39,8 @@ server.register(fastifyCors, {
 });
 server.register(bootstrap, {
   controllers: [
-    LeaderboardController,
+    LeaderboardUserController,
+    LeaderboardTeamController,
     IdeaController,
     IdeaUserController,
     IdeaLikeController,

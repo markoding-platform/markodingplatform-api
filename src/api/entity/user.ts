@@ -50,6 +50,12 @@ export class User {
   @Column({type: 'bigint', default: 0})
   markodingPoint: number;
 
+  @Column('text')
+  fcmToken: string;
+
+  @Column('text')
+  imageUrl: string;
+
   @OneToMany(() => UserPoint, (point) => point.user)
   points: UserPoint[];
 }
@@ -63,6 +69,8 @@ export type UserInput = Omit<
   | 'skilvulPoint'
   | 'markodingPoint'
   | 'points'
+  | 'imageUrl'
+  | 'fcmToken'
 >;
 
 export type UserUpdateInput = Omit<

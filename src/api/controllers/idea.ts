@@ -154,6 +154,7 @@ export class IdeaController {
 
     const problemArea = new IdeaProblemArea();
     problemArea.id = req.body.problemAreaId;
+    // @typescript-eslint/ban-ts-comment
     // @ts-ignore
     delete req.body.problemAreaId;
     let updated = await this.ideaService.update(req.params.id, {
@@ -183,7 +184,7 @@ export class IdeaController {
 }
 
 @Controller({route: '/leaderboards/team'})
-export class LeaderboardController {
+export class LeaderboardTeamController {
   constructor(private ideaService: IdeaService) {}
 
   @GET({
