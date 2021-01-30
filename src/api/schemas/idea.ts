@@ -53,6 +53,23 @@ export const paginatedIdeaSchema = {
   },
 };
 
+export const paginatedLeaderboardSchema = {
+  type: 'object',
+  properties: {
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          ...properties,
+          problemArea: problemAreaSchema,
+        },
+      },
+    },
+  },
+};
+
 export const ideaCommentSchema = {
   type: 'object',
   properties: {
