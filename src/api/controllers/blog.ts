@@ -47,11 +47,13 @@ export default class BlogController {
     let sorts = '';
     if (sort) {
       sort.split(',').forEach((s: string) => {
+        let ss = s;
+        if (ss.startsWith('-')) ss = s.slice(1);
         if (orderEnum.indexOf(s, 1) < 0) {
           return;
         }
 
-        sorts += snakeCase(s);
+        sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
       });
     }
 

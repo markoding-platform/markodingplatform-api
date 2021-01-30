@@ -29,6 +29,7 @@ export default class BlogService {
 
       sorts.forEach((s: string) => {
         if (s.startsWith('-')) {
+          s = s.slice(1);
           orderBy[`blogs.${s}`] = 'DESC';
         } else {
           orderBy[`blogs.${s}`] = 'ASC';

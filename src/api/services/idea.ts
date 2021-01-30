@@ -45,17 +45,24 @@ export default class IdeaService {
       });
     }
 
+    const orderBy = {};
     if (sort) {
-      if (sort.startsWith('-')) {
-        query = query.orderBy('ideas.solution_name', 'DESC');
-      } else {
-        query = query.orderBy('ideas.solution_name', 'ASC');
-      }
+      const sorts = sort.split(',');
+
+      sorts.forEach((s: string) => {
+        if (s.startsWith('-')) {
+          s = s.slice(1);
+          orderBy[`ideas.${s}`] = 'DESC';
+        } else {
+          orderBy[`ideas.${s}`] = 'ASC';
+        }
+      });
     }
 
     return query
       .limit(limit)
       .offset(offset)
+      .orderBy(orderBy)
       .leftJoinAndSelect('ideas.problemArea', 'problemArea')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')

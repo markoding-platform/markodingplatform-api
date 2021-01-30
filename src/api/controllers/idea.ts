@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
+import {snakeCase} from 'lodash';
 
 import {
   UserService,
@@ -22,6 +23,7 @@ import {
   ideaCommentSchema,
   ideaInputSchema,
   paginatedIdeaSchema,
+  paginatedLeaderboardSchema,
   ideaQueryStringSchema,
   ideaProblemAreaSchema,
 } from '../schemas/idea';
@@ -30,7 +32,7 @@ import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
 import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/ideas'})
-export default class IdeaController {
+export class IdeaController {
   constructor(
     private userService: UserService,
     private ideaService: IdeaService,
@@ -68,6 +70,11 @@ export default class IdeaController {
   async getAllIdeas(
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
+    const orderEnum = ['solutionType', 'liked'];
+    if (req.query.sort) {
+      req.query.sort = transformSort(req.query.sort, orderEnum);
+    }
+
     const response = await this.ideaService.getAll(req.query);
     return paginateResponse(req.query, response);
   }
@@ -165,4 +172,45 @@ export default class IdeaController {
   async getAllIdeaProblemAreas(): Promise<IdeaProblemArea[]> {
     return this.ideaProblemAreaService.getAll();
   }
+}
+
+@Controller({route: '/leaderboards/team'})
+export class LeaderboardController {
+  constructor(private ideaService: IdeaService) {}
+
+  @GET({
+    url: '/',
+    options: {
+      schema: {
+        querystring: ideaQueryStringSchema,
+        response: {200: paginatedLeaderboardSchema},
+      },
+    },
+  })
+  async getAllIdeas(
+    req: FastifyRequest<{Querystring: IdeaQueryString}>,
+  ): Promise<PaginatedResponse<Idea>> {
+    const orderEnum = ['solutionType', 'liked'];
+
+    if (req.query.sort) {
+      req.query.sort = transformSort(req.query.sort, orderEnum);
+    }
+
+    const response = await this.ideaService.getAll(req.query);
+    return paginateResponse(req.query, response);
+  }
+}
+
+function transformSort(sort: string, order: string[]): string {
+  let sorts = '';
+  sort.split(',').forEach((s: string) => {
+    let ss = s;
+    if (ss.startsWith('-')) ss = s.slice(1);
+    if (order.indexOf(ss) < 0) {
+      return;
+    }
+
+    sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+  });
+  return sorts;
 }
