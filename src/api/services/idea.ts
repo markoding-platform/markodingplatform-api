@@ -20,7 +20,6 @@ export default class IdeaService {
       .createQueryBuilder('ideas')
       .where('ideas.id = :id', idea)
       .leftJoinAndSelect('ideas.problemArea', 'problemArea')
-      .leftJoinAndSelect('ideas.comments', 'comments')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
       .getOne();
