@@ -13,6 +13,10 @@ export class users1611929499637 implements MigrationInterface {
         "email" varchar NOT NULL,
         "external_id" varchar NOT NULL,
         "is_email_verified" bool NOT NULL DEFAULT false,
+        "skilvul_point" bigint DEFAULT 0,
+        "markoding_point" bigint DEFAULT 0,
+        "fcm_token" text NULL,
+        "image_url" text NULL,
 
         CONSTRAINT "FK_profile_id" FOREIGN KEY ("profile_id") REFERENCES "public"."profiles"("id"),
         PRIMARY KEY ("id")
