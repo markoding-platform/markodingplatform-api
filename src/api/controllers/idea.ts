@@ -1,6 +1,7 @@
 import camelcaseKeys from 'camelcase-keys';
 import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
+import {snakeCase} from 'lodash';
 
 import {
   UserService,
@@ -68,6 +69,22 @@ export default class IdeaController {
   async getAllIdeas(
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
+    const orderEnum = ['solutionType', 'liked'];
+
+    let sorts = '';
+    if (req.query.sort) {
+      req.query.sort.split(',').forEach((s: string) => {
+        let ss = s;
+        if (ss.startsWith('-')) ss = s.slice(1);
+        if (orderEnum.indexOf(ss) < 0) {
+          return;
+        }
+
+        sorts += s.startsWith('-') ? '-' + snakeCase(s) : snakeCase(s);
+      });
+    }
+    req.query.sort = sorts;
+
     const response = await this.ideaService.getAll(req.query);
     return paginateResponse(req.query, response);
   }
