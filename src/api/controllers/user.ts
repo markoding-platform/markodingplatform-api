@@ -5,10 +5,10 @@ import UserService from '../services/user';
 import authenticate from '../hooks/onRequest/authentication';
 import {User} from '../entity/user';
 import {commonQueryString, commonParams} from '../schemas/common';
-import {userSchema, userProfileSchema} from '../schemas/user';
+import {userSchema, userProfileSchema, userLeaderSchema} from '../schemas/user';
 
 @Controller({route: '/users'})
-export default class UserController {
+export class UserController {
   constructor(private service: UserService) {}
 
   @GET({
@@ -213,5 +213,81 @@ export default class UserController {
     if (!user) throw {statusCode: 404, message: 'Data not found'};
 
     return user;
+  }
+
+  @GET({
+    url: '/account',
+    options: {
+      schema: {
+        response: {200: userSchema},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async getUserAccount(req: AuthenticatedRequest): Promise<User | undefined> {
+    const user = await this.service.getOne({id: req.user.user.id});
+    if (!user) throw {statusCode: 404, message: 'Data not found'};
+    return user;
+  }
+
+  @PUT({
+    url: '/image',
+    options: {
+      schema: {
+        response: {200: userSchema},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async updateUserImage(
+    req: AuthenticatedRequest<{
+      Body: {imageUrl: string};
+    }>,
+  ): Promise<User | undefined> {
+    const user = await this.service.updateById(req.user.user.id, {
+      imageUrl: req.body.imageUrl,
+    });
+    if (!user) throw {statusCode: 404, message: 'Data not found'};
+    return user;
+  }
+
+  @PUT({
+    url: '/fcm-token',
+    options: {
+      schema: {
+        response: {200: userSchema},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async updateUserFCMToken(
+    req: AuthenticatedRequest<{
+      Body: {fcmToken: string};
+    }>,
+  ): Promise<User | undefined> {
+    const user = await this.service.updateById(req.user.user.id, {
+      fcmToken: req.body.fcmToken,
+    });
+    if (!user) throw {statusCode: 404, message: 'Data not found'};
+    return user;
+  }
+}
+
+@Controller({route: '/leaderboards/user'})
+export class LeaderboardUserController {
+  constructor(private service: UserService) {}
+
+  @GET({
+    url: '/',
+    options: {
+      schema: {
+        querystring: commonQueryString,
+        response: {200: {type: 'array', items: userLeaderSchema}},
+      },
+    },
+  })
+  async getUserLeaders(): Promise<User[]> {
+    const leaderUsers = await this.service.getUserLeader();
+    return leaderUsers;
   }
 }

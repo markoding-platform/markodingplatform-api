@@ -11,6 +11,8 @@ const properties = {
     type: 'number',
     nullable: true,
   },
+  fcmToken: {type: 'string'},
+  imageUrl: {type: 'string'},
 };
 
 export const userSchema = {
@@ -37,6 +39,23 @@ export const userProfileSchema = {
     profile: {
       nullable: true,
       ...profileSchema,
+    },
+  },
+};
+
+export const userLeaderSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string'},
+    name: {type: 'string'},
+    imageUrl: {type: 'string'},
+    skilvulPoint: {
+      type: 'number',
+      nullable: true,
+    },
+    markodingPoint: {
+      type: 'number',
+      nullable: true,
     },
   },
 };

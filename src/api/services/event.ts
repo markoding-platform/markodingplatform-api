@@ -22,20 +22,18 @@ export default class EventService {
   async getAll(queryString: CommonQueryString): Promise<[Event[], number]> {
     const {limit, offset, sort} = queryString;
     let query = this.repository.createQueryBuilder('events');
-
+    query.addSelect('start_date > now() as is_active');
     if (sort) {
       if (sort.startsWith('-')) {
         query = query.orderBy('events.title', 'DESC');
       } else {
         query = query.orderBy('events.title', 'ASC');
       }
+    } else {
+      query.addOrderBy('is_active', 'DESC');
+      query.addOrderBy('events.start_date', 'ASC');
     }
-
-    return query
-      .offset(offset)
-      .limit(limit)
-      .addOrderBy('events.start_date', 'ASC')
-      .getManyAndCount();
+    return query.offset(offset).limit(limit).getManyAndCount();
   }
 
   async store(event: Partial<Event>): Promise<Event> {
