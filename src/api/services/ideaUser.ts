@@ -38,6 +38,7 @@ export default class IdeaUserService {
         leftJoinAndSelect: {
           idea: 'ideaUser.idea',
           user: 'ideaUser.user',
+          problemArea: 'idea.problemArea',
           profile: 'user.profile',
         },
       },
