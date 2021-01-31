@@ -1,18 +1,33 @@
 import camelcaseKeys from 'camelcase-keys';
 import {FastifyRequest} from 'fastify';
-import {Controller, GET, POST} from 'fastify-decorators';
+import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
 import AnnouncementService from '../services/announcement';
-import {Announcement, AnnouncementInput} from '../entity/announcement';
+import {Announcement, AnnouncementInput} from '../entity';
 import {
   announcementSchema,
   announcementInputSchema,
 } from '../schemas/announcement';
 import {commonParams} from '../schemas/common';
+import authenticate from '../hooks/onRequest/authentication';
 
 @Controller({route: '/announcements'})
 export default class AnnouncementController {
   constructor(private service: AnnouncementService) {}
+
+  @GET({
+    url: '/count',
+    options: {
+      schema: {
+        response: {200: {type: 'number'}},
+      },
+      onRequest: authenticate,
+    },
+  })
+  async getByUserCount(req: AuthenticatedRequest): Promise<number> {
+    const user = req.user.user;
+    return this.service.getByUserCount(user.id);
+  }
 
   @GET({
     url: '/:id',
@@ -21,10 +36,11 @@ export default class AnnouncementController {
         params: commonParams,
         response: {200: announcementSchema},
       },
+      onRequest: authenticate,
     },
   })
   async getById(
-    req: FastifyRequest<{Params: {id: string}}>,
+    req: AuthenticatedRequest<{Params: {id: string}}>,
   ): Promise<Announcement> {
     const announcement = await this.service.getById(req.params.id);
     if (!announcement) throw {statusCode: 404, message: 'Entity not found'};
@@ -38,10 +54,12 @@ export default class AnnouncementController {
       schema: {
         response: {200: {type: 'array', items: announcementSchema}},
       },
+      onRequest: authenticate,
     },
   })
-  async getAll(): Promise<Announcement[]> {
-    return this.service.getAll();
+  async getByUser(req: AuthenticatedRequest): Promise<Announcement[]> {
+    const user = req.user.user;
+    return this.service.getByUser(user.id);
   }
 
   @POST({
@@ -51,15 +69,16 @@ export default class AnnouncementController {
         body: announcementInputSchema,
         response: {200: announcementSchema},
       },
+      onRequest: authenticate,
     },
   })
   async create(
-    req: FastifyRequest<{Body: AnnouncementInput}>,
+    req: AuthenticatedRequest<{Body: AnnouncementInput}>,
   ): Promise<Announcement> {
     return this.service.store(req.body);
   }
 
-  @POST({
+  @PUT({
     url: '/:id',
     options: {
       schema: {
@@ -67,10 +86,11 @@ export default class AnnouncementController {
         body: announcementInputSchema,
         response: {200: announcementSchema},
       },
+      onRequest: authenticate,
     },
   })
   async update(
-    req: FastifyRequest<{
+    req: AuthenticatedRequest<{
       Params: {id: string};
       Body: AnnouncementInput;
     }>,

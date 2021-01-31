@@ -50,7 +50,8 @@ export type IdeaQueryString = CommonQueryString & {
   problemAreaId?: string;
 };
 
-export interface SearchResponse<Idea, Event> {
+export interface SearchResponse<Idea, Event, Blog> {
   ideas: Idea[];
   events: Event[];
+  blogs: Blog[];
 }

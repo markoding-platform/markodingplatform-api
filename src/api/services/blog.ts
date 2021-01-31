@@ -45,4 +45,12 @@ export default class BlogService {
   async store(blog: Partial<Blog>): Promise<Blog> {
     return this.repository.save(blog);
   }
+
+  async getSearch(keyword: string): Promise<Blog[]> {
+    return this.repository
+      .createQueryBuilder()
+      .where('title ILIKE :keyword', {keyword: `%${keyword}%`})
+      .limit(5)
+      .getMany();
+  }
 }
