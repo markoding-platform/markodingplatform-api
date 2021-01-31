@@ -1,7 +1,7 @@
 import {FastifyReply} from 'fastify';
-import {Controller, POST} from 'fastify-decorators';
+import {Controller, POST, GET} from 'fastify-decorators';
 
-import {User} from '../entity';
+import {User, IdeaLike} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import {UserService, IdeaService, IdeaLikeService} from '../services';
 import {commonParams} from '../schemas/common';
@@ -54,4 +54,45 @@ export default class IdeaLikeController {
 
     return reply.code(204).send();
   }
+
+  @GET({
+    url: '/:id/user-voted',
+    options: {
+      schema: {
+        response: {
+          200: {
+            type: 'object',
+            properties: {
+              isVoted: {type: 'boolean'},
+            },
+          },
+        },
+      },
+      onRequest: authenticate,
+    },
+  })
+  async getUserVote(
+    req: AuthenticatedRequest<{Params: {id: string}}>,
+  ): Promise<IdeaLikeResponse> {
+    const user = req.user?.user as User;
+    const [userFound, ideaFound] = await Promise.all([
+      this.userService.getOne({id: user.id}),
+      this.ideaService.getOne({id: req.params.id}),
+    ]);
+    if (!userFound) throw {statusCode: 404, message: 'User not found'};
+    if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
+
+    const ideaLike = await this.ideaLikeService.getUserVote(
+      req.params.id,
+      user.id,
+    );
+    if (ideaLike) {
+      return {isVoted: true};
+    }
+    return {isVoted: false};
+  }
 }
+
+type IdeaLikeResponse = {
+  isVoted: boolean;
+};

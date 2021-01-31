@@ -38,4 +38,13 @@ export default class IdeaLikeService {
     await this.repository.save(ideaLike);
     return false;
   }
+
+  async getUserVote(ideaId: string, userId: string) {
+    return this.repository.findOne({
+      where: {
+        user: userId,
+        idea: ideaId,
+      },
+    });
+  }
 }
