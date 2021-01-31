@@ -28,7 +28,7 @@ export default class ChatController {
     },
   })
   async getRecent(
-    req: FastifyRequest<{Querystring: CommonQueryString}>,
+    req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
   ): Promise<PaginatedResponse<Chat>> {
     const response = await this.service.getRecent(
       req.query.limit || 6,
@@ -47,7 +47,9 @@ export default class ChatController {
       onRequest: authenticate,
     },
   })
-  async getById(req: FastifyRequest<{Params: {id: string}}>): Promise<Chat> {
+  async getById(
+    req: AuthenticatedRequest<{Params: {id: string}}>,
+  ): Promise<Chat> {
     const question = await this.service.getById(+req.params.id);
 
     if (!question) throw {statusCode: 404, message: 'Entity not found'};

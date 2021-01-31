@@ -43,3 +43,11 @@ export const blogInputSchema = {
   required: ['title', 'description', 'date'],
   properties,
 };
+
+export const blogSearchSchema = {
+  type: 'object',
+  properties: {
+    id: {type: 'string', nullable: false},
+    title: {type: 'string'},
+  },
+};

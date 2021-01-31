@@ -22,6 +22,22 @@ export default class AnnouncementService {
     return this.repository.find();
   }
 
+  async getByUser(userId: string): Promise<Announcement[]> {
+    return this.repository
+      .createQueryBuilder()
+      .where('user_id = :userId', {userId})
+      .orWhere('user_id IS NULL')
+      .getMany();
+  }
+
+  async getByUserCount(userId: string): Promise<number> {
+    return this.repository
+      .createQueryBuilder()
+      .where('user_id = :userId', {userId})
+      .orWhere('user_id IS NULL')
+      .getCount();
+  }
+
   async store(announcement: Partial<AnnouncementInput>): Promise<Announcement> {
     return this.repository.save(announcement);
   }
