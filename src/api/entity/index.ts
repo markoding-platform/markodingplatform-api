@@ -20,3 +20,4 @@ export {Chat, ChatInput} from './chat';
 export {Banner, BannerInput} from './banner';
 export {Profile, ProfileInput} from './profile';
 export {UserPoint} from './userPoint';
+export {Badge, BadgeInput} from './badge';
