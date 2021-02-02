@@ -23,7 +23,7 @@ export class Idea {
   @DeleteDateColumn({type: 'timestamp', nullable: true})
   deletedAt: Date;
 
-  @Column({type: 'enum', enum: IdeaStatus, default: IdeaStatus.PARTICIPANT})
+  @Column({type: 'enum', enum: IdeaStatus, default: IdeaStatus.ONREVIEW})
   status: IdeaStatus;
   @Column('varchar', {length: 255}) schoolId: string;
   @Column('text') schoolName: string;

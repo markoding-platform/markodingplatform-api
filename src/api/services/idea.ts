@@ -31,7 +31,8 @@ export default class IdeaService {
     const {limit, offset, sort, solutionType, problemAreaId} = queryString;
     let query = this.repository
       .createQueryBuilder('ideas')
-      .where('is_draft = false');
+      .where('is_draft = false')
+      .andWhere('status <> onreview');
 
     if (solutionType) {
       query = query.andWhere(`ideas.solution_type IN (:...solutionType)`, {
