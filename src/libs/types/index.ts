@@ -7,6 +7,7 @@ export enum SolutionType {
   GAME = 'game',
 }
 export enum IdeaStatus {
+  ONREVIEW = 'onreview',
   PARTICIPANT = 'peserta',
   FINALIST = 'finalis',
   WINNER = 'pemenang',
