@@ -3,6 +3,9 @@ import fastify from 'fastify';
 import fastifyCors from 'fastify-cors';
 import {bootstrap} from 'fastify-decorators';
 import fastifyMultipart from 'fastify-multipart';
+//import fastifySentry from 'fastify-sentry';
+
+import sentryConnector from './libs/utils/sentry';
 
 import {
   UserController,
@@ -33,6 +36,7 @@ const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
 
 const server = fastify({logger: true});
 server.decorateRequest('user', null);
+server.register(sentryConnector);
 server.register(fastifyMultipart);
 server.register(fastifyCors, {
   origin: '*',
@@ -60,6 +64,12 @@ server.register(bootstrap, {
     UserController,
     SearchController,
   ],
+});
+server.get('/debug-sentry', (_, reply) => {
+  throw new Error('My second Sentry error!');
+  return reply.send({
+    error: 400,
+  });
 });
 
 server.listen(APP_PORT, APP_HOST, (err, address) => {

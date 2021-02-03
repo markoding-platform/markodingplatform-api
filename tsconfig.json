@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true
   },
   "exclude": ["migrations"]
 }
