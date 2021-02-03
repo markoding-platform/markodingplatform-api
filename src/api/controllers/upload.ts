@@ -58,7 +58,7 @@ export default class UploadController {
     });
 
     const {path} = req.query;
-    const pathEnum = ['banners', 'blogs', 'events', 'ideas', 'test'];
+    const pathEnum = ['banners', 'blogs', 'events', 'ideas'];
     if (pathEnum.indexOf(path) < 0) {
       throw {statusCode: 400, message: 'Invalid folder'};
     }
