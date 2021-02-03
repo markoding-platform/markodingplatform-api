@@ -32,7 +32,7 @@ export default class IdeaService {
     let query = this.repository
       .createQueryBuilder('ideas')
       .where('is_draft = false')
-      .andWhere('status <> onreview');
+      .andWhere("status != 'onreview'");
 
     if (solutionType) {
       query = query.andWhere(`ideas.solution_type IN (:...solutionType)`, {
