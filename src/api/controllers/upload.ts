@@ -58,7 +58,7 @@ export default class UploadController {
     });
 
     const {path} = req.query;
-    const pathEnum = ['banners', 'blogs', 'events', 'ideas'];
+    const pathEnum = ['banners', 'blogs', 'events', 'ideas', 'test'];
     if (pathEnum.indexOf(path) < 0) {
       throw {statusCode: 400, message: 'Invalid folder'};
     }
@@ -70,15 +70,12 @@ export default class UploadController {
       ACL: 'public-read',
     };
 
-    s3.upload(
-      params,
-      function (err: Error, data: S3.Types.ManagedUpload.SendData) {
-        if (err) {
-          throw err;
-        }
+    s3.upload(params, (err: Error, data: S3.Types.ManagedUpload.SendData) => {
+      if (err) {
+        throw err;
+      }
 
-        return reply.send({url: data.Location});
-      },
-    );
+      return reply.send({url: data.Location});
+    });
   }
 }

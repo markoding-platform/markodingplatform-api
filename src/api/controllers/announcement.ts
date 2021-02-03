@@ -1,5 +1,4 @@
 import camelcaseKeys from 'camelcase-keys';
-import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST, PUT} from 'fastify-decorators';
 
 import AnnouncementService from '../services/announcement';

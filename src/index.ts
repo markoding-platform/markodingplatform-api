@@ -3,9 +3,9 @@ import fastify from 'fastify';
 import fastifyCors from 'fastify-cors';
 import {bootstrap} from 'fastify-decorators';
 import fastifyMultipart from 'fastify-multipart';
-//import fastifySentry from 'fastify-sentry';
+import * as Sentry from '@sentry/node';
 
-import sentryConnector from './libs/utils/sentry';
+import pkg from '../package.json';
 
 import {
   UserController,
@@ -32,15 +32,32 @@ import UploadController from './api/controllers/upload';
 import ProfileController from './api/controllers/profile';
 import SearchController from './api/controllers/search';
 
-const {APP_PORT = 8080, APP_HOST = '0.0.0.0'} = process.env;
-
-const server = fastify({logger: true});
-server.decorateRequest('user', null);
-server.register(sentryConnector);
-server.register(fastifyMultipart);
-server.register(fastifyCors, {
-  origin: '*',
+const {
+  APP_PORT = 8080,
+  APP_HOST = '0.0.0.0',
+  SENTRY_DSN,
+  NODE_ENV,
+} = process.env;
+Sentry.init({
+  dsn: SENTRY_DSN,
+  environment: NODE_ENV,
+  release: `${pkg.name}@${pkg.version}`,
 });
+
+const server = fastify({
+  logger: true,
+  ignoreTrailingSlash: true,
+});
+server.addHook('onError', (_, __, error, done) => {
+  if (NODE_ENV !== 'development') {
+    Sentry.captureException(error);
+  }
+
+  done();
+});
+server.decorateRequest('user', null);
+server.register(fastifyMultipart);
+server.register(fastifyCors, {origin: '*'});
 server.register(bootstrap, {
   controllers: [
     LeaderboardUserController,
@@ -64,12 +81,6 @@ server.register(bootstrap, {
     UserController,
     SearchController,
   ],
-});
-server.get('/debug-sentry', (_, reply) => {
-  throw new Error('My second Sentry error!');
-  return reply.send({
-    error: 400,
-  });
 });
 
 server.listen(APP_PORT, APP_HOST, (err, address) => {

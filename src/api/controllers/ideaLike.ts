@@ -1,7 +1,7 @@
 import {FastifyReply} from 'fastify';
 import {Controller, POST, GET} from 'fastify-decorators';
 
-import {User, IdeaLike} from '../entity';
+import {User} from '../entity';
 import authenticate from '../hooks/onRequest/authentication';
 import {UserService, IdeaService, IdeaLikeService} from '../services';
 import {commonParams} from '../schemas/common';
@@ -46,10 +46,10 @@ export default class IdeaLikeController {
 
     if (isLiked) {
       ideaFound.liked -= 1;
-      this.ideaService.update(req.params.id, ideaFound.toIdea());
+      this.ideaService.update(req.params.id, ideaFound.toIdeaLike());
     } else {
       ideaFound.liked += 1;
-      this.ideaService.update(req.params.id, ideaFound.toIdea());
+      this.ideaService.update(req.params.id, ideaFound.toIdeaLike());
     }
 
     return reply.code(204).send();
@@ -73,7 +73,7 @@ export default class IdeaLikeController {
   })
   async getUserVote(
     req: AuthenticatedRequest<{Params: {id: string}}>,
-  ): Promise<IdeaLikeResponse> {
+  ): Promise<{isVoted: boolean}> {
     const user = req.user?.user as User;
     const [userFound, ideaFound] = await Promise.all([
       this.userService.getOne({id: user.id}),
@@ -92,7 +92,3 @@ export default class IdeaLikeController {
     return {isVoted: false};
   }
 }
-
-type IdeaLikeResponse = {
-  isVoted: boolean;
-};

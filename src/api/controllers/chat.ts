@@ -1,4 +1,3 @@
-import {FastifyRequest} from 'fastify';
 import {Controller, GET, POST} from 'fastify-decorators';
 
 import ChatService from '../services/chat';
