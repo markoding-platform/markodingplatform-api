@@ -69,13 +69,31 @@ export default class IdeaController {
     idea.id = req.params.id;
     const user: User = new User();
     user.id = userLogin.id;
-    const values: IdeaUserInput[] = [{idea: idea, user: user, isLeader: true}];
-    req.body.userIds.forEach((userId: string) => {
+    const team: IdeaUserInput[] = [{idea, user, isLeader: true}];
+
+    const userIds = req.body.userIds;
+    const uniqueUserIds = userIds.filter(
+      (id: string, i: number) => userIds.indexOf(id) == i,
+    );
+    uniqueUserIds.forEach((userId: string) => {
       const user: User = new User();
       user.id = userId;
-      values.push({idea, user, isLeader: false});
+      team.push({idea, user, isLeader: false});
     });
-    return this.ideaUserService.store(values);
+
+    for (const t of team) {
+      const [userFound, userFoundOnTeam] = await Promise.all([
+        this.userService.getOne({id: t.user.id}),
+        this.ideaUserService.getIdeaByUser(user),
+      ]);
+
+      if (!userFound) throw {statusCode: 400, message: 'User not found'};
+      if (userFoundOnTeam) {
+        throw {statusCode: 400, message: 'User already on team'};
+      }
+    }
+
+    return this.ideaUserService.store(team);
   }
 
   @POST({
@@ -100,14 +118,23 @@ export default class IdeaController {
 
     const idea: Idea = new Idea();
     idea.id = req.params.id;
-    const [userFound, ideaFound, ideaUsersFound] = await Promise.all([
+    const [
+      userFound,
+      ideaFound,
+      ideaUsersFound,
+      userFoundOnTeam,
+    ] = await Promise.all([
       this.userService.getOne({id: req.body.userId}),
       this.ideaService.getOne(idea),
       this.ideaUserService.getAllUsersByIdea(idea),
+      this.ideaUserService.getIdeaByUser(user),
     ]);
     if (!userFound) throw {statusCode: 404, message: 'User not found'};
     if (!ideaFound) throw {statusCode: 404, message: 'Idea not found'};
     if (!ideaUsersFound) throw {statusCode: 404, message: 'Team not found'};
+    if (userFoundOnTeam) {
+      throw {statusCode: 400, message: 'User already on team'};
+    }
 
     ideaUsersFound.forEach((u: IdeaUser) => {
       if (u.user.id === user.id && !u.isLeader) {
