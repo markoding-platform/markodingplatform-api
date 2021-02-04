@@ -64,6 +64,14 @@ export default class UserService {
     return this.repository.findOne(user);
   }
 
+  async getByIdWithProfile(id: string): Promise<User | undefined> {
+    return this.repository
+      .createQueryBuilder('user')
+      .where({id})
+      .leftJoinAndSelect('user.profile', 'profile')
+      .getOne();
+  }
+
   async getUserTeacher(
     name?: string,
     schoolId?: string,
