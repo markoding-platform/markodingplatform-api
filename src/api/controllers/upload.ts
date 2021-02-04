@@ -70,15 +70,12 @@ export default class UploadController {
       ACL: 'public-read',
     };
 
-    s3.upload(
-      params,
-      function (err: Error, data: S3.Types.ManagedUpload.SendData) {
-        if (err) {
-          throw err;
-        }
+    s3.upload(params, (err: Error, data: S3.Types.ManagedUpload.SendData) => {
+      if (err) {
+        throw err;
+      }
 
-        return reply.send({url: data.Location});
-      },
-    );
+      return reply.send({url: data.Location});
+    });
   }
 }

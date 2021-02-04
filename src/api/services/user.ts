@@ -88,7 +88,9 @@ export default class UserService {
         'user.profile',
         'profile',
         'profile.profile_type = :profileType',
-        {profileType: 'teacher'},
+        {
+          profileType: 'teacher',
+        },
       );
     }
 
@@ -125,7 +127,9 @@ export default class UserService {
         'user.profile',
         'profile',
         'profile.profile_type = :profileType',
-        {profileType: 'student'},
+        {
+          profileType: 'student',
+        },
       );
     }
 
@@ -161,7 +165,9 @@ export default class UserService {
         'user.profile',
         'profile',
         'profile.profile_type = :profileType',
-        {profileType: 'student'},
+        {
+          profileType: 'student',
+        },
       );
     }
 
@@ -204,7 +210,9 @@ export default class UserService {
         'user.profile',
         'profile',
         'profile.profile_type = :profileType',
-        {profileType: 'mentor'},
+        {
+          profileType: 'mentor',
+        },
       );
     }
 
@@ -241,7 +249,9 @@ export default class UserService {
         'user.profile',
         'profile',
         'profile.profile_type = :profileType',
-        {profileType: 'supporter'},
+        {
+          profileType: 'supporter',
+        },
       );
     }
 

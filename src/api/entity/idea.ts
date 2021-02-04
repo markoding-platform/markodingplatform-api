@@ -53,26 +53,8 @@ export class Idea {
   @OneToMany(() => IdeaComment, (comment: IdeaComment) => comment.idea)
   comments: IdeaComment[];
 
-  toIdea() {
+  toIdeaLike(): {liked: number} {
     return {
-      id: this.id,
-      status: this.status,
-      schoolId: this.schoolId,
-      schoolName: this.schoolName,
-      solutionType: this.solutionType,
-      problemArea: this.problemArea,
-      problemSelection: this.problemSelection,
-      problemReasoning: this.problemReasoning,
-      solutionVision: this.solutionVision,
-      solutionMission: this.solutionMission,
-      solutionBenefit: this.solutionBenefit,
-      solutionObstacle: this.solutionObstacle,
-      solutionPitchUrl: this.solutionPitchUrl,
-      targetOutcomes: this.targetOutcomes,
-      targetCustomer: this.targetCustomer,
-      potentialCollaboration: this.potentialCollaboration,
-      solutionSupportingPhotos: this.solutionSupportingPhotos,
-      isDraft: this.isDraft,
       liked: this.liked,
     };
   }

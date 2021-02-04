@@ -39,7 +39,10 @@ export default class IdeaLikeService {
     return false;
   }
 
-  async getUserVote(ideaId: string, userId: string) {
+  async getUserVote(
+    ideaId: string,
+    userId: string,
+  ): Promise<IdeaLike | undefined> {
     return this.repository.findOne({
       where: {
         user: userId,

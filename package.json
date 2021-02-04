@@ -84,6 +84,7 @@
     "bracketSpacing": false
   },
   "dependencies": {
+    "@sentry/node": "^6.0.3",
     "aws-sdk": "^2.820.0",
     "camelcase-keys": "^6.2.2",
     "date-fns": "^2.16.1",
@@ -103,12 +104,12 @@
     "typeorm-naming-strategies": "^2.0.0"
   },
   "devDependencies": {
-    "@types/pg": "^7.14.6",
-    "@types/validator": "^13.1.0",
     "@types/busboy": "^0.2.3",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.9",
+    "@types/pg": "^7.14.6",
+    "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "backpack-core": "^0.8.4",

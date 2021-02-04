@@ -1,4 +1,4 @@
-import {timestamps, pagination, commonQueryString} from './common';
+import {timestamps, pagination} from './common';
 
 const properties = {
   id: {type: 'string'},
