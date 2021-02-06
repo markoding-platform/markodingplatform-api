@@ -64,6 +64,7 @@ export default class IdeaService {
       .limit(limit)
       .offset(offset)
       .orderBy(orderBy)
+      .addOrderBy('ideas.created_at', 'ASC')
       .leftJoinAndSelect('ideas.problemArea', 'problemArea')
       .loadRelationCountAndMap('ideas.totalLikes', 'ideas.likes')
       .loadRelationCountAndMap('ideas.totalComments', 'ideas.comments')
