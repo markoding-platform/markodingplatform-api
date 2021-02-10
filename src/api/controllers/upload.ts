@@ -65,17 +65,29 @@ export default class UploadController {
 
     const params = {
       Bucket: 'markodingplatform',
-      Key: `${path}/` + data.filename,
+      Key: `${path}/` + new Date().getTime().toString() + data.filename,
       Body: data.file,
       ACL: 'public-read',
     };
 
+    // @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const uploaded = await uploadS3(params);
+
+    // @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return reply.code(201).send({url: uploaded.Location});
+  }
+}
+
+function uploadS3(params) {
+  return new Promise((resolve, reject) => {
     s3.upload(params, (err: Error, data: S3.Types.ManagedUpload.SendData) => {
       if (err) {
-        throw err;
+        return reject(err);
       }
 
-      return reply.send({url: data.Location});
+      return resolve(data);
     });
-  }
+  });
 }
