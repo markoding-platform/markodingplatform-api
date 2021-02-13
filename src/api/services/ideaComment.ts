@@ -30,8 +30,9 @@ export default class IdeaCommentService {
   ): Promise<[IdeaComment[], number]> {
     const {limit, offset} = queryString;
     return this.repository
-      .createQueryBuilder()
+      .createQueryBuilder('ideaComment')
       .where('idea_id = :id', {id})
+      .leftJoinAndSelect('ideaComment.user', 'user')
       .limit(limit)
       .offset(offset)
       .getManyAndCount();
