@@ -24,6 +24,8 @@ export const teamInputSchema = {
   properties: {
     userIds: {
       type: 'array',
+      minItems: 1,
+      maxItems: 3,
       items: {type: 'string'},
     },
   },
