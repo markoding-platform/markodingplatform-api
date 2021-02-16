@@ -47,11 +47,17 @@ export class IdeaController {
         params: commonParams,
         response: {200: ideaCommentSchema},
       },
+      onRequest: authenticate,
     },
   })
   async getIdeaById(
-    req: FastifyRequest<{Params: {id: string}}>,
+    req: AuthenticatedRequest<{Params: {id: string}}>,
   ): Promise<IdeaResponse> {
+    const user = req.user?.user as User;
+    const userFound = await this.userService.getOne({id: user.id});
+    if (!userFound) {
+      throw {statusCode: 400, message: 'Please login to see ideas'};
+    }
     const idea = await this.ideaService.getOne({id: req.params.id});
     if (!idea) throw {statusCode: 404, message: 'Idea not found'};
 
@@ -65,11 +71,17 @@ export class IdeaController {
         querystring: ideaQueryStringSchema,
         response: {200: paginatedIdeaSchema},
       },
+      onRequest: authenticate,
     },
   })
   async getAllIdeas(
-    req: FastifyRequest<{Querystring: IdeaQueryString}>,
+    req: AuthenticatedRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
+    const user = req.user?.user as User;
+    const userFound = await this.userService.getOne({id: user.id});
+    if (!userFound) {
+      throw {statusCode: 400, message: 'Please login to see ideas'};
+    }
     const orderEnum = ['solutionType', 'solutionName', 'liked'];
     let sorts = '';
     if (req.query.sort) {

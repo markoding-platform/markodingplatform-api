@@ -88,8 +88,11 @@ export default class IdeaController {
       ]);
 
       if (!userFound) throw {statusCode: 404, message: 'User not found'};
-      if (userFound.profile?.profileType !== 'student') {
-        throw {statusCode: 400, message: 'User not student'};
+      if (
+        userFound.profile?.profileType !== 'student' &&
+        userFound.profile?.profileType !== 'teacher'
+      ) {
+        throw {statusCode: 400, message: 'User not student or teacher'};
       }
       if (userFoundOnTeam) {
         throw {statusCode: 400, message: 'User already on team'};
