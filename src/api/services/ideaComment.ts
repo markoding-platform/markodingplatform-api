@@ -32,6 +32,7 @@ export default class IdeaCommentService {
     return this.repository
       .createQueryBuilder('ideaComment')
       .where('idea_id = :id', {id})
+      .orderBy('ideaComment.created_at', 'DESC')
       .leftJoinAndSelect('ideaComment.user', 'user')
       .limit(limit)
       .offset(offset)
