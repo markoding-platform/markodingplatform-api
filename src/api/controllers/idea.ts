@@ -26,6 +26,7 @@ import {
   paginatedLeaderboardSchema,
   ideaQueryStringSchema,
   ideaProblemAreaSchema,
+  paginatedIdeaSchemaList,
 } from '../schemas/idea';
 import {commonParams} from '../schemas/common';
 import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
@@ -69,25 +70,18 @@ export class IdeaController {
     options: {
       schema: {
         querystring: ideaQueryStringSchema,
-        response: {200: paginatedIdeaSchema},
+        response: {200: paginatedIdeaSchemaList},
       },
-      onRequest: authenticate,
     },
   })
   async getAllIdeas(
-    req: AuthenticatedRequest<{Querystring: IdeaQueryString}>,
+    req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
-    const user = req.user?.user as User;
-    const userFound = await this.userService.getOne({id: user.id});
-    if (!userFound) {
-      throw {statusCode: 400, message: 'Please login to see ideas'};
-    }
     const orderEnum = ['solutionType', 'solutionName', 'liked'];
     let sorts = '';
     if (req.query.sort) {
       sorts = transformSort(req.query.sort, orderEnum);
     }
-
     const response = await this.ideaService.getAll({...req.query, sort: sorts});
     return paginateResponse(req.query, response);
   }
