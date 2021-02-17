@@ -78,6 +78,7 @@ export class IdeaController {
     req: FastifyRequest<{Querystring: IdeaQueryString}>,
   ): Promise<PaginatedResponse<Idea>> {
     const orderEnum = ['solutionType', 'solutionName', 'liked'];
+
     let sorts = '';
     if (req.query.sort) {
       sorts = transformSort(req.query.sort, orderEnum);
