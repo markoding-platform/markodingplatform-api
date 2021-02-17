@@ -84,6 +84,7 @@ export class IdeaController {
       throw {statusCode: 400, message: 'Please login to see ideas'};
     }
     const orderEnum = ['solutionType', 'solutionName', 'liked'];
+
     let sorts = '';
     if (req.query.sort) {
       sorts = transformSort(req.query.sort, orderEnum);
