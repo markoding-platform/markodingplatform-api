@@ -26,6 +26,7 @@ import {
   paginatedLeaderboardSchema,
   ideaQueryStringSchema,
   ideaProblemAreaSchema,
+  paginatedIdeaSchemaList,
 } from '../schemas/idea';
 import {commonParams} from '../schemas/common';
 import {PaginatedResponse, IdeaQueryString} from '../../libs/types';
@@ -69,7 +70,7 @@ export class IdeaController {
     options: {
       schema: {
         querystring: ideaQueryStringSchema,
-        response: {200: paginatedIdeaSchema},
+        response: {200: paginatedIdeaSchemaList},
       },
       onRequest: authenticate,
     },
@@ -87,7 +88,6 @@ export class IdeaController {
     if (req.query.sort) {
       sorts = transformSort(req.query.sort, orderEnum);
     }
-
     const response = await this.ideaService.getAll({...req.query, sort: sorts});
     return paginateResponse(req.query, response);
   }
