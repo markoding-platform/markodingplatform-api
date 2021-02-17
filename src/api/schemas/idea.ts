@@ -22,6 +22,17 @@ const properties = {
   liked: {type: 'number'},
 };
 
+const propertiesCard = {
+  id: {type: 'string'},
+  schoolId: {type: 'string'},
+  status: {type: 'string'},
+  solutionName: {type: 'string'},
+  solutionMission: {type: 'string'},
+  solutionPitchUrl: {type: 'string'},
+  isDraft: {type: 'boolean'},
+  liked: {type: 'number'},
+};
+
 const problemAreaSchema = {
   type: 'object',
   properties: {
@@ -42,6 +53,17 @@ export const ideaSchema = {
   },
 };
 
+export const ideaSchemaList = {
+  type: 'object',
+  properties: {
+    ...timestamps,
+    ...propertiesCard,
+    problemArea: problemAreaSchema,
+    totalLikes: {type: 'number'},
+    totalComments: {type: 'number'},
+  },
+};
+
 export const paginatedIdeaSchema = {
   type: 'object',
   properties: {
@@ -49,6 +71,17 @@ export const paginatedIdeaSchema = {
     data: {
       type: 'array',
       items: ideaSchema,
+    },
+  },
+};
+
+export const paginatedIdeaSchemaList = {
+  type: 'object',
+  properties: {
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: ideaSchemaList,
     },
   },
 };
