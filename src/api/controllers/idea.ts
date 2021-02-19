@@ -83,7 +83,6 @@ export class IdeaController {
       sorts = transformSort(req.query.sort, orderEnum);
     }
     const response = await this.ideaService.getAll({...req.query, sort: sorts});
-    console.log(response);
     return paginateResponse(req.query, response);
   }
 
