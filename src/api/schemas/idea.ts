@@ -17,7 +17,10 @@ const properties = {
   targetOutcomes: {type: 'string'},
   targetCustomer: {type: 'string'},
   potentialCollaboration: {type: 'string'},
-  solutionSupportingPhotos: {type: 'array'},
+  solutionSupportingPhotos: {
+    type: 'array',
+    items: {type: 'string'},
+  },
   isDraft: {type: 'boolean'},
   liked: {type: 'number'},
 };
@@ -29,6 +32,10 @@ const propertiesCard = {
   solutionName: {type: 'string'},
   solutionMission: {type: 'string'},
   solutionPitchUrl: {type: 'string'},
+  solutionSupportingPhotos: {
+    type: 'array',
+    items: {type: 'string'},
+  },
   isDraft: {type: 'boolean'},
   liked: {type: 'number'},
 };
