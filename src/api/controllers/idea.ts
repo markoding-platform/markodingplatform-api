@@ -22,7 +22,6 @@ import {
   ideaSchema,
   ideaCommentSchema,
   ideaInputSchema,
-  paginatedIdeaSchema,
   paginatedLeaderboardSchema,
   ideaQueryStringSchema,
   ideaProblemAreaSchema,
