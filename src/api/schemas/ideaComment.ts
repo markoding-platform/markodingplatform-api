@@ -1,12 +1,12 @@
 import {timestamps, pagination} from './common';
-import {userSchema} from './user';
+import {userProfileSchema} from './user';
 
 const properties = {
   id: {type: 'string'},
   comment: {type: 'string'},
   ideaId: {type: 'string'},
   userId: {type: 'string'},
-  user: userSchema,
+  user: userProfileSchema,
 };
 
 const ideaCommentSchema = {

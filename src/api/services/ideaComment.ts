@@ -34,6 +34,7 @@ export default class IdeaCommentService {
       .where('idea_id = :id', {id})
       .orderBy('ideaComment.created_at', 'DESC')
       .leftJoinAndSelect('ideaComment.user', 'user')
+      .leftJoinAndSelect('user.profile', 'profile')
       .limit(limit)
       .offset(offset)
       .getManyAndCount();

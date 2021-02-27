@@ -1,5 +1,5 @@
-import {userSchema} from './user';
 import {timestamps} from './common';
+import {userProfileSchema} from './user';
 
 const properties = {
   content: {type: 'string'},
@@ -11,7 +11,7 @@ export const questionCommentSchema = {
     id: {type: 'string'},
     ...timestamps,
     ...properties,
-    user: userSchema,
+    user: userProfileSchema,
   },
 };
 
