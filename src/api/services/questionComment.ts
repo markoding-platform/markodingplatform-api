@@ -25,6 +25,7 @@ export default class QuestionCommentService {
         questionId,
       })
       .leftJoinAndSelect('QuestionComment.user', 'user')
+      .leftJoinAndSelect('user.profile', 'profile')
       .take(limit)
       .skip(offset)
       .getMany();
