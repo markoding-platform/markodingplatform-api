@@ -1,4 +1,6 @@
 import {profileSchema} from './profile';
+import {pagination} from './common';
+import {eventSchema} from './event';
 
 const properties = {
   name: {type: 'string'},
@@ -39,6 +41,17 @@ export const userProfileSchema = {
     profile: {
       nullable: true,
       ...profileSchema,
+    },
+  },
+};
+
+export const paginatedUserProfileSchema = {
+  type: 'object',
+  properties: {
+    pages: pagination,
+    data: {
+      type: 'array',
+      items: userProfileSchema,
     },
   },
 };

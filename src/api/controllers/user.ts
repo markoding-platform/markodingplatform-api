@@ -1,11 +1,17 @@
 import {Controller, GET, PUT} from 'fastify-decorators';
-import {CommonQueryString} from 'schemas';
 
 import UserService from '../services/user';
 import authenticate from '../hooks/onRequest/authentication';
-import {User} from '../entity/user';
+import {User} from '../entity';
 import {commonQueryString, commonParams} from '../schemas/common';
-import {userSchema, userProfileSchema, userLeaderSchema} from '../schemas/user';
+import {
+  userSchema,
+  userProfileSchema,
+  userLeaderSchema,
+  paginatedUserProfileSchema,
+} from '../schemas/user';
+import {CommonQueryString, PaginatedResponse} from '../../libs/types';
+import {paginateResponse} from '../../libs/utils';
 
 @Controller({route: '/users'})
 export class UserController {
@@ -16,22 +22,21 @@ export class UserController {
     options: {
       schema: {
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: userProfileSchema}},
+        response: {200: paginatedUserProfileSchema},
       },
       onRequest: authenticate,
     },
   })
   async getUserTeachers(
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
-  ): Promise<User[]> {
-    const userTeachers = await this.service.getUserTeacher(
+  ): Promise<PaginatedResponse<User>> {
+    const response = await this.service.getUserTeacherPagination(
       req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
     );
-
-    return userTeachers;
+    return paginateResponse(req.query, response);
   }
 
   @GET({
@@ -62,22 +67,22 @@ export class UserController {
     options: {
       schema: {
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: userProfileSchema}},
+        response: {200: paginatedUserProfileSchema},
       },
       onRequest: authenticate,
     },
   })
   async getUserStudents(
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
-  ): Promise<User[]> {
-    const userTeachers = await this.service.getUserStudent(
+  ): Promise<PaginatedResponse<User>> {
+    const response = await this.service.getUserStudentPagination(
       req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
     );
 
-    return userTeachers;
+    return paginateResponse(req.query, response);
   }
 
   @GET({
@@ -132,22 +137,22 @@ export class UserController {
     options: {
       schema: {
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: userProfileSchema}},
+        response: {200: paginatedUserProfileSchema},
       },
       onRequest: authenticate,
     },
   })
   async getUserMentors(
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
-  ): Promise<User[]> {
-    const userTeachers = await this.service.getUserMentor(
+  ): Promise<PaginatedResponse<User>> {
+    const response = await this.service.getUserMentorPagination(
       req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
     );
 
-    return userTeachers;
+    return paginateResponse(req.query, response);
   }
 
   @GET({
@@ -155,22 +160,22 @@ export class UserController {
     options: {
       schema: {
         querystring: commonQueryString,
-        response: {200: {type: 'array', items: userProfileSchema}},
+        response: {200: paginatedUserProfileSchema},
       },
       onRequest: authenticate,
     },
   })
   async getUserSupporters(
     req: AuthenticatedRequest<{Querystring: CommonQueryString}>,
-  ): Promise<User[]> {
-    const userTeachers = await this.service.getUserSupporter(
+  ): Promise<PaginatedResponse<User>> {
+    const response = await this.service.getUserSupporterPagination(
       req.query.keyword,
       '',
       req.query.limit,
       req.query.skip,
     );
 
-    return userTeachers;
+    return paginateResponse(req.query, response);
   }
 
   @GET({

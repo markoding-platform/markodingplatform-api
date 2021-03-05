@@ -111,6 +111,45 @@ export default class UserService {
     return users;
   }
 
+  async getUserTeacherPagination(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<[User[], number]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'DESC');
+
+    if (schoolId) {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
+        {schoolId, profileType: 'teacher'},
+      );
+    } else {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {
+          profileType: 'teacher',
+        },
+      );
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
+    }
+
+    const users = await userQuery.getManyAndCount();
+
+    return users;
+  }
+
   async getUserStudent(
     name?: string,
     schoolId?: string,
@@ -146,6 +185,45 @@ export default class UserService {
     }
 
     const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserStudentPagination(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<[User[], number]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'DESC');
+
+    if (schoolId) {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {
+          profileType: 'student',
+        },
+      );
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
+    }
+
+    const users = await userQuery.getManyAndCount();
 
     return users;
   }
@@ -233,6 +311,45 @@ export default class UserService {
     return users;
   }
 
+  async getUserMentorPagination(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<[User[], number]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'DESC');
+
+    if (schoolId) {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {
+          profileType: 'mentor',
+        },
+      );
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
+    }
+
+    const users = await userQuery.getManyAndCount();
+
+    return users;
+  }
+
   async getUserSupporter(
     name?: string,
     schoolId?: string,
@@ -268,6 +385,45 @@ export default class UserService {
     }
 
     const users = await userQuery.getMany();
+
+    return users;
+  }
+
+  async getUserSupporterPagination(
+    name?: string,
+    schoolId?: string,
+    limit = 10,
+    offset = 0,
+  ): Promise<[User[], number]> {
+    let userQuery = this.repository
+      .createQueryBuilder('user')
+      .limit(limit)
+      .offset(offset * limit)
+      .orderBy('user.created_at', 'DESC');
+
+    if (schoolId) {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.school_id = :schoolId AND profile.profile_type = :profileType',
+        {schoolId, profileType: 'student'},
+      );
+    } else {
+      userQuery = userQuery.innerJoinAndSelect(
+        'user.profile',
+        'profile',
+        'profile.profile_type = :profileType',
+        {
+          profileType: 'supporter',
+        },
+      );
+    }
+
+    if (name) {
+      userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
+    }
+
+    const users = await userQuery.getManyAndCount();
 
     return users;
   }

@@ -35,6 +35,7 @@ export type CommonQueryString = {
   offset: number;
   sort?: string;
   keyword?: string;
+  skip?: number;
 };
 
 export type QueryString = {
