@@ -119,8 +119,6 @@ export default class UserService {
   ): Promise<[User[], number]> {
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .limit(limit)
-      .offset(offset * limit)
       .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
@@ -145,7 +143,7 @@ export default class UserService {
       userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
-    const users = await userQuery.getManyAndCount();
+    const users = await userQuery.offset(offset).limit(limit).getManyAndCount();
 
     return users;
   }
@@ -197,8 +195,6 @@ export default class UserService {
   ): Promise<[User[], number]> {
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .limit(limit)
-      .offset(offset * limit)
       .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
@@ -223,7 +219,7 @@ export default class UserService {
       userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
-    const users = await userQuery.getManyAndCount();
+    const users = await userQuery.offset(offset).limit(limit).getManyAndCount();
 
     return users;
   }
@@ -319,8 +315,6 @@ export default class UserService {
   ): Promise<[User[], number]> {
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .limit(limit)
-      .offset(offset * limit)
       .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
@@ -345,7 +339,7 @@ export default class UserService {
       userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
-    const users = await userQuery.getManyAndCount();
+    const users = await userQuery.offset(offset).limit(limit).getManyAndCount();
 
     return users;
   }
@@ -397,8 +391,6 @@ export default class UserService {
   ): Promise<[User[], number]> {
     let userQuery = this.repository
       .createQueryBuilder('user')
-      .limit(limit)
-      .offset(offset * limit)
       .orderBy('user.created_at', 'DESC');
 
     if (schoolId) {
@@ -423,7 +415,7 @@ export default class UserService {
       userQuery = userQuery.where('user.name ILIKE :name', {name: `%${name}%`});
     }
 
-    const users = await userQuery.getManyAndCount();
+    const users = await userQuery.offset(offset).limit(limit).getManyAndCount();
 
     return users;
   }
