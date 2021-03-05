@@ -34,7 +34,7 @@ export class UserController {
       req.query.keyword,
       '',
       req.query.limit,
-      req.query.skip,
+      req.query.offset,
     );
     return paginateResponse(req.query, response);
   }
@@ -79,7 +79,7 @@ export class UserController {
       req.query.keyword,
       '',
       req.query.limit,
-      req.query.skip,
+      req.query.offset,
     );
 
     return paginateResponse(req.query, response);
@@ -149,7 +149,7 @@ export class UserController {
       req.query.keyword,
       '',
       req.query.limit,
-      req.query.skip,
+      req.query.offset,
     );
 
     return paginateResponse(req.query, response);
@@ -172,7 +172,7 @@ export class UserController {
       req.query.keyword,
       '',
       req.query.limit,
-      req.query.skip,
+      req.query.offset,
     );
 
     return paginateResponse(req.query, response);
