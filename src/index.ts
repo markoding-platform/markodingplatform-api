@@ -83,6 +83,10 @@ server.register(bootstrap, {
   ],
 });
 
+server.get('/', async () => {
+  return {status: 'Running...'};
+});
+
 server.listen(APP_PORT, APP_HOST, (err, address) => {
   if (err) {
     console.error(err);
