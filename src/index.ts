@@ -84,7 +84,7 @@ server.register(bootstrap, {
 });
 
 server.get('/', async () => {
-  return {status: 'Running...'};
+  return {status: 'deploy success..'};
 });
 
 server.listen(APP_PORT, APP_HOST, (err, address) => {
